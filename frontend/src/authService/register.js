@@ -4,7 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-import AuthService from "./authService";
+import { RegisterService } from "./authService";
 
 const required = value => {
   if (!value) {
@@ -92,7 +92,7 @@ export default class Register extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
+        RegisterService(
         this.state.username,
         this.state.email,
         this.state.password

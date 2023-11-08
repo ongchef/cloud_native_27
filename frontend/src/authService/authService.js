@@ -1,30 +1,15 @@
 import axios from "axios";
+import {UserContext} from "../UserContext";
+import { useContext } from "react";
 
 const API_URL = "/api/auth/";
 
-class AuthService {
-  login(username, password) {
-    console.log("success")
-    localStorage.setItem("user", {username:username});
-    // return axios
-    //   .post(API_URL + "signin", {
-    //     username,
-    //     password
-    //   })
-    //   .then(response => {
-    //     if (response.data.accessToken) {
-    //       localStorage.setItem("user", JSON.stringify(response.data));
-    //     }
-
-    //     return response.data;
-    //   });
-  }
-
-  logout() {
+    
+export function logout() {
     localStorage.removeItem("user");
   }
 
-  register(username, email, password) {
+export function RegisterService(username, email, password) {
     // return axios.post(API_URL + "signup", {
     //   username,
     //   email,
@@ -32,10 +17,7 @@ class AuthService {
     // });
   }
 
-  getCurrentUser() {
+export function getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
   }
   
-}
-
-export default AuthService();
