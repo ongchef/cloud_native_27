@@ -18,18 +18,25 @@ const login = (userName, password) => {
     function delay(){
       return new Promise(function (resolve, reject) {
       setTimeout(function () {
+        if(userName!=='user'||userName!=='provider'||userName!=='admin'){
+          const error = true;
+          reject(fakeUser(userName))
+        }
+        else{
+          resolve(fakeUser(userName));
+        }
         
-        resolve(fakeUser(userName));
+        
       }, 1000);
      
     });}
     return delay()
       .then((response) => {
-      if (response.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response));
+      if (response.data.accessToken) {
+        localStorage.setItem("user", JSON.stringify(response.data));
       }
-      console.log(response)
-      return response;
+      console.log(response.data)
+      return response.data;
     });
     
   // return axios

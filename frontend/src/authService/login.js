@@ -38,7 +38,6 @@ export default function Login() {
         setMessage("")
         setLoading(true)
         form.current.validateAll();
-        console.log(checkBtn)
       if (checkBtn.current.context._errors.length === 0) {
 
            
