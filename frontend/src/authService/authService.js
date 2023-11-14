@@ -18,8 +18,7 @@ const login = (userName, password) => {
     function delay(){
       return new Promise(function (resolve, reject) {
       setTimeout(function () {
-        if(userName!=='user'||userName!=='provider'||userName!=='admin'){
-          const error = true;
+        if(userName!=='user'&&userName!=='provider'&&userName!=='admin'){
           reject(fakeUser(userName))
         }
         else{

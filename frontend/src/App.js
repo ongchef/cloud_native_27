@@ -49,13 +49,25 @@ export default function App() {
     // console.log(decodedJwt.exp  )
   };
   
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const [verified, setVerified] = useState(false);
+  const [user, setUser] = useState(false);
+  const [admin, setAdmin] = useState(false);
+  const [provider, setProvider] = useState(false);
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     console.log(user)
     if (user) {
-      setCurrentUser(user);
+      setVerified(true);
+      if(user.roles.includes('ROLE_USER')){
+        setUser(true)
+      }
+      else if(user.roles.includes('ROLE_ADMIN')){
+        setAdmin(true)
+      }
+      else if(user.roles.includes('ROLE_PROVIDER')){
+        setProvider(true)
+      }
     }
 
     eventBus.on("logout", () => {
@@ -69,7 +81,10 @@ export default function App() {
 
   const logOut = () => {
     AuthService.logout();
-    setCurrentUser(undefined);
+    setVerified(false)
+    setUser(false)
+    setAdmin(false)
+    setProvider(false)
   };
 
 
@@ -90,7 +105,7 @@ export default function App() {
         <Typography variant="h6" noWrap component="div" >
           Joinable
         </Typography>
-        {currentUser?
+        {verified?
         // <Box display='flex' justifyContent='right'>
           <Button  display='flex' variant="h6" onClick={logOut} sx={{ marginLeft: "auto" }}>
             Logout
@@ -119,7 +134,7 @@ export default function App() {
         </DrawerHeader>
         <Divider />
         <List>
-            {currentUser?"":(
+            {verified?"":(
               <>
             <ListItem  disablePadding >
               <ListItemButton to='/register'>
@@ -139,6 +154,99 @@ export default function App() {
             </ListItem>
             </>
             )}
+            {user?(
+              <>
+            <ListItem  disablePadding >
+              <ListItemButton>
+                <ListItemIcon>
+                  
+                </ListItemIcon>
+                <ListItemText primary={"加入場地"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem  disablePadding >
+              <ListItemButton>
+                <ListItemIcon>
+              
+                </ListItemIcon>
+                <ListItemText primary={"預約場地"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem  disablePadding >
+              <ListItemButton>
+                <ListItemIcon>
+              
+                </ListItemIcon>
+                <ListItemText primary={"歷史紀錄"} />
+              </ListItemButton>
+            </ListItem>
+            </>
+            ):""}
+            
+            {provider?(
+              <>
+            <ListItem  disablePadding >
+              <ListItemButton>
+                <ListItemIcon>
+                  
+                </ListItemIcon>
+                <ListItemText primary={"球場狀態查詢"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem  disablePadding >
+              <ListItemButton>
+                <ListItemIcon>
+         
+                </ListItemIcon>
+                <ListItemText primary={"球場管理"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem  disablePadding >
+              <ListItemButton>
+                <ListItemIcon>
+         
+                </ListItemIcon>
+                <ListItemText primary={"歷史紀錄"} />
+              </ListItemButton>
+            </ListItem>
+            </>
+            ):""}
+            {admin?(
+              <>
+            <ListItem  disablePadding >
+              <ListItemButton >
+                <ListItemIcon>
+                  
+                </ListItemIcon>
+                <ListItemText primary={"球場狀態查詢"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem  disablePadding >
+              <ListItemButton >
+                <ListItemIcon>
+           
+                </ListItemIcon>
+                <ListItemText primary={"球場管理"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem  disablePadding >
+              <ListItemButton >
+                <ListItemIcon>
+           
+                </ListItemIcon>
+                <ListItemText primary={"使用者歷史紀錄"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem  disablePadding >
+              <ListItemButton >
+                <ListItemIcon>
+           
+                </ListItemIcon>
+                <ListItemText primary={"註冊球場供應商"} />
+              </ListItemButton>
+            </ListItem>
+            </>
+            ):""}
         </List>
         <Divider />
       </Drawer>
