@@ -1,4 +1,4 @@
-import React, { Component, useContext, useEffect, useState } from "react";
+import React, { Component, useContext, useEffect, useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -9,6 +9,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { UserContext } from "../UserContext";
 import axios from "axios";
+import AuthService from "./authService";
 
 const required = value => {
   if (!value) {
@@ -26,42 +27,23 @@ export default function Login() {
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
-    const [form, setForm] = useState()
-    const [checkBtn, setCheckBtn] = useState()
+    const form = useRef();
+    const checkBtn = useRef();
     const [user, setUser] = useContext(UserContext);
   
-    function delay() {   
-        return new Promise(function (resolve, reject) {
-          setTimeout(function () {
-            resolve({userName:userName, password:password});
-          }, 1000);
-        });
-      }
+    
 
     function handleLogin(e) {
         e.preventDefault();
         setMessage("")
         setLoading(true)
-        form.validateAll();
-        
-      if (checkBtn.context._errors.length === 0) {
-            // axios.post("signin", {
-            //     userName,
-            //     password
-            // })
-            // .then(response => {
-            //     if (response.data.accessToken) {
-            //     localStorage.setItem("user", JSON.stringify(response.data));
-            //     }
+        form.current.validateAll();
+        console.log(checkBtn)
+      if (checkBtn.current.context._errors.length === 0) {
 
-            //     return response.data;
-            // })
-            
-            // 這裡是模擬使用 Axios 後的反應
-            delay()
-            .then((newUser)=> {
-                setUser(newUser)
-                console.log(newUser)
+           
+            AuthService.login(userName, password)
+            .then(()=> {
                 // this.props.history.push("/profile");
                   window.location.href='/'
             },
@@ -102,9 +84,7 @@ export default function Login() {
               </Typography>
               <Form
                 onSubmit={handleLogin}
-                ref={c => {
-                  setForm(c);
-                }}
+                ref={form}
               >
                 <div className="form-group">
                   <label htmlFor="username">Username</label>
@@ -152,9 +132,7 @@ export default function Login() {
                 )}
                 <CheckButton
                   style={{ display: "none" }}
-                  ref={c => {
-                    setCheckBtn(c);
-                  }}
+                  ref={checkBtn}
                 />
               </Form>
             </div>

@@ -4,7 +4,7 @@ import { Routes, Route, Link, Router } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
 import Login from './authService/login';
 import Register from './authService/register';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -17,9 +17,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { AppBar } from '@mui/material';
+import { AppBar, Box, Button } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { UserContext } from './UserContext';
+import AuthService from './authService/authService';
+import eventBus from './authService/eventBus';
+import AuthVerify from './authService/authVerify';
 
 const drawerWidth = 240;
 
@@ -34,15 +37,41 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function App() {
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState({useName:"",role:""})
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+    // const decodedJwt = JSON.parse(atob(user.accessToken.split(".")[1]));
+
+    // console.log(decodedJwt.exp  )
   };
   
+  const [currentUser, setCurrentUser] = useState(undefined);
+
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    console.log(user)
+    if (user) {
+      setCurrentUser(user);
+    }
+
+    eventBus.on("logout", () => {
+      logOut();
+    });
+
+    return () => {
+      eventBus.remove("logout");
+    };
+  }, []);
+
+  const logOut = () => {
+    AuthService.logout();
+    setCurrentUser(undefined);
+  };
+
 
   return (
     
@@ -58,9 +87,16 @@ export default function App() {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" noWrap component="div">
+        <Typography variant="h6" noWrap component="div" >
           Joinable
         </Typography>
+        {currentUser?
+        // <Box display='flex' justifyContent='right'>
+          <Button  display='flex' variant="h6" onClick={logOut} sx={{ marginLeft: "auto" }}>
+            Logout
+          </Button>:""
+        // </Box>
+      }
       </Toolbar>
     </AppBar>
     <Drawer
@@ -83,6 +119,8 @@ export default function App() {
         </DrawerHeader>
         <Divider />
         <List>
+            {currentUser?"":(
+              <>
             <ListItem  disablePadding >
               <ListItemButton to='/register'>
                 <ListItemIcon>
@@ -99,15 +137,16 @@ export default function App() {
                 <ListItemText primary={"Login"} />
               </ListItemButton>
             </ListItem>
+            </>
+            )}
         </List>
         <Divider />
       </Drawer>
-      <UserContext.Provider value={[user,setUser]}>
         <Routes>
               <Route exact path="/login" element={<Login /> } />
               <Route exact path="/register" element={<Register />} />
         </Routes>
-      </UserContext.Provider>
+        <AuthVerify logOut={logOut}/>
       </>
   );
 }
