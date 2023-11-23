@@ -1,0 +1,709 @@
+[
+    {
+        "classroom_id": 0,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171101",
+        "floor_number": 1.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 1,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171102",
+        "floor_number": 1.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 2,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171103",
+        "floor_number": 1.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 3,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171104",
+        "floor_number": 1.0,
+        "capacity_size": 110
+    },
+    {
+        "classroom_id": 4,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171105",
+        "floor_number": 1.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 5,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171201",
+        "floor_number": 2.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 6,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171202",
+        "floor_number": 2.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 7,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171203",
+        "floor_number": 2.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 8,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171204",
+        "floor_number": 2.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 9,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171205",
+        "floor_number": 2.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 10,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171206",
+        "floor_number": 2.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 11,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171207",
+        "floor_number": 2.0,
+        "capacity_size": 110
+    },
+    {
+        "classroom_id": 12,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171208",
+        "floor_number": 2.0,
+        "capacity_size": 110
+    },
+    {
+        "classroom_id": 13,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171301",
+        "floor_number": 3.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 14,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171302",
+        "floor_number": 3.0,
+        "capacity_size": 180
+    },
+    {
+        "classroom_id": 15,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171303",
+        "floor_number": 3.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 16,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171304",
+        "floor_number": 3.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 17,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171305",
+        "floor_number": 3.0,
+        "capacity_size": 170
+    },
+    {
+        "classroom_id": 18,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171306",
+        "floor_number": 3.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 19,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171307",
+        "floor_number": 3.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 20,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171308",
+        "floor_number": 3.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 21,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171401",
+        "floor_number": 4.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 22,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171402",
+        "floor_number": 4.0,
+        "capacity_size": 170
+    },
+    {
+        "classroom_id": 23,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171403",
+        "floor_number": 4.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 24,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171404",
+        "floor_number": 4.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 25,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171405",
+        "floor_number": 4.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 26,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171406",
+        "floor_number": 4.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 27,
+        "building_name": "\u5171\u540c",
+        "room_name": "\u5171407",
+        "floor_number": 4.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 28,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e101",
+        "floor_number": 1.0,
+        "capacity_size": 170
+    },
+    {
+        "classroom_id": 29,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e102",
+        "floor_number": 1.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 30,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e103",
+        "floor_number": 1.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 31,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e201",
+        "floor_number": 2.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 32,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e202",
+        "floor_number": 2.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 33,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e203",
+        "floor_number": 2.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 34,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e204",
+        "floor_number": 2.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 35,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e205",
+        "floor_number": 2.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 36,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e301",
+        "floor_number": 3.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 37,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e302",
+        "floor_number": 3.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 38,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e303",
+        "floor_number": 3.0,
+        "capacity_size": 180
+    },
+    {
+        "classroom_id": 39,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e304",
+        "floor_number": 3.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 40,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e305",
+        "floor_number": 3.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 41,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e306",
+        "floor_number": 3.0,
+        "capacity_size": 170
+    },
+    {
+        "classroom_id": 42,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e401",
+        "floor_number": 4.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 43,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e402",
+        "floor_number": 4.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 44,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e403",
+        "floor_number": 4.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 45,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e404",
+        "floor_number": 4.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 46,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e405",
+        "floor_number": 4.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 47,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e406",
+        "floor_number": 4.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 48,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e501",
+        "floor_number": 5.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 49,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e502",
+        "floor_number": 5.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 50,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e503",
+        "floor_number": 5.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 51,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e504",
+        "floor_number": 5.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 52,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e505",
+        "floor_number": 5.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 53,
+        "building_name": "\u666e\u901a",
+        "room_name": "\u666e506",
+        "floor_number": 5.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 54,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0102",
+        "floor_number": 1.0,
+        "capacity_size": 180
+    },
+    {
+        "classroom_id": 55,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0103",
+        "floor_number": 1.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 56,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0201",
+        "floor_number": 2.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 57,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0202",
+        "floor_number": 2.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 58,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0203",
+        "floor_number": 2.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 59,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0204",
+        "floor_number": 2.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 60,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0301",
+        "floor_number": 3.0,
+        "capacity_size": 180
+    },
+    {
+        "classroom_id": 61,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0302",
+        "floor_number": 3.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 62,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0303",
+        "floor_number": 3.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 63,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0304",
+        "floor_number": 3.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 64,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0401",
+        "floor_number": 4.0,
+        "capacity_size": 110
+    },
+    {
+        "classroom_id": 65,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0402",
+        "floor_number": 4.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 66,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0403",
+        "floor_number": 4.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 67,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0404",
+        "floor_number": 4.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 68,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0405",
+        "floor_number": 4.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 69,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0501",
+        "floor_number": 5.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 70,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0502",
+        "floor_number": 5.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 71,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0503",
+        "floor_number": 5.0,
+        "capacity_size": 120
+    },
+    {
+        "classroom_id": 72,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0504",
+        "floor_number": 5.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 73,
+        "building_name": "\u65b0\u751f",
+        "room_name": "\u65b0505",
+        "floor_number": 5.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 74,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c201",
+        "floor_number": 2.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 75,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c202",
+        "floor_number": 2.0,
+        "capacity_size": 110
+    },
+    {
+        "classroom_id": 76,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c203",
+        "floor_number": 2.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 77,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c301",
+        "floor_number": 3.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 78,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c302",
+        "floor_number": 3.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 79,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c401",
+        "floor_number": 4.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 80,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c402",
+        "floor_number": 4.0,
+        "capacity_size": 80
+    },
+    {
+        "classroom_id": 81,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c403",
+        "floor_number": 4.0,
+        "capacity_size": 150
+    },
+    {
+        "classroom_id": 82,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c404",
+        "floor_number": 4.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 83,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c501",
+        "floor_number": 5.0,
+        "capacity_size": 160
+    },
+    {
+        "classroom_id": 84,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c502",
+        "floor_number": 5.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 85,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c503",
+        "floor_number": 5.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 86,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c504",
+        "floor_number": 5.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 87,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c505",
+        "floor_number": 5.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 88,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c601",
+        "floor_number": 6.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 89,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c602",
+        "floor_number": 6.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 90,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c603",
+        "floor_number": 6.0,
+        "capacity_size": 100
+    },
+    {
+        "classroom_id": 91,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c604",
+        "floor_number": 6.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 92,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c605",
+        "floor_number": 6.0,
+        "capacity_size": 140
+    },
+    {
+        "classroom_id": 93,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c606",
+        "floor_number": 6.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 94,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c607",
+        "floor_number": 6.0,
+        "capacity_size": 110
+    },
+    {
+        "classroom_id": 95,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c701",
+        "floor_number": 7.0,
+        "capacity_size": 130
+    },
+    {
+        "classroom_id": 96,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c702",
+        "floor_number": 7.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 97,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c703",
+        "floor_number": 7.0,
+        "capacity_size": 170
+    },
+    {
+        "classroom_id": 98,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c704",
+        "floor_number": 7.0,
+        "capacity_size": 190
+    },
+    {
+        "classroom_id": 99,
+        "building_name": "\u7d9c\u5408",
+        "room_name": "\u7d9c705",
+        "floor_number": 7.0,
+        "capacity_size": 90
+    },
+    {
+        "classroom_id": 901,
+        "building_name": "\u751f\u79d1\u9662",
+        "room_name": "\u6f01\u79d1407A",
+        "floor_number": 4.0,
+        "capacity_size": 80
+    }
+]
