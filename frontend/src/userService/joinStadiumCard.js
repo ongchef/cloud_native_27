@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
 
-export default function StadiumCard({ image, title, description }) {
+export default function joinStadiumCard({ image, title, description }) {
   return (
     <Box my={2}>
       <Card sx={{ width: "70vw", margin: "auto" }}>
@@ -35,7 +35,14 @@ export default function StadiumCard({ image, title, description }) {
               <Typography variant="body2" color="text.secondary">
                 {description}
               </Typography>
-              <Button variant="contained"onClick={()=>window.location.href="orderStadiumDetail?id="}>預約場地</Button>
+              <Button
+                variant="contained"
+                onClick={() =>
+                  (window.location.href = "orderStadiumDetail?id=")
+                }
+              >
+                預約場地
+              </Button>
             </CardContent>
           </Grid>
         </Grid>

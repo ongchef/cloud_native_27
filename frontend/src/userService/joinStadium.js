@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import StadiumCard from "./orderStadiumCard";
+import StadiumCard from "./joinStadiumCard";
 import React, { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -17,7 +17,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
-export default function OrderStadium() {
+export default function JoinStadium() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
