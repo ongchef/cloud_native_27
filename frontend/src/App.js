@@ -25,8 +25,9 @@ import eventBus from "./authService/eventBus";
 import AuthVerify from "./authService/authVerify";
 import OrderStadium from "./userService/orderStadium";
 import JoinStadium from "./userService/joinStadium";
-
+import UserHistory from "./userService/userHistory";
 import OrderStadiumDetail from "./userService/orderStadiumDetail";
+import JoinStadiumDetail from "./userService/joinStadiumDetail";
 
 const drawerWidth = 240;
 
@@ -176,7 +177,7 @@ export default function App() {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton to="/userHistory">
                   <ListItemIcon></ListItemIcon>
                   <ListItemText primary={"歷史紀錄"} />
                 </ListItemButton>
@@ -250,9 +251,15 @@ export default function App() {
         <Route exact path="/joinStadium" element={<JoinStadium />} />
         <Route
           exact
+          path="/joinStadiumDetail"
+          element={<JoinStadiumDetail />}
+        />
+        <Route
+          exact
           path="/orderStadiumDetail"
           element={<OrderStadiumDetail />}
         />
+        <Route exact path="/userHistory" element={<UserHistory />} />
       </Routes>
       <AuthVerify logOut={logOut} />
     </>

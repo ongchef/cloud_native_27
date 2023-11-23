@@ -7,7 +7,7 @@ import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
 import { useEffect } from "react";
 
-export default function joinStadiumCard({ image, title, description }) {
+export default function joinStadiumCard({ id, image, title, description }) {
   return (
     <Box my={2}>
       <Card sx={{ width: "70vw", margin: "auto" }}>
@@ -25,7 +25,12 @@ export default function joinStadiumCard({ image, title, description }) {
               component="img"
               image={image}
               alt={title}
-              sx={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}
+              sx={{
+                maxHeight: "100%",
+                maxWidth: "100%",
+                objectFit: "contain",
+                padding: "2%",
+              }}
             />
           </Grid>
           <Grid item xs={6}>
@@ -38,11 +43,9 @@ export default function joinStadiumCard({ image, title, description }) {
               </Typography>
               <Button
                 variant="contained"
-                onClick={() =>
-                  (window.location.href = "orderStadiumDetail?id=")
-                }
+                onClick={() => (window.location.href = "joinStadiumDetail?id=")}
               >
-                預約場地
+                加入場地
               </Button>
             </CardContent>
           </Grid>
