@@ -5,8 +5,10 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
+import { useEffect } from "react";
 
 export default function StadiumCard({ image, title, description }) {
+  
   return (
     <Box my={2}>
       <Card sx={{ width: "70vw", margin: "auto" }}>
