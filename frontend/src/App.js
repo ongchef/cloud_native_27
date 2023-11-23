@@ -24,6 +24,7 @@ import AuthService from "./authService/authService";
 import eventBus from "./authService/eventBus";
 import AuthVerify from "./authService/authVerify";
 import OrderStadium from "./userService/orderStadium";
+import OrderStadiumDetail from "./userService/orderStadiumDetail";
 
 const drawerWidth = 240;
 
@@ -244,6 +245,11 @@ export default function App() {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
         <Route exact path="/orderStadium" element={<OrderStadium />} />
+        <Route
+          exact
+          path="/orderStadiumDetail"
+          element={<OrderStadiumDetail />}
+        />
       </Routes>
       <AuthVerify logOut={logOut} />
     </>

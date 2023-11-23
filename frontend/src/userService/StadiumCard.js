@@ -4,6 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
+import Button from "@mui/material/Button"; // 引入Button元件
 
 export default function StadiumCard({ image, title, description }) {
   return (
@@ -34,6 +35,7 @@ export default function StadiumCard({ image, title, description }) {
               <Typography variant="body2" color="text.secondary">
                 {description}
               </Typography>
+              <Button variant="contained">預約場地</Button>
             </CardContent>
           </Grid>
         </Grid>
