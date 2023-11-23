@@ -1,38 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 import { Routes, Route, Link, Router } from "react-router-dom";
-import { styled, useTheme } from '@mui/material/styles';
-import Login from './authService/login';
-import Register from './authService/register';
-import { useContext, useEffect, useState } from 'react';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import MenuIcon from '@mui/icons-material/Menu';
-import IconButton from '@mui/material/IconButton';
-import Drawer from '@mui/material/Drawer';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { AppBar, Box, Button } from '@mui/material';
-import LoginIcon from '@mui/icons-material/Login';
-import { UserContext } from './UserContext';
-import AuthService from './authService/authService';
-import eventBus from './authService/eventBus';
-import AuthVerify from './authService/authVerify';
+import { styled, useTheme } from "@mui/material/styles";
+import Login from "./authService/login";
+import Register from "./authService/register";
+import { useContext, useEffect, useState } from "react";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
+import Drawer from "@mui/material/Drawer";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { AppBar, Box, Button } from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
+import { UserContext } from "./UserContext";
+import AuthService from "./authService/authService";
+import eventBus from "./authService/eventBus";
+import AuthVerify from "./authService/authVerify";
+import OrderStadium from "./userService/orderStadium";
 
 const drawerWidth = 240;
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
+  justifyContent: "flex-end",
 }));
 
 export default function App() {
@@ -48,7 +49,7 @@ export default function App() {
 
     // console.log(decodedJwt.exp  )
   };
-  
+
   const [verified, setVerified] = useState(false);
   const [user, setUser] = useState(false);
   const [admin, setAdmin] = useState(false);
@@ -56,17 +57,15 @@ export default function App() {
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-    console.log(user)
+    console.log(user);
     if (user) {
       setVerified(true);
-      if(user.roles.includes('ROLE_USER')){
-        setUser(true)
-      }
-      else if(user.roles.includes('ROLE_ADMIN')){
-        setAdmin(true)
-      }
-      else if(user.roles.includes('ROLE_PROVIDER')){
-        setProvider(true)
+      if (user.roles.includes("ROLE_USER")) {
+        setUser(true);
+      } else if (user.roles.includes("ROLE_ADMIN")) {
+        setAdmin(true);
+      } else if (user.roles.includes("ROLE_PROVIDER")) {
+        setProvider(true);
       }
     }
 
@@ -81,46 +80,53 @@ export default function App() {
 
   const logOut = () => {
     AuthService.logout();
-    setVerified(false)
-    setUser(false)
-    setAdmin(false)
-    setProvider(false)
+    setVerified(false);
+    setUser(false);
+    setAdmin(false);
+    setProvider(false);
   };
 
-
   return (
-    
     <>
-    <AppBar position="fixed" open={open}>
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{ mr: 2, ...(open && { display: 'none' }) }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" noWrap component="div" >
-          Joinable
-        </Typography>
-        {verified?
-        // <Box display='flex' justifyContent='right'>
-          <Button  display='flex' variant="h6" onClick={logOut} sx={{ marginLeft: "auto" }}>
-            Logout
-          </Button>:""
-        // </Box>
-      }
-      </Toolbar>
-    </AppBar>
-    <Drawer
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(open && { display: "none" }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Joinable
+          </Typography>
+          {
+            verified ? (
+              // <Box display='flex' justifyContent='right'>
+              <Button
+                display="flex"
+                variant="h6"
+                onClick={logOut}
+                sx={{ marginLeft: "auto" }}
+              >
+                Logout
+              </Button>
+            ) : (
+              ""
+            )
+            // </Box>
+          }
+        </Toolbar>
+      </AppBar>
+      <Drawer
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
         variant="persistent"
@@ -129,134 +135,117 @@ export default function App() {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {<ChevronLeftIcon /> }
+            {<ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-            {verified?"":(
-              <>
-            <ListItem  disablePadding >
-              <ListItemButton to='/register'>
-                <ListItemIcon>
-                  
-                </ListItemIcon>
-                <ListItemText primary={"Register"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton to='/login'>
-                <ListItemIcon>
-                  {<LoginIcon></LoginIcon>}
-                </ListItemIcon>
-                <ListItemText primary={"Login"} />
-              </ListItemButton>
-            </ListItem>
+          {verified ? (
+            ""
+          ) : (
+            <>
+              <ListItem disablePadding>
+                <ListItemButton to="/register">
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"Register"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton to="/login">
+                  <ListItemIcon>{<LoginIcon></LoginIcon>}</ListItemIcon>
+                  <ListItemText primary={"Login"} />
+                </ListItemButton>
+              </ListItem>
             </>
-            )}
-            {user?(
-              <>
-            <ListItem  disablePadding >
-              <ListItemButton>
-                <ListItemIcon>
-                  
-                </ListItemIcon>
-                <ListItemText primary={"加入場地"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton>
-                <ListItemIcon>
-              
-                </ListItemIcon>
-                <ListItemText primary={"預約場地"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton>
-                <ListItemIcon>
-              
-                </ListItemIcon>
-                <ListItemText primary={"歷史紀錄"} />
-              </ListItemButton>
-            </ListItem>
+          )}
+          {user ? (
+            <>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"加入場地"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton to="/orderStadium">
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"預約場地"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"歷史紀錄"} />
+                </ListItemButton>
+              </ListItem>
             </>
-            ):""}
-            
-            {provider?(
-              <>
-            <ListItem  disablePadding >
-              <ListItemButton>
-                <ListItemIcon>
-                  
-                </ListItemIcon>
-                <ListItemText primary={"球場狀態查詢"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton>
-                <ListItemIcon>
-         
-                </ListItemIcon>
-                <ListItemText primary={"球場管理"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton>
-                <ListItemIcon>
-         
-                </ListItemIcon>
-                <ListItemText primary={"歷史紀錄"} />
-              </ListItemButton>
-            </ListItem>
+          ) : (
+            ""
+          )}
+
+          {provider ? (
+            <>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"球場狀態查詢"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"球場管理"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"歷史紀錄"} />
+                </ListItemButton>
+              </ListItem>
             </>
-            ):""}
-            {admin?(
-              <>
-            <ListItem  disablePadding >
-              <ListItemButton >
-                <ListItemIcon>
-                  
-                </ListItemIcon>
-                <ListItemText primary={"球場狀態查詢"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton >
-                <ListItemIcon>
-           
-                </ListItemIcon>
-                <ListItemText primary={"球場管理"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton >
-                <ListItemIcon>
-           
-                </ListItemIcon>
-                <ListItemText primary={"使用者歷史紀錄"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem  disablePadding >
-              <ListItemButton >
-                <ListItemIcon>
-           
-                </ListItemIcon>
-                <ListItemText primary={"註冊球場供應商"} />
-              </ListItemButton>
-            </ListItem>
+          ) : (
+            ""
+          )}
+          {admin ? (
+            <>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"球場狀態查詢"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"球場管理"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"使用者歷史紀錄"} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={"註冊球場供應商"} />
+                </ListItemButton>
+              </ListItem>
             </>
-            ):""}
+          ) : (
+            ""
+          )}
         </List>
         <Divider />
       </Drawer>
-        <Routes>
-              <Route exact path="/login" element={<Login /> } />
-              <Route exact path="/register" element={<Register />} />
-        </Routes>
-        <AuthVerify logOut={logOut}/>
-      </>
+      <Routes>
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/register" element={<Register />} />
+        <Route exact path="/orderStadium" element={<OrderStadium />} />
+      </Routes>
+      <AuthVerify logOut={logOut} />
+    </>
   );
 }
-
-
