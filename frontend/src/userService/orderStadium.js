@@ -8,11 +8,20 @@ import StadiumCard from "./StadiumCard";
 import React, { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs'
+import moment from 'moment/moment'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 export default function OrderStadium() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
+  const [date, setDate] = useState( moment(new Date()).format('YYYY-MM-DD'));
+  const [time, setTime] = useState(0);
 
   const handleSportChange = (event) => {
     setSport(event.target.value);
@@ -33,15 +42,33 @@ export default function OrderStadium() {
         margin="auto"
       >
         <Box m={1}>
-          <TextField
-            id="datetime-local"
-            label="Next appointment"
-            type="datetime-local"
-            defaultValue="2017-05-24T10:30"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                      disablePast = {true}
+                      value = {dayjs(date+1)}
+                      shouldDisableDate={(date)=>{
+                          return date.date()>new Date().getDate()+7}}
+                      formatDate={(date) => moment(date).format('DD-MM-YYYY')}
+                      onChange={(newDate) => {
+                        newDate = moment(new Date(newDate.year(),newDate.month(),newDate.date())).format('YYYY-MM-DD')
+                        setDate(newDate)}}
+                  />
+                  <TimePicker  
+                    timeSteps={{minutes:30}}
+                    label="時段"
+                    ampm={false}
+                    minTime={moment("9:00", "HH:mm")}
+                    maxTime={moment("21:00", "HH:mm")}
+                    // views={["hours","minutes"]}
+                    format='hh:mm'
+                    // defaultValue={dayjs("0000-00-00T9:00")}
+                    onChange={(newTime)=>{
+                      console.log(newTime)
+                      console.log(newTime.get('hour'))
+                      setTime(newTime.get('hour'))}}
+                  />
+
+          </LocalizationProvider>
         </Box>
         <Box m={1}>
           <FormControl fullWidth>
