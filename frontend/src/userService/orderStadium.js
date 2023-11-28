@@ -18,14 +18,16 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
+import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
+
 export default function OrderStadium() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
-  useEffect(()=>{
-    fakeStadium()
-  })
+  useEffect(() => {
+    fakeStadium();
+  });
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
@@ -113,23 +115,44 @@ export default function OrderStadium() {
           <Button variant="contained">Search</Button>
         </Box>
       </Box>
-      <Box m={0.5} sx={{ height: "80vh", overflowY: "auto" }}>
+      <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         <StadiumCard
-          my={2}
+          id={1}
           image={pic2}
-          title={"球場名稱"}
-          description={"球場的資訊"}
+          title={"球場名稱1"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "週一至週五",
+            "16:00~22:00",
+            6,
+          ]}
         />
         <StadiumCard
+          id={2}
           image={pic}
-          title={"球場名稱"}
-          description={"球場的資訊"}
+          title={"球場名稱2"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "週一至週五",
+            "16:00~22:00",
+            7,
+          ]}
         />
         <StadiumCard
-          image={pic}
-          title={"球場名稱"}
-          description={"球場的資訊"}
+          id={3}
+          image={pic2}
+          title={"球場名稱3"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "週一至週五",
+            "16:00~22:00",
+            8,
+          ]}
         />
+      </Box>
+      <Box display="flex" justifyContent="center" marginTop="20px">
+        {/* 其他內容 */}
+        <Pagination count={10} color="primary" /> {/* 添加這一行 */}
       </Box>
     </div>
   );

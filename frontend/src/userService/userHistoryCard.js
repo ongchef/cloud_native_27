@@ -5,10 +5,16 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
-export default function UserHistoryCard({ id, image, title, description }) {
+export default function UserHistoryCard({
+  id,
+  image,
+  title,
+  description,
+  status,
+}) {
   return (
     <Box my={2}>
-      <Card sx={{ width: "70vw", margin: "auto" }}>
+      <Card sx={{ height: "30vh", width: "70vw", margin: "auto" }}>
         <Grid container>
           <Grid
             item
@@ -42,13 +48,8 @@ export default function UserHistoryCard({ id, image, title, description }) {
                   {item}
                 </Typography>
               ))}
-              <Button
-                variant="contained"
-                onClick={() =>
-                  (window.location.href = "orderStadiumDetail?id=")
-                }
-              >
-                預約場地
+              <Button variant="contained" disabled={!status}>
+                {status ? "即將到來" : "已結束"}
               </Button>
             </CardContent>
           </Grid>

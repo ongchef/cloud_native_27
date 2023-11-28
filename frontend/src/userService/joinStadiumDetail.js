@@ -38,7 +38,7 @@ export default function JoinStadiumDetail() {
             my={2}
             image={pic2}
             title={"球場名稱"}
-            description={"球場的資訊"}
+            description={"球場的"}
           />
           {/* 內容2 */}
         </Container>

@@ -21,7 +21,7 @@ export default function UserHistory() {
         <Box width="80vw">
           <Typography variant="h3">球場歷史紀錄</Typography>
         </Box>
-        <Box>
+        <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
           <HistoryCard
             image={pic}
             title={"球場名稱1"}
@@ -31,6 +31,7 @@ export default function UserHistory() {
               "19:00~21:00",
               ["Basketball", "新手友善", "雙打"],
             ]}
+            status={true}
           />
           <HistoryCard
             image={pic2}
@@ -41,6 +42,7 @@ export default function UserHistory() {
               "19:00~21:00",
               ["Basketball", "新手友善", "雙打"],
             ]}
+            status={true}
           />
           <HistoryCard
             image={pic2}
@@ -51,6 +53,7 @@ export default function UserHistory() {
               "19:00~21:00",
               ["Basketball", "新手友善", "雙打"],
             ]}
+            status={false}
           />
         </Box>
       </Box>
