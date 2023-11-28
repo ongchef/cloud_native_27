@@ -15,8 +15,11 @@ export const getCourtsQuery = () => {
 
 // get all courts by admin id
 export const getCourtsByAdminIdQuery = (data) => {
+
+    const { admin_id } = data
+
     return new Promise((resolve, reject) => {
-        db.query('SELECT * from STADIUM.COURT WHERE admin_id = ?', [data], (error, results) => {
+        db.query('SELECT * from STADIUM.COURT WHERE admin_id = ?', [admin_id], (error, results) => {
             if (error) {
                 reject(error);
             } else {
@@ -26,66 +29,115 @@ export const getCourtsByAdminIdQuery = (data) => {
     });
 }
 
-// TODO: check admin_id of the court
-// if finished, it can be added it into other functions
-export const checkCourtsProvider = (data) => {
+// check admin_id of the court
+export const isCourtsProvider = (data) => {
     return new Promise((resolve, reject) => {
-        db.query('', [data], (error, results) => {
+
+        const { court_id, admin_id } = data
+
+        db.query('SELECT admin_id FROM STADIUM.COURT WHERE court_id = ?', [court_id], (error, results) => {
+            
             if (error) {
-                reject(error);
+                reject(false);
             } else {
-                resolve(results);
+                const court_admin_id = results[0]['admin_id']
+                if (court_admin_id === admin_id){
+                    resolve(true);
+                }
+                resolve(false)
             }
         });
     });
 }
 
 // get court's reserved time by court id
-export const getCourtsReservedByCourtIdQuery = (data) => {
-    // TODO: check admin_id of the court
+export const getCourtsReservedByCourtIdQuery = async(data) => {
 
-    return new Promise((resolve, reject) => {
-        db.query(`SELECT start_time, end_time FROM STADIUM.APPOINTMENT_TIME INNER JOIN 
-        STADIUM.APPOINTMENT ON STADIUM.APPOINTMENT_TIME.appointment_id = STADIUM.APPOINTMENT.appointment_id 
-        WHERE court_id = ?`, [data], (error, results) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(results);
-            }
+    const iscourtproiver = await isCourtsProvider(data)
+
+    if (iscourtproiver) {
+
+        const court_id = data['court_id']
+
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT start_time, end_time FROM STADIUM.APPOINTMENT_TIME INNER JOIN 
+            STADIUM.APPOINTMENT ON STADIUM.APPOINTMENT_TIME.appointment_id = STADIUM.APPOINTMENT.appointment_id 
+            WHERE court_id = ?`, [court_id], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
         });
-    });
+    } else {
+        return new Promise((resolve, reject) => {
+            resolve("You are not the owner of the court!")
+        })
+    }
+
 }
 
 // put court info by court_id
-// TODO: check which columns should be edited
-export const putCourtsInfoByIdQuery = (data) => {
-    // TODO: check admin_id of the court
+export const putCourtsInfoByIdQuery = async(data) => {
+
+    const iscourtproiver = await isCourtsProvider(data)
+
+    if (iscourtproiver) {
+
+        const { court_id, admin_id, ...update_col_dict } = data;
+
+        return new Promise((resolve, reject) => {
+            db.query('UPDATE STADIUM.COURT SET ? WHERE court_id = ?', [update_col_dict, court_id], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve("變更完成!");
+                }
+            });
+        });
+    } else {
+        return new Promise((resolve, reject) => {
+            resolve("You are not the owner of the court!")
+        })
+    }
+}
+
+// post create courts
+export const postCreateCourtsQuery = (data) => {
 
     return new Promise((resolve, reject) => {
-        db.query('UPDATE * from STADIUM.COURT SET = ? WHERE = ?', [data], (error, results) => {
+        db.query(`INSERT INTO STADIUM.COURT SET ?`, [data], (error, results) => {
             if (error) {
                 reject(error);
             } else {
-                resolve(results);
+                resolve("新增完成!");
             }
         });
     });
 }
 
-// post create courts
-// TODO: court_id auto increment setting in DB?
-export const postCreateCourtsQuery = (data) => {
+// delete courts
+export const deleteCourtsByIdQuery = async(data) => {
 
-    const court_columns = '(admin_id, name, location, contact, available)'
+    const iscourtproiver = await isCourtsProvider(data)
 
-    return new Promise((resolve, reject) => {
-        db.query(`INSERT INTO STADIUM.COURT ${court_columns} VALUES ?`, [data], (error, results) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(results);
-            }
+    if (iscourtproiver) {
+
+        const { court_id } = data;
+
+        return new Promise((resolve, reject) => {
+            db.query('DELETE FROM STADIUM.COURT WHERE court_id = ?', [court_id], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve("刪除完成!");
+                }
+            });
         });
-    });
+    } else {
+        return new Promise((resolve, reject) => {
+            resolve("You are not the owner of the court!")
+        })
+    }
 }
