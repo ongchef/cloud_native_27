@@ -13,11 +13,22 @@ import Grid from "@mui/material/Grid";
 
 var timeperiod = {
   availableTime:[13,20],
-  booking:[[13,15],[17,19]]
+  booking:[[13,14,15],[17,18,19]]
 }
-function timeBtn(){
+function TimeBtn(){
+  
   const availableTime = timeperiod.availableTime
-  return 
+  const availableTimeList = Array.from(new Array(availableTime[1]-availableTime[0]+1),(x,i)=>i+availableTime[0])
+  const btnList = availableTimeList.map((time)=>{
+    return (
+      <Grid item>
+        <Button variant="outlined" >{time}</Button>
+      </Grid>
+    )
+  })
+  return (
+    btnList
+  )
 }
 export default function StadiumBookingDetail() {
   const navigate = useNavigate();
@@ -64,7 +75,14 @@ export default function StadiumBookingDetail() {
                       description
                     </Typography>
                   </CardContent>
+                  <Box paddingLeft={3} display='flex' alignContent='right' flexWrap='wrap'>
+                    <Grid rowSpacing={2} container>
+                    <TimeBtn></TimeBtn>
+                    </Grid>
+                    
+                  </Box>
                 </Grid>
+                
               </Grid>
             </Card>
           </Box>
