@@ -28,6 +28,7 @@ import OrderStadiumDetail from "./userService/orderStadiumDetail";
 import JoinStadiumDetail from "./userService/joinStadiumDetail";
 import { useNavigate } from "react-router-dom"; // 引入useNavigate鉤子
 import StadiumBoard from "./provider/stadiumBoard";
+import StadiumBookingDetail from "./provider/stadiumBookingDetail";
 
 const drawerWidth = 240;
 
@@ -248,8 +249,11 @@ export default function App() {
         <Divider />
       </Drawer>
       <Routes>
+        
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
+        {user &&
+        <>
         <Route exact path="/orderStadium" element={<OrderStadium />} />
         <Route exact path="/joinStadium" element={<JoinStadium />} />
         <Route
@@ -262,9 +266,12 @@ export default function App() {
           path="/orderStadiumDetail"
           element={<OrderStadiumDetail />}
         />
+        </>
+        }
         <Route exact path="/userHistory" element={<UserHistory />} />
         {/* provider */}
         <Route exact path="/stadiumBoard" element={<StadiumBoard />} />
+        <Route exact path="/stadiumBookingDetail" element={<StadiumBookingDetail />} />
       </Routes>
       <AuthVerify logOut={logOut} />
     </>

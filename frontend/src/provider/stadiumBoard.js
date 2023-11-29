@@ -4,12 +4,13 @@ import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import StadiumCard from "./orderStadiumCard";
+import StadiumCard from "./stadiumCard";
 import React, { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 import dayjs from "dayjs";
 import moment from "moment/moment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -121,9 +122,23 @@ export default function StadiumBoard() {
         </Box>
         
       </Box>
-      <Typography variant="h4" color="text.secondary">
+      <Box >
+      <Grid
+            container
+          >
+    
+        <Grid item xs={1.5}>
+        </Grid>
+        <Grid item xs={4.5}>
+        <Typography variant="h4" color="text.secondary">
                 球場預約情況
         </Typography>
+        </Grid>
+        <Grid item xs={6}>
+        
+        </Grid>
+        </Grid>    
+        </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
       
         <StadiumCard
