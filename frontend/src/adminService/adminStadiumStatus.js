@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import StadiumCard from "./joinStadiumCard";
+import StadiumCard from "../userService/joinStadiumCard";
 import React, { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -18,7 +18,7 @@ import FormControlLabel from "@mui/material/FormControlLabel"; // 引入FormCont
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination";
-export default function JoinStadium() {
+export default function AdminStadiumStatus() {
   const [sport, setSport] = useState("basketball");
   const [location, setLocation] = useState("Da an");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
@@ -32,8 +32,8 @@ export default function JoinStadium() {
     setLocation(event.target.value);
   };
   return (
-    <div>
-      <h1>Order Stadium</h1>
+    <>
+      <h1>Admin Stadium Status</h1>
       <Box
         display="flex"
         flexDirection="row"
@@ -170,6 +170,6 @@ export default function JoinStadium() {
         {/* 其他內容 */}
         <Pagination count={10} color="primary" /> {/* 添加這一行 */}
       </Box>
-    </div>
+    </>
   );
 }
