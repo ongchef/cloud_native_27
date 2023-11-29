@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import StadiumCard from "../userService/joinStadiumCard";
+import StadiumCard from "./adminStadiumCard";
 import React, { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -140,7 +140,7 @@ export default function AdminStadiumStatus() {
             "106台北市大安區羅斯福路四段1號",
             "2023-11-02",
             "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
+            4,
           ]}
         />
         <StadiumCard
@@ -151,7 +151,7 @@ export default function AdminStadiumStatus() {
             "106台北市大安區羅斯福路四段1號",
             "2023-11-02",
             "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
+            6,
           ]}
         />
         <StadiumCard
@@ -162,7 +162,7 @@ export default function AdminStadiumStatus() {
             "106台北市大安區羅斯福路四段1號",
             "2023-11-02",
             "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
+            10,
           ]}
         />
       </Box>
