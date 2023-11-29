@@ -71,7 +71,7 @@ export default function OrderStadiumCard({ id, image, title, description }) {
                     variant="contained"
                     onClick={() => navigate(`/joinStadiumDetail?id=${id}`)} // Include the id in the string
                   >
-                    加入場地
+                    預約場地
                   </Button>
                 </Box>
               </Box>
