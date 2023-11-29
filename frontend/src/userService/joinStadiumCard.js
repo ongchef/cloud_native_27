@@ -5,64 +5,107 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
+import Avatar from "@mui/material/Avatar";
 
 export default function JoinStadiumCard({ id, image, title, description }) {
   const navigate = useNavigate();
 
   return (
     <Box my={2}>
-      <Card sx={{ width: "70vw", margin: "auto" }}>
-        <Grid container>
-          <Grid
-            item
-            xs={6}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+      <Card sx={{ height: "35vh", width: "70vw", margin: "auto" }}>
+        <Grid paddingLeft="30px" container spacing={2}>
+          <Grid item xs={12} sm={6}>
             <CardMedia
               component="img"
-              image={image}
-              alt={title}
-              sx={{
-                maxHeight: "100%",
-                maxWidth: "100%",
-                objectFit: "contain",
-                padding: "2%",
-              }}
+              image={image} // 替換為您的圖片URL
+              alt="Stadium"
             />
           </Grid>
           <Grid item xs={6}>
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{ fontWeight: "bold" }}
+              >
                 {title}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description[0]}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description[1] + " " + description[2]}
-              </Typography>
-              {Array.isArray(description[3]) &&
-                description[3].map((item, index) => (
-                  <Typography
-                    key={index}
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    {item}
-                  </Typography>
-                ))}
-              <Button
-                variant="contained"
-                onClick={() => navigate(`/joinStadiumDetail?id=${id}`)} // Include the id in the string
+              <Box
+                mx={1}
+                my={1}
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                flexWrap="wrap"
+                gap={1}
               >
-                加入場地
-              </Button>
+                <Typography variant="body2" color="text.secondary">
+                  {description[0]}
+                </Typography>
+                <Typography variant="body2" color="000000">
+                  <span
+                    style={{
+                      color: "000000",
+                      backgroundColor: "#D9D9D9",
+                      paddingLeft: "10px",
+                      paddingRight: "10px",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {description[1]} {description[2]}
+                  </span>
+                </Typography>
+                <Typography variant="body2" color="000000">
+                  {description[3].map((tag, index) => (
+                    <React.Fragment key={index}>
+                      <span
+                        style={{
+                          color: "000000",
+                          backgroundColor: "#D9D9D9",
+                          paddingLeft: "10px",
+                          paddingRight: "10px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                          fontSize: "16px",
+                        }}
+                      >
+                        {tag}
+                      </span>
+                      {index < description[3].length - 1 && <>&nbsp;</>}
+                    </React.Fragment>
+                  ))}
+                </Typography>
+                <Typography variant="body2" color="000000">
+                  當前場地預約人數： <strong>4/8</strong>
+                </Typography>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  flexWrap="wrap"
+                  gap={1}
+                >
+                  <Avatar
+                    sx={{ bgcolor: "#FFA370" }}
+                    alt="Remy Sharp"
+                    src="/broken-image.jpg"
+                  >
+                    {description[4][0]}
+                  </Avatar>
+                  主揪人：{description[4]}
+                </Box>
+
+                <Box display="flex" justifyContent="flex-end">
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate(`/joinStadiumDetail?id=${id}`)} // Include the id in the string
+                  >
+                    加入場地
+                  </Button>
+                </Box>
+              </Box>
             </CardContent>
           </Grid>
         </Grid>
