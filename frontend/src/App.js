@@ -26,6 +26,7 @@ import JoinStadium from "./userService/joinStadium";
 import UserHistory from "./userService/userHistory";
 import OrderStadiumDetail from "./userService/orderStadiumDetail";
 import JoinStadiumDetail from "./userService/joinStadiumDetail";
+import AdminStadiumStatus from "./adminService/adminStadiumStatus";
 import { useNavigate } from "react-router-dom"; // 引入useNavigate鉤子
 import StadiumBoard from "./provider/stadiumBoard";
 import StadiumBookingDetail from "./provider/stadiumBookingDetail";
@@ -218,7 +219,7 @@ export default function App() {
           {admin ? (
             <>
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton to="/adminStadiumStatus">
                   <ListItemIcon></ListItemIcon>
                   <ListItemText primary={"球場狀態查詢"} />
                 </ListItemButton>
@@ -272,6 +273,11 @@ export default function App() {
         {/* provider */}
         <Route exact path="/stadiumBoard" element={<StadiumBoard />} />
         <Route exact path="/stadiumBookingDetail" element={<StadiumBookingDetail />} />
+        <Route
+          exact
+          path="/adminStadiumStatus"
+          element={<AdminStadiumStatus />}
+        />
       </Routes>
       <AuthVerify logOut={logOut} />
     </>

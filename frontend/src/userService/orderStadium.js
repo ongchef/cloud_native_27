@@ -1,9 +1,7 @@
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
 import StadiumCard from "./orderStadiumCard";
 import React, { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
@@ -62,9 +60,9 @@ export default function OrderStadium() {
                 setDate(newDate);
               }}
             />
-            </LocalizationProvider>
-          </Box>
-          <Box m={1}>
+          </LocalizationProvider>
+        </Box>
+        <Box m={1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               timeSteps={{ minutes: 30 }}
