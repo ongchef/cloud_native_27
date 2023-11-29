@@ -1,12 +1,15 @@
+import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
 import StadiumCard from "./orderStadiumCard";
 import React, { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import moment from "moment/moment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -16,9 +19,9 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
-import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
+import Pagination from "@mui/material/Pagination"; 
 
-export default function OrderStadium() {
+export default function StadiumBoard() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
@@ -60,9 +63,9 @@ export default function OrderStadium() {
                 setDate(newDate);
               }}
             />
-          </LocalizationProvider>
-        </Box>
-        <Box m={1}>
+            </LocalizationProvider>
+          </Box>
+          <Box m={1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               timeSteps={{ minutes: 30 }}
@@ -116,8 +119,13 @@ export default function OrderStadium() {
         <Box m={1}>
           <Button variant="contained">Search</Button>
         </Box>
+        
       </Box>
+      <Typography variant="h4" color="text.secondary">
+                球場預約情況
+        </Typography>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
+      
         <StadiumCard
           id={1}
           image={pic2}
