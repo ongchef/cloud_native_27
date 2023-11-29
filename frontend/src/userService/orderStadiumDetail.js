@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
 import pic2 from "../pic/羽球3.png";
+import { Input } from "antd";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Card } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
@@ -13,6 +14,8 @@ import { Button } from "antd";
 import React, { useState } from "react";
 import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
+import { Switch } from "antd";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function OrderStadiumDetail() {
   const navigate = useNavigate();
@@ -23,7 +26,7 @@ export default function OrderStadiumDetail() {
       console.log(`key: ${pair[0]}, value: ${pair[1]}`);
     }
   });
-  const [selectedOptions, setSelectedOptions] = useState(["a"]);
+  const [selectedOptions, setSelectedOptions] = useState([""]);
 
   const handleButtonClick = (value) => {
     const index = selectedOptions.indexOf(value);
@@ -62,8 +65,14 @@ export default function OrderStadiumDetail() {
         <Container maxWidth="sm">
           <Box my={2}>
             <Card sx={{ width: "70vw", margin: "auto" }}>
-              <Grid container>
-                <Grid item xs={6}>
+              <Grid
+                paddingLeft="30px"
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Grid item xs={12} sm={6}>
                   <CardMedia
                     component="img"
                     image={pic2} // 替換為您的圖片URL
@@ -83,11 +92,11 @@ export default function OrderStadiumDetail() {
                       variant="body2"
                       color="text.secondary"
                       paddingX={1}
-                      paddingY={0.2}
+                      paddingY={0.6}
                     >
                       106台北市大安區羅斯福路四段1號
                     </Typography>
-                    <Typography variant="body2" color="000000" paddingY={0.2}>
+                    <Typography variant="body2" color="000000" paddingY={0.6}>
                       <span
                         style={{
                           color: "000000",
@@ -103,7 +112,7 @@ export default function OrderStadiumDetail() {
                       variant="body2"
                       color="000000"
                       paddingX={1}
-                      paddingY={0.2}
+                      paddingY={0.6}
                     >
                       建議最大使用人數 : {8}
                     </Typography>
@@ -111,7 +120,7 @@ export default function OrderStadiumDetail() {
                       variant="body1"
                       color="000000"
                       paddingX={1}
-                      paddingY={0.2}
+                      paddingY={0.6}
                       sx={{ fontWeight: "bold" }}
                     >
                       預約時間：
@@ -158,6 +167,74 @@ export default function OrderStadiumDetail() {
                       >
                         18:00
                       </Button>
+                    </Box>
+                    <Box my={1} display="flex" alignItems="center">
+                      <Typography
+                        variant="body1"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.2}
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        強度：
+                      </Typography>
+                      <Radio.Group defaultValue="a" buttonStyle="solid">
+                        <Radio.Button value="a">新手友善</Radio.Button>
+                        <Radio.Button value="b">Advanced</Radio.Button>
+                        <Radio.Button value="c">頂尖對決</Radio.Button>
+                      </Radio.Group>
+                    </Box>
+                    <Box my={1} display="flex" alignItems="center">
+                      <Typography
+                        variant="body1"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.2}
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        規則：
+                      </Typography>
+                      <Radio.Group defaultValue="single" buttonStyle="solid">
+                        <Radio.Button value="single">單打</Radio.Button>
+                        <Radio.Button value="double">雙打</Radio.Button>
+                      </Radio.Group>
+                    </Box>
+                    <Box my={1} display="flex" alignItems="center">
+                      <Typography
+                        variant="body1"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.2}
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        備註：
+                      </Typography>
+                      <Input
+                        placeholder="e.g. 激烈碰撞"
+                        style={{ width: 300 }}
+                      />
+                    </Box>
+                    <Box my={1} display="flex" alignItems="center">
+                      <Typography
+                        variant="body1"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.2}
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        將此預約設定為私人房間：
+                      </Typography>
+                      <Switch />
+                    </Box>
+                    <Box display="flex" justifyContent="flex-end">
+                      <ButtonM
+                        width="300px"
+                        variant="outlined"
+                        onClick={() => navigate(-1)}
+                      >
+                        <ArrowForwardIcon />
+                        預約場地
+                      </ButtonM>
                     </Box>
                   </CardContent>
                 </Grid>
