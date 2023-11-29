@@ -21,13 +21,16 @@ import Pagination from "@mui/material/Pagination";
 export default function AdminStadiumStatus() {
   const [sport, setSport] = useState("basketball");
   const [location, setLocation] = useState("Da an");
+  const [provider, setProvider] = useState("NTU");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
 
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
-
+  const handleProviderChange = (event) => {
+    setProvider(event.target.value);
+  };
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
@@ -39,9 +42,25 @@ export default function AdminStadiumStatus() {
         flexDirection="row"
         justifyContent="center"
         alignItems="center"
-        width="70vw"
+        width="80vw"
         margin="auto"
       >
+        <Box m={1}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">球場提供商</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={provider}
+              onChange={handleProviderChange}
+              label="球場提供商"
+            >
+              <MenuItem value={"NTU"}>臺灣大學</MenuItem>
+              <MenuItem value={"Daan"}>大安運動中心</MenuItem>
+              <MenuItem value={"NTUST"}>臺灣科技大學</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <Box m={1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -107,26 +126,7 @@ export default function AdminStadiumStatus() {
             </Select>
           </FormControl>
         </Box>
-        <RadioGroup
-          padding="10px"
-          column
-          aria-label="position"
-          name="position"
-          defaultValue="top"
-        >
-          <FormControlLabel
-            value="public"
-            control={<Radio color="primary" />}
-            label="公開"
-            labelPlacement="end"
-          />
-          <FormControlLabel
-            value="private"
-            control={<Radio color="primary" />}
-            label="私人"
-            labelPlacement="end"
-          />
-        </RadioGroup>
+
         <Box m={1}>
           <Button variant="contained">Search</Button>
         </Box>

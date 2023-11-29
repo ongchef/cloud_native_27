@@ -96,7 +96,12 @@ export default function OrderStadiumDetail() {
                     >
                       106台北市大安區羅斯福路四段1號
                     </Typography>
-                    <Typography variant="body2" color="000000" paddingY={0.6}>
+                    <Typography
+                      variant="body2"
+                      color="000000"
+                      paddingY={0.6}
+                      paddingX={1}
+                    >
                       <span
                         style={{
                           color: "000000",
@@ -230,7 +235,9 @@ export default function OrderStadiumDetail() {
                       <ButtonM
                         width="300px"
                         variant="outlined"
-                        onClick={() => navigate(-1)}
+                        onClick={() => {
+                          console.log("預約場地api");
+                        }}
                       >
                         <ArrowForwardIcon />
                         預約場地

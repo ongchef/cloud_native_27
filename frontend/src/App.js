@@ -195,7 +195,7 @@ export default function App() {
           {provider ? (
             <>
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton to="/stadiumBoard">
                   <ListItemIcon></ListItemIcon>
                   <ListItemText primary={"球場狀態查詢"} />
                 </ListItemButton>
@@ -250,29 +250,32 @@ export default function App() {
         <Divider />
       </Drawer>
       <Routes>
-        
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
-        {user &&
-        <>
-        <Route exact path="/orderStadium" element={<OrderStadium />} />
-        <Route exact path="/joinStadium" element={<JoinStadium />} />
-        <Route
-          exact
-          path="/joinStadiumDetail"
-          element={<JoinStadiumDetail />}
-        />
-        <Route
-          exact
-          path="/orderStadiumDetail"
-          element={<OrderStadiumDetail />}
-        />
-        </>
-        }
+        {user && (
+          <>
+            <Route exact path="/orderStadium" element={<OrderStadium />} />
+            <Route exact path="/joinStadium" element={<JoinStadium />} />
+            <Route
+              exact
+              path="/joinStadiumDetail"
+              element={<JoinStadiumDetail />}
+            />
+            <Route
+              exact
+              path="/orderStadiumDetail"
+              element={<OrderStadiumDetail />}
+            />
+          </>
+        )}
         <Route exact path="/userHistory" element={<UserHistory />} />
         {/* provider */}
         <Route exact path="/stadiumBoard" element={<StadiumBoard />} />
-        <Route exact path="/stadiumBookingDetail" element={<StadiumBookingDetail />} />
+        <Route
+          exact
+          path="/stadiumBookingDetail"
+          element={<StadiumBookingDetail />}
+        />
         <Route
           exact
           path="/adminStadiumStatus"

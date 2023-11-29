@@ -141,6 +141,7 @@ export default function JoinStadium() {
             "2023-11-02",
             "19:00~21:00",
             ["Basketball", "新手友善", "雙打"],
+            "Wonu Juan",
           ]}
         />
         <StadiumCard
@@ -152,6 +153,7 @@ export default function JoinStadium() {
             "2023-11-02",
             "19:00~21:00",
             ["Basketball", "新手友善", "雙打"],
+            "Gordon Sung",
           ]}
         />
         <StadiumCard
@@ -163,6 +165,7 @@ export default function JoinStadium() {
             "2023-11-02",
             "19:00~21:00",
             ["Basketball", "新手友善", "雙打"],
+            "Bryan Chen",
           ]}
         />
       </Box>

@@ -11,44 +11,70 @@ export default function OrderStadiumCard({ id, image, title, description }) {
   const navigate = useNavigate();
   return (
     <Box my={2}>
-      <Card sx={{ width: "70vw", margin: "auto" }}>
-        <Grid container>
-          <Grid
-            item
-            xs={6}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+      <Card sx={{ height: "35vh", width: "70vw", margin: "auto" }}>
+        <Grid paddingLeft="30px" container spacing={2}>
+          <Grid item xs={12} sm={6}>
             <CardMedia
               component="img"
-              image={image}
-              alt={title}
-              sx={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}
+              image={image} // 替換為您的圖片URL
+              alt="Stadium"
             />
           </Grid>
           <Grid item xs={6}>
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{ fontWeight: "bold" }}
+              >
                 {title}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description[0]}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description[1]} {description[2]} 開放預約
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                建議最大使用人數：{description[3]}
-              </Typography>
-              <Button
-                variant="contained"
-                onClick={() => navigate(`/orderStadiumDetail?id=${id}`)} // Include the id in the string
+              <Box
+                mx={1}
+                my={1}
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                flexWrap="wrap"
+                gap={1}
               >
-                預約場地
-              </Button>
+                <Typography variant="body2" color="text.secondary">
+                  {description[0]}
+                </Typography>
+                <Typography variant="body2" color="000000">
+                  <span
+                    style={{
+                      color: "000000",
+                      backgroundColor: "#D9D9D9",
+                      paddingLeft: "10px",
+                      paddingRight: "10px",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {description[1]} {description[2]} 開放預約
+                  </span>
+                </Typography>
+
+                <Typography variant="body2" color="000000">
+                  建議最大使用人數： <strong>{description[3]}</strong>
+                </Typography>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  flexWrap="wrap"
+                  gap={1}
+                ></Box>
+
+                <Box display="flex" justifyContent="flex-end">
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate(`/joinStadiumDetail?id=${id}`)} // Include the id in the string
+                  >
+                    預約場地
+                  </Button>
+                </Box>
+              </Box>
             </CardContent>
           </Grid>
         </Grid>

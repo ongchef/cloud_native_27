@@ -121,7 +121,7 @@ export default function OrderStadium() {
         <StadiumCard
           id={1}
           image={pic2}
-          title={"球場名稱1"}
+          title={"台大綜合體育館 - 一樓多功能球場"}
           description={[
             "106台北市大安區羅斯福路四段1號",
             "週一至週五",
@@ -132,7 +132,7 @@ export default function OrderStadium() {
         <StadiumCard
           id={2}
           image={pic}
-          title={"球場名稱2"}
+          title={"台大舊體育館 - 羽球場 A場"}
           description={[
             "106台北市大安區羅斯福路四段1號",
             "週一至週五",
@@ -143,7 +143,7 @@ export default function OrderStadium() {
         <StadiumCard
           id={3}
           image={pic2}
-          title={"球場名稱3"}
+          title={"台大新體育場 - 羽球場 A場"}
           description={[
             "106台北市大安區羅斯福路四段1號",
             "週一至週五",
