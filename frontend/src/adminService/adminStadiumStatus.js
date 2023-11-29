@@ -126,26 +126,7 @@ export default function AdminStadiumStatus() {
             </Select>
           </FormControl>
         </Box>
-        <RadioGroup
-          padding="10px"
-          column
-          aria-label="position"
-          name="position"
-          defaultValue="top"
-        >
-          <FormControlLabel
-            value="public"
-            control={<Radio color="primary" />}
-            label="公開"
-            labelPlacement="end"
-          />
-          <FormControlLabel
-            value="private"
-            control={<Radio color="primary" />}
-            label="私人"
-            labelPlacement="end"
-          />
-        </RadioGroup>
+
         <Box m={1}>
           <Button variant="contained">Search</Button>
         </Box>
