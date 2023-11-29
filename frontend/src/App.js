@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Routes, Route, Link, Router } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
@@ -19,14 +18,15 @@ import ListItemText from "@mui/material/ListItemText";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { AppBar, Box, Button } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
-import { UserContext } from "./UserContext";
 import AuthService from "./authService/authService";
 import eventBus from "./authService/eventBus";
 import AuthVerify from "./authService/authVerify";
 import OrderStadium from "./userService/orderStadium";
 import JoinStadium from "./userService/joinStadium";
-
+import UserHistory from "./userService/userHistory";
 import OrderStadiumDetail from "./userService/orderStadiumDetail";
+import JoinStadiumDetail from "./userService/joinStadiumDetail";
+import { useNavigate } from "react-router-dom"; // 引入useNavigate鉤子
 
 const drawerWidth = 240;
 
@@ -40,6 +40,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function App() {
+  const navigate = useNavigate(); // 獲取navigate函數
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -87,6 +88,7 @@ export default function App() {
     setUser(false);
     setAdmin(false);
     setProvider(false);
+    navigate("/login");
   };
 
   return (
@@ -112,6 +114,7 @@ export default function App() {
                 display="flex"
                 variant="h6"
                 onClick={logOut}
+                to="/login"
                 sx={{ marginLeft: "auto" }}
               >
                 Logout
@@ -176,7 +179,7 @@ export default function App() {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton to="/userHistory">
                   <ListItemIcon></ListItemIcon>
                   <ListItemText primary={"歷史紀錄"} />
                 </ListItemButton>
@@ -250,9 +253,15 @@ export default function App() {
         <Route exact path="/joinStadium" element={<JoinStadium />} />
         <Route
           exact
+          path="/joinStadiumDetail"
+          element={<JoinStadiumDetail />}
+        />
+        <Route
+          exact
           path="/orderStadiumDetail"
           element={<OrderStadiumDetail />}
         />
+        <Route exact path="/userHistory" element={<UserHistory />} />
       </Routes>
       <AuthVerify logOut={logOut} />
     </>

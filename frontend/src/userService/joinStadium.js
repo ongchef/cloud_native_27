@@ -1,9 +1,7 @@
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
 import StadiumCard from "./joinStadiumCard";
 import React, { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
@@ -14,9 +12,12 @@ import moment from "moment/moment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+import Radio from "@mui/material/Radio"; // 引入Radio元件
+import RadioGroup from "@mui/material/RadioGroup"; // 引入RadioGroup元件
+import FormControlLabel from "@mui/material/FormControlLabel"; // 引入FormControlLabel元件
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
+import Pagination from "@mui/material/Pagination";
 export default function JoinStadium() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
@@ -106,27 +107,68 @@ export default function JoinStadium() {
             </Select>
           </FormControl>
         </Box>
+        <RadioGroup
+          padding="10px"
+          column
+          aria-label="position"
+          name="position"
+          defaultValue="top"
+        >
+          <FormControlLabel
+            value="public"
+            control={<Radio color="primary" />}
+            label="公開"
+            labelPlacement="end"
+          />
+          <FormControlLabel
+            value="private"
+            control={<Radio color="primary" />}
+            label="私人"
+            labelPlacement="end"
+          />
+        </RadioGroup>
         <Box m={1}>
           <Button variant="contained">Search</Button>
         </Box>
       </Box>
-      <Box m={0.5} sx={{ height: "80vh", overflowY: "auto" }}>
+      <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         <StadiumCard
-          my={2}
+          id={1}
+          image={pic}
+          title={"球場名稱2"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "2023-11-02",
+            "19:00~21:00",
+            ["Basketball", "新手友善", "雙打"],
+          ]}
+        />
+        <StadiumCard
+          id={2}
           image={pic2}
-          title={"球場名稱"}
-          description={"球場的資訊"}
+          title={"球場名稱2"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "2023-11-02",
+            "19:00~21:00",
+            ["Basketball", "新手友善", "雙打"],
+          ]}
         />
         <StadiumCard
+          id={3}
           image={pic}
-          title={"球場名稱"}
-          description={"球場的資訊"}
+          title={"球場名稱2"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "2023-11-02",
+            "19:00~21:00",
+            ["Basketball", "新手友善", "雙打"],
+          ]}
         />
-        <StadiumCard
-          image={pic}
-          title={"球場名稱"}
-          description={"球場的資訊"}
-        />
+      </Box>
+      <Box display="flex" justifyContent="center" marginTop="20px">
+        {/* 其他內容 */}
+        <Pagination count={10} color="primary" /> {/* 添加這一行 */}
       </Box>
     </div>
   );

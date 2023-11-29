@@ -5,8 +5,10 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
+import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 
-export default function OrderStadiumCard({ image, title, description }) {
+export default function OrderStadiumCard({ id, image, title, description }) {
+  const navigate = useNavigate();
   return (
     <Box my={2}>
       <Card sx={{ width: "70vw", margin: "auto" }}>
@@ -33,13 +35,17 @@ export default function OrderStadiumCard({ image, title, description }) {
                 {title}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {description}
+                {description[0]}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {description[1]} {description[2]} 開放預約
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                建議最大使用人數：{description[3]}
               </Typography>
               <Button
                 variant="contained"
-                onClick={() =>
-                  (window.location.href = "orderStadiumDetail?id=")
-                }
+                onClick={() => navigate(`/orderStadiumDetail?id=${id}`)} // Include the id in the string
               >
                 預約場地
               </Button>
