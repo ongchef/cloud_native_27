@@ -27,6 +27,7 @@ import UserHistory from "./userService/userHistory";
 import OrderStadiumDetail from "./userService/orderStadiumDetail";
 import JoinStadiumDetail from "./userService/joinStadiumDetail";
 import { useNavigate } from "react-router-dom"; // 引入useNavigate鉤子
+import StadiumBoard from "./provider/stadiumBoard";
 
 const drawerWidth = 240;
 
@@ -262,6 +263,8 @@ export default function App() {
           element={<OrderStadiumDetail />}
         />
         <Route exact path="/userHistory" element={<UserHistory />} />
+        {/* provider */}
+        <Route exact path="/stadiumBoard" element={<StadiumBoard />} />
       </Routes>
       <AuthVerify logOut={logOut} />
     </>
