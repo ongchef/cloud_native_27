@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid";
 import { Button } from "antd";
 import React, { useState } from "react";
 import { Radio } from "antd";
+import ButtonM from "@mui/material/Button";
 
 export default function OrderStadiumDetail() {
   const navigate = useNavigate();
@@ -46,14 +47,14 @@ export default function OrderStadiumDetail() {
       >
         <Container maxWidth="sm" width="90vw">
           <Box my={1}>
-            <Button
+            <ButtonM
               width="300px"
               variant="outlined"
               onClick={() => navigate(-1)}
             >
               <ArrowBackIcon />
               返回搜尋頁
-            </Button>
+            </ButtonM>
           </Box>
           <Typography variant="h4">組隊詳細資料</Typography>
           {/* 內容1 */}
