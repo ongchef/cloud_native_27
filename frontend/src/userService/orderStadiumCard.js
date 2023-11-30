@@ -11,7 +11,7 @@ export default function OrderStadiumCard({ id, image, title, description }) {
   const navigate = useNavigate();
   return (
     <Box my={2}>
-      <Card sx={{ height: "100%", width: "100%", margin: "auto" }}>
+      <Card sx={{ height: "100%", width: "70%", margin: "auto" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <CardMedia

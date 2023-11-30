@@ -9,6 +9,45 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
+
+function FormDialog() {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <IconButton variant="outlined" onClick={handleClickOpen} >
+        <EditIcon/>
+      </IconButton>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Subscribe</DialogTitle>
+        <DialogContent>
+          
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Subscribe</Button>
+        </DialogActions>
+      </Dialog>
+      </>
+  );
+}
 
 export default function CreateStadium() {
   const navigate = useNavigate();
@@ -74,6 +113,7 @@ export default function CreateStadium() {
                     <TextField fullWidth size="small" />
                     <Typography>最大使用人數</Typography>
                     <TextField fullWidth size="small" />
+                    <FormDialog/>
                   </CardContent>
                 </Grid>
               </Grid>

@@ -10,19 +10,38 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import Tooltip from '@mui/material/Tooltip';
 
-var timeperiod = {
-  availableTime:[13,20],
-  booking:[[13,14,15],[17,18,19]]
-}
+  const availableTime=[13,20]
+  const bookingList=[
+    {
+      num:4,
+      period:[13,14,15]
+    },
+    {
+      num:2,
+      period:[17,18,19]
+    },]
+
 function TimeBtn(){
-  
-  const availableTime = timeperiod.availableTime
+
   const availableTimeList = Array.from(new Array(availableTime[1]-availableTime[0]+1),(x,i)=>i+availableTime[0])
   const btnList = availableTimeList.map((time)=>{
     return (
       <Grid item>
-        <Button variant="outlined" >{time}</Button>
+        { 
+          bookingList.some(item=>item.period.includes(time))?(
+            <Tooltip
+              title={bookingList.find(item=>item.period.includes(time)).num}
+              placement="top"
+              >
+              <Button variant="outlined" >{time}</Button>
+            </Tooltip>
+          ):(
+             <Button variant="outlined" >{time}</Button>
+          )
+        }
+        
       </Grid>
     )
   })

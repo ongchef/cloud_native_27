@@ -44,6 +44,7 @@ export default function OrderStadiumCard({ id, image, title, description }) {
               <Typography variant="body2" color="text.secondary">
                 建議最大使用人數：{description[3]}
               </Typography>
+              
               <Button
                 variant="contained"
                 onClick={() => navigate(`/stadiumBookingDetail?id=${id}`)} // Include the id in the string
