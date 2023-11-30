@@ -11,7 +11,16 @@ export default function OrderStadiumCard({ id, image, title, description }) {
   const navigate = useNavigate();
   return (
     <Box my={2}>
-      <Card sx={{ height: "100%", width: "100%", margin: "auto" }}>
+      <Card
+        sx={{
+          height: "35vh",
+          width: "70%",
+          margin: "auto",
+          "@media (max-width:600px)": {
+            height: "auto",
+          },
+        }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <CardMedia
@@ -51,13 +60,6 @@ export default function OrderStadiumCard({ id, image, title, description }) {
                 <Typography variant="body2" color="000000">
                   建議最大使用人數： <strong>{description[3]}</strong>
                 </Typography>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  flexWrap="wrap"
-                  gap={1}
-                ></Box>
 
                 <Box display="flex" justifyContent="flex-end">
                   <Button
