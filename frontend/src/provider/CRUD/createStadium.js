@@ -25,7 +25,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import HighlightOff from "@mui/icons-material/HighlightOff";
 
 function TimeBlock(props){
-  const {startTimeList,setStartTimeList, endTimeList, setEndTimeList,periodId, form} = props
+  const {startTimeList,setStartTimeList, endTimeList, setEndTimeList,periodId, con} = props
   console.log(periodId)
   return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -61,7 +61,7 @@ function TimeBlock(props){
                 }))
               }}
             />
-            <Button onClick={()=>console.log(0)}>
+            <Button onClick={con}>
               <HighlightOff/>
             </Button>
             </DemoContainer>
@@ -120,7 +120,7 @@ function FormDialog() {
   };
   useEffect(()=>{
     
-    setForm({[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} form={form}/>})
+    setForm({[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} con={con}/>})
     setPeriodId(periodId+1)
   },[])
   useEffect(()=>{
@@ -131,6 +131,9 @@ function FormDialog() {
   // useEffect(()=>{
   //   console.log(form)
   // })
+  function con (){
+    console.log(form)
+  }
   return (
     <>
       <IconButton variant="outlined" onClick={handleClickOpen} >
@@ -142,7 +145,7 @@ function FormDialog() {
           {Object.values(form)}
           <Button variant="text" onClick={()=>{
             
-            setForm({...form,[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} form={form}/>})
+            setForm({...form,[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} con={con}/>})
             setPeriodId(periodId+1)}}
            >新增營業時間</Button>
             
