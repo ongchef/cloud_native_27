@@ -16,6 +16,7 @@ import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
 import { Switch } from "antd";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function AdminStadiumDetail() {
   const navigate = useNavigate();
@@ -174,6 +175,18 @@ export default function AdminStadiumDetail() {
                       >
                         18:00
                       </Button>
+                    </Box>
+
+                    <Box display="flex" justifyContent="flex-end">
+                      <Tooltip
+                        title="Click to reserve the stadium"
+                        placement="top"
+                      >
+                        <ButtonM width="300px" variant="outlined">
+                          <ArrowForwardIcon />
+                          預約場地
+                        </ButtonM>
+                      </Tooltip>
                     </Box>
                   </CardContent>
                 </Grid>
