@@ -43,20 +43,20 @@ function TimeBtn() {
         {bookingList.some(
           (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
         ) ? (
-          // <Tooltip
-          //   title={
-          //     bookingList.find(
-          //       (item) =>
-          //         item.period[0] / 2 <= time && item.period[1] / 2 > time
-          //     ).num + "/8"
-          //   }
-          //   placement="top"
-          // >
-          <Button variant="outlined">
-            {Math.floor(time)}:{time % 1 ? "30" : "00"}
-          </Button>
+          <Tooltip
+            title={
+              bookingList.find(
+                (item) =>
+                  item.period[0] / 2 <= time && item.period[1] / 2 > time
+              ).num + "/8"
+            }
+            placement="top"
+          >
+            <Button variant="outlined">
+              {Math.floor(time)}:{time % 1 ? "30" : "00"}
+            </Button>
+          </Tooltip>
         ) : (
-          // </Tooltip>
           <Button variant="outlined" color="inherit">
             {Math.floor(time)}:{time % 1 ? "30" : "00"}
           </Button>
