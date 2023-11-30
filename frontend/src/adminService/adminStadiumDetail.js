@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
 import pic2 from "../pic/羽球3.png";
-import { Input } from "antd";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Card } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
@@ -12,13 +11,29 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Button } from "antd";
 import React, { useState } from "react";
-import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
-import { Switch } from "antd";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tooltip from "@mui/material/Tooltip";
 
 export default function AdminStadiumDetail() {
+  const availableTime = [13, 20];
+  const bookingList = [
+    {
+      Founder: "Wonu Juan",
+      num: 4,
+      period: [13, 13.5, 14, 14.5],
+    },
+    {
+      Founder: "Gordon Sung",
+      num: 2,
+      period: [17, 17.5, 18, 18.5],
+    },
+    {
+      Founder: "Gordon Sung",
+      num: 8,
+      period: [20, 20.5],
+    },
+  ];
   const navigate = useNavigate();
   useEffect(() => {
     let url = new URL(window.location.href);
