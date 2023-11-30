@@ -41,7 +41,7 @@ export default function StadiumBookingDetail() {
   });
   return (
     <div>
-      <h1>Order Stadium Detail</h1>
+      <h1>場地詳細狀況</h1>
       <Box
         display="flex"
         width="70vw"

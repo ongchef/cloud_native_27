@@ -30,6 +30,8 @@ import AdminStadiumStatus from "./adminService/adminStadiumStatus";
 import { useNavigate } from "react-router-dom"; // 引入useNavigate鉤子
 import StadiumBoard from "./provider/stadiumBoard";
 import StadiumBookingDetail from "./provider/stadiumBookingDetail";
+import ReadStadium from "./provider/CRUD/readStadium";
+import CreateStadium from "./provider/CRUD/createStadium";
 
 const drawerWidth = 240;
 
@@ -276,11 +278,14 @@ export default function App() {
           path="/stadiumBookingDetail"
           element={<StadiumBookingDetail />}
         />
+        <Route exact path="/readStadium" element={<ReadStadium />} />
+        <Route exact path="/createStadium" element={<CreateStadium />} />
         <Route
           exact
           path="/adminStadiumStatus"
           element={<AdminStadiumStatus />}
         />
+        
       </Routes>
       <AuthVerify logOut={logOut} />
     </>
