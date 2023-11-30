@@ -16,27 +16,97 @@ import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
 import { Switch } from "antd";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+const availableTime = [32, 42];
+const bookingList = [
+  {
+    Founder: "Wonu Juan",
+    num: 4,
+    period: [32, 36],
+  },
+  {
+    Founder: "Gordon Sung",
+    num: 2,
+    period: [38, 41],
+  },
+];
 
 export default function OrderStadiumDetail() {
   const navigate = useNavigate();
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
     for (let pair of params.entries()) {
-      console.log(`key: ${pair[0]}, value: ${pair[1]}`);
+      //console.log(`key: ${pair[0]}, value: ${pair[1]}`);
     }
   });
-  const [selectedOptions, setSelectedOptions] = useState([""]);
-
+  // const validateTime = () => {
+  //   if (selectedTime === null) {
+  //     console.log("No time selected");
+  //   } else if (/* condition to check if the selected time is valid */) {
+  //     console.log("Selected time is valid");
+  //   } else {
+  //     console.log("Selected time is not valid");
+  //   }
+  // };
+  // const handleButtonClick = (value) => {
+  //   const index = selectedOptions.indexOf(value);
+  //   console.log(index, selectedOptions);
+  //   if (index < 0) {
+  //     setSelectedOptions([...selectedOptions, value]);
+  //   } else {
+  //     setSelectedOptions([
+  //       ...selectedOptions.slice(0, index),
+  //       ...selectedOptions.slice(index + 1),
+  //     ]);
+  //   }
+  //   console.log(selectedOptions);
+  // };
+  function TimeBtn() {
+    const availableTimeList = Array.from(
+      new Array(availableTime[1] - 1 - availableTime[0] + 1),
+      (x, i) => (i + availableTime[0]) / 2
+    );
+    const btnList = availableTimeList.map((time) => {
+      const value = `${Math.floor(time)}:${time % 1 ? "30" : "00"}`;
+      return (
+        <Grid item>
+          {bookingList.some(
+            (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
+          ) ? (
+            <Button
+              variant="outlined"
+              color="inherit"
+              disabled
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+            >
+              {value}
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="inherit"
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+            >
+              {value}
+            </Button>
+          )}
+        </Grid>
+      );
+    });
+    return btnList;
+  }
   const handleButtonClick = (value) => {
-    const index = selectedOptions.indexOf(value);
-    if (index < 0) {
-      setSelectedOptions([...selectedOptions, value]);
+    if (selectedOptions.includes(value)) {
+      setSelectedOptions(selectedOptions.filter((option) => option !== value));
     } else {
-      setSelectedOptions([
-        ...selectedOptions.slice(0, index),
-        ...selectedOptions.slice(index + 1),
-      ]);
+      setSelectedOptions([...selectedOptions, value]);
     }
   };
   return (
@@ -132,7 +202,7 @@ export default function OrderStadiumDetail() {
                     </Typography>
 
                     <Box mx={1}>
-                      <Button
+                      {/* <Button
                         type={
                           selectedOptions.includes("a") ? "primary" : "default"
                         }
@@ -171,7 +241,10 @@ export default function OrderStadiumDetail() {
                         onClick={() => handleButtonClick("e")}
                       >
                         18:00
-                      </Button>
+                      </Button> */}
+                      <Grid container spacing={1}>
+                        <TimeBtn />
+                      </Grid>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
                       <Typography
@@ -237,6 +310,7 @@ export default function OrderStadiumDetail() {
                         variant="outlined"
                         onClick={() => {
                           console.log("預約場地api");
+                          console.log(selectedOptions);
                         }}
                       >
                         <ArrowForwardIcon />
