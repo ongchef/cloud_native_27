@@ -13,7 +13,7 @@ export default function OrderStadiumCard({ id, image, title, description }) {
     <Box my={2}>
       <Card
         sx={{
-          height: "35vh",
+          height: "auto",
           width: "70%",
           margin: "auto",
           "@media (max-width:600px)": {
