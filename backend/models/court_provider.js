@@ -52,59 +52,41 @@ export const isCourtsProvider = (data) => {
 
 // get court's reserved time by court id
 export const getCourtsReservedByCourtIdQuery = async(data) => {
+    
+    const court_id = data['court_id']
 
-    const iscourtproiver = await isCourtsProvider(data)
-
-    if (iscourtproiver) {
-
-        const court_id = data['court_id']
-
-        return new Promise((resolve, reject) => {
-            db.query(`SELECT start_time, end_time FROM STADIUM.APPOINTMENT_TIME INNER JOIN 
-            STADIUM.APPOINTMENT ON STADIUM.APPOINTMENT_TIME.appointment_id = STADIUM.APPOINTMENT.appointment_id 
-            WHERE court_id = ?`, [court_id], (error, results) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(results);
-                }
-            });
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT start_time, end_time FROM STADIUM.APPOINTMENT_TIME INNER JOIN 
+        STADIUM.APPOINTMENT ON STADIUM.APPOINTMENT_TIME.appointment_id = STADIUM.APPOINTMENT.appointment_id 
+        WHERE court_id = ?`, [court_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
         });
-    } else {
-        return new Promise((resolve, reject) => {
-            resolve("You are not the owner of the court!")
-        })
-    }
+    });
 
 }
 
 // put court info by court_id
-export const putCourtsInfoByIdQuery = async(data) => {
+export const putCourtsByIdQuery = async(data) => {
 
-    const iscourtproiver = await isCourtsProvider(data)
+    const { court_id, admin_id, ...update_col_dict } = data;
 
-    if (iscourtproiver) {
-
-        const { court_id, admin_id, ...update_col_dict } = data;
-
-        return new Promise((resolve, reject) => {
-            db.query('UPDATE STADIUM.COURT SET ? WHERE court_id = ?', [update_col_dict, court_id], (error, results) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve("變更完成!");
-                }
-            });
+    return new Promise((resolve, reject) => {
+        db.query('UPDATE STADIUM.COURT SET ? WHERE court_id = ?', [update_col_dict, court_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve("變更完成!");
+            }
         });
-    } else {
-        return new Promise((resolve, reject) => {
-            resolve("You are not the owner of the court!")
-        })
-    }
+    });
 }
 
-// post create courts
-export const postCreateCourtsQuery = (data) => {
+// post courts
+export const postCourtsQuery = (data) => {
 
     return new Promise((resolve, reject) => {
         db.query(`INSERT INTO STADIUM.COURT SET ?`, [data], (error, results) => {
@@ -120,24 +102,15 @@ export const postCreateCourtsQuery = (data) => {
 // delete courts
 export const deleteCourtsByIdQuery = async(data) => {
 
-    const iscourtproiver = await isCourtsProvider(data)
+    const { court_id } = data;
 
-    if (iscourtproiver) {
-
-        const { court_id } = data;
-
-        return new Promise((resolve, reject) => {
-            db.query('DELETE FROM STADIUM.COURT WHERE court_id = ?', [court_id], (error, results) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve("刪除完成!");
-                }
-            });
+    return new Promise((resolve, reject) => {
+        db.query('DELETE FROM STADIUM.COURT WHERE court_id = ?', [court_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve("刪除完成!");
+            }
         });
-    } else {
-        return new Promise((resolve, reject) => {
-            resolve("You are not the owner of the court!")
-        })
-    }
+    });
 }
