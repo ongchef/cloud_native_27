@@ -16,11 +16,11 @@ import Tooltip from '@mui/material/Tooltip';
   const bookingList=[
     {
       num:4,
-      period:[13,14,15]
+      period:[13,15]
     },
     {
       num:2,
-      period:[17,18,19]
+      period:[17,19]
     },]
 
 function TimeBtn(){
@@ -30,9 +30,9 @@ function TimeBtn(){
     return (
       <Grid item>
         { 
-          bookingList.some(item=>item.period.includes(time))?(
+          bookingList.some(item=>item.period[0]<=time && item.period[1]>=time)?(
             <Tooltip
-              title={bookingList.find(item=>item.period.includes(time)).num}
+              title={bookingList.find(item=>item.period[0]<=time && item.period[1]>=time).num}
               placement="top"
               >
               <Button variant="outlined" >{time}</Button>
