@@ -26,7 +26,7 @@ const bookingList = [
 
 function TimeBtn() {
   const availableTimeList = Array.from(
-    new Array(availableTime[1] - availableTime[0] + 1),
+    new Array(availableTime[1] -1- availableTime[0] + 1),
     (x, i) => (i + availableTime[0]) / 2
   );
   const btnList = availableTimeList.map((time) => {
@@ -89,8 +89,14 @@ export default function StadiumBookingDetail() {
         <Container maxWidth="sm">
           <Box my={2}>
             <Card sx={{ width: "70vw", margin: "auto" }}>
-              <Grid container>
-                <Grid item xs={6}>
+              <Grid
+                paddingLeft="30px"
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Grid item xs={12} sm={6}>
                   <CardMedia
                     component="img"
                     image={pic2} // 替換為您的圖片URL
@@ -99,23 +105,70 @@ export default function StadiumBookingDetail() {
                 </Grid>
                 <Grid item xs={6}>
                   <CardContent>
-                    <Typography variant="h5" component="div">
-                      標題
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      台大綜合體育館 - 一樓多功能球場 2023/11/02
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      description
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      paddingX={1}
+                      paddingY={0.6}
+                    >
+                      106台北市大安區羅斯福路四段1號
                     </Typography>
+                    <Typography
+                      variant="body2"
+                      color="000000"
+                      paddingY={0.6}
+                      paddingX={1}
+                    >
+                      <span
+                        style={{
+                          color: "000000",
+                          backgroundColor: "#D9D9D9",
+                          paddingLeft: "10px",
+                          paddingRight: "10px",
+                        }}
+                      >
+                        週一至週五 13:00~20:00 開放預約
+                      </span>
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="000000"
+                      paddingX={1}
+                      paddingY={0.6}
+                    >
+                      建議最大使用人數 : {8}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="000000"
+                      paddingX={1}
+                      paddingY={0.6}
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      預約狀況：
+                    </Typography>
+
+                    <Box mx={1}>
+                      <Grid container spacing={1}>
+                        <TimeBtn />
+                      </Grid>
+                    </Box>
+                    <Box display="flex" justifyContent="flex-end">
+                      <Tooltip
+                        title="Click to reserve the stadium"
+                        placement="top"
+                      >
+              
+                      </Tooltip>
+                    </Box>
                   </CardContent>
-                  <Box
-                    paddingLeft={3}
-                    display="flex"
-                    alignContent="right"
-                    flexWrap="wrap"
-                  >
-                    <Grid rowSpacing={2} container>
-                      <TimeBtn></TimeBtn>
-                    </Grid>
-                  </Box>
                 </Grid>
               </Grid>
             </Card>
