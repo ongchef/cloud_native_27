@@ -25,7 +25,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import HighlightOff from "@mui/icons-material/HighlightOff";
 
 function TimeBlock(props){
-  const {startTimeList,setStartTimeList, endTimeList, setEndTimeList,periodId} = props
+  const {startTimeList,setStartTimeList, endTimeList, setEndTimeList,periodId, form} = props
   console.log(periodId)
   return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -61,9 +61,9 @@ function TimeBlock(props){
                 }))
               }}
             />
-            <IconButton>
+            <Button onClick={()=>console.log(0)}>
               <HighlightOff/>
-            </IconButton>
+            </Button>
             </DemoContainer>
           </LocalizationProvider>
   )
@@ -104,7 +104,7 @@ function checkTimeOverlap(startTimeList,endTimeList){
 }
 function FormDialog() {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState()
+  const [form, setForm] = useState({})
   const [startTimeList, setStartTimeList] = useState([])
   const [endTimeList, setEndTimeList] = useState([])
   const [periodId, setPeriodId] = useState(0)
@@ -120,13 +120,17 @@ function FormDialog() {
   };
   useEffect(()=>{
     
-    setForm([<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId}/>])
+    setForm({[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} form={form}/>})
     setPeriodId(periodId+1)
   },[])
   useEffect(()=>{
     console.log(startTimeList)
     console.log(endTimeList)
-  },[startTimeList,endTimeList])
+    console.log(form)
+  },[startTimeList,endTimeList,form])
+  // useEffect(()=>{
+  //   console.log(form)
+  // })
   return (
     <>
       <IconButton variant="outlined" onClick={handleClickOpen} >
@@ -135,10 +139,10 @@ function FormDialog() {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>選取日期與時間</DialogTitle>
         <DialogContent>
-          {form}
+          {Object.values(form)}
           <Button variant="text" onClick={()=>{
             
-            setForm([...form,<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId}/>])
+            setForm({...form,[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} form={form}/>})
             setPeriodId(periodId+1)}}
            >新增營業時間</Button>
             
@@ -175,6 +179,7 @@ export default function CreateStadium() {
       //$("#banner_name").text(file.name);
     }
   }
+  
   return (
     <div>
       <h1> 新增場地資訊 </h1>
