@@ -12,27 +12,27 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Tooltip from '@mui/material/Tooltip';
 
-  const availableTime=[13,20]
+  const availableTime=[26,40]
   const bookingList=[
     {
       num:4,
-      period:[13,15]
+      period:[26,30]
     },
     {
       num:2,
-      period:[17,19]
+      period:[34,38]
     },]
 
 function TimeBtn(){
 
-  const availableTimeList = Array.from(new Array(availableTime[1]-availableTime[0]+1),(x,i)=>i+availableTime[0])
+  const availableTimeList = Array.from(new Array(availableTime[1]-availableTime[0]+1),(x,i)=>(i+availableTime[0])/2)
   const btnList = availableTimeList.map((time)=>{
     return (
       <Grid item>
         { 
-          bookingList.some(item=>item.period[0]<=time && item.period[1]>=time)?(
+          bookingList.some(item=>(item.period[0])/2<=time && (item.period[1])/2>time)?(
             <Tooltip
-              title={bookingList.find(item=>item.period[0]<=time && item.period[1]>=time).num}
+              title={bookingList.find(item=>(item.period[0])/2<=time && (item.period[1])/2>time).num}
               placement="top"
               >
               <Button variant="outlined" >{time}</Button>
