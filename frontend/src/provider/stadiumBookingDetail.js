@@ -49,7 +49,7 @@ function TimeBtn() {
             </Button>
           </Tooltip>
         ) : (
-          <Button variant="outlined" disabled>
+          <Button variant="outlined" sx={{color:'black', borderColor:'black'}}>
             {Math.floor(time)}:{time % 1 ? "30" : "00"}
           </Button>
         )}
