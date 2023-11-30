@@ -9,31 +9,65 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { Button } from "antd";
 import React, { useState } from "react";
-import ButtonM from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tooltip from "@mui/material/Tooltip";
+const availableTime = [26, 40];
+const bookingList = [
+  {
+    Founder: "Wonu Juan",
+    num: 4,
+    period: [26, 30],
+  },
+  {
+    Founder: "Gordon Sung",
+    num: 2,
+    period: [34, 38],
+  },
+  {
+    Founder: "Gordon Sung",
+    num: 8,
+    period: [38, 40],
+  },
+];
+
+function TimeBtn() {
+  const availableTimeList = Array.from(
+    new Array(availableTime[1] - 1 - availableTime[0] + 1),
+    (x, i) => (i + availableTime[0]) / 2
+  );
+  const btnList = availableTimeList.map((time) => {
+    return (
+      <Grid item>
+        {bookingList.some(
+          (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
+        ) ? (
+          <Tooltip
+            title={
+              bookingList.find(
+                (item) =>
+                  item.period[0] / 2 <= time && item.period[1] / 2 > time
+              ).num + "/8"
+            }
+            placement="top"
+          >
+            <Button variant="outlined">
+              {Math.floor(time)}:{time % 1 ? "30" : "00"}
+            </Button>
+          </Tooltip>
+        ) : (
+          <Button variant="outlined" color="inherit">
+            {Math.floor(time)}:{time % 1 ? "30" : "00"}
+          </Button>
+        )}
+      </Grid>
+    );
+  });
+  return btnList;
+}
 
 export default function AdminStadiumDetail() {
-  const availableTime = [13, 20];
-  const bookingList = [
-    {
-      Founder: "Wonu Juan",
-      num: 4,
-      period: [13, 13.5, 14, 14.5],
-    },
-    {
-      Founder: "Gordon Sung",
-      num: 2,
-      period: [17, 17.5, 18, 18.5],
-    },
-    {
-      Founder: "Gordon Sung",
-      num: 8,
-      period: [20, 20.5],
-    },
-  ];
   const navigate = useNavigate();
   useEffect(() => {
     let url = new URL(window.location.href);
@@ -66,14 +100,14 @@ export default function AdminStadiumDetail() {
       >
         <Container maxWidth="sm" width="90vw">
           <Box my={1}>
-            <ButtonM
+            <Button
               width="300px"
               variant="outlined"
               onClick={() => navigate(-1)}
             >
               <ArrowBackIcon />
               返回搜尋頁
-            </ButtonM>
+            </Button>
           </Box>
           <Typography variant="h4" sx={{ fontWeight: "bold" }}>
             球場詳細預約資訊
@@ -128,7 +162,7 @@ export default function AdminStadiumDetail() {
                           paddingRight: "10px",
                         }}
                       >
-                        週一至週五 16:00~21:00 開放預約
+                        週一至週五 13:00~20:00 開放預約
                       </span>
                     </Typography>
                     <Typography
@@ -150,57 +184,19 @@ export default function AdminStadiumDetail() {
                     </Typography>
 
                     <Box mx={1}>
-                      <Button
-                        type={
-                          selectedOptions.includes("a") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("a")}
-                      >
-                        16:00
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("b") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("b")}
-                      >
-                        16:30
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("c") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("c")}
-                      >
-                        17:00
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("d") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("d")}
-                      >
-                        17:30
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("e") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("e")}
-                      >
-                        18:00
-                      </Button>
+                      <Grid container spacing={1}>
+                        <TimeBtn />
+                      </Grid>
                     </Box>
-
                     <Box display="flex" justifyContent="flex-end">
                       <Tooltip
                         title="Click to reserve the stadium"
                         placement="top"
                       >
-                        <ButtonM width="300px" variant="outlined">
+                        <Button width="300px" variant="outlined">
                           <ArrowForwardIcon />
                           預約場地
-                        </ButtonM>
+                        </Button>
                       </Tooltip>
                     </Box>
                   </CardContent>
