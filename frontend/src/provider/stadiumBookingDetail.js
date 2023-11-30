@@ -10,8 +10,9 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 
+<<<<<<< HEAD
   const availableTime=[13,20]
   const bookingList=[
     {
@@ -22,13 +23,29 @@ import Tooltip from '@mui/material/Tooltip';
       num:2,
       period:[17,19]
     },]
+=======
+const availableTime = [13, 20];
+const bookingList = [
+  {
+    num: 4,
+    period: [13, 14, 15],
+  },
+  {
+    num: 2,
+    period: [17, 19],
+  },
+];
+>>>>>>> 20d90a5b4cd5f90444c8564dca030f5ab035c20d
 
-function TimeBtn(){
-
-  const availableTimeList = Array.from(new Array(availableTime[1]-availableTime[0]+1),(x,i)=>i+availableTime[0])
-  const btnList = availableTimeList.map((time)=>{
+function TimeBtn() {
+  const availableTimeList = Array.from(
+    new Array(availableTime[1] - availableTime[0] + 1),
+    (x, i) => i + availableTime[0]
+  );
+  const btnList = availableTimeList.map((time) => {
     return (
       <Grid item>
+<<<<<<< HEAD
         { 
           bookingList.some(item=>item.period[0]<=time && item.period[1]>=time)?(
             <Tooltip
@@ -42,12 +59,22 @@ function TimeBtn(){
           )
         }
         
+=======
+        {bookingList.some((item) => item.period.includes(time)) ? (
+          <Tooltip
+            title={bookingList.find((item) => item.period.includes(time)).num}
+            placement="top"
+          >
+            <Button variant="outlined">{time}</Button>
+          </Tooltip>
+        ) : (
+          <Button variant="outlined">{time}</Button>
+        )}
+>>>>>>> 20d90a5b4cd5f90444c8564dca030f5ab035c20d
       </Grid>
-    )
-  })
-  return (
-    btnList
-  )
+    );
+  });
+  return btnList;
 }
 export default function StadiumBookingDetail() {
   const navigate = useNavigate();
@@ -94,14 +121,17 @@ export default function StadiumBookingDetail() {
                       description
                     </Typography>
                   </CardContent>
-                  <Box paddingLeft={3} display='flex' alignContent='right' flexWrap='wrap'>
+                  <Box
+                    paddingLeft={3}
+                    display="flex"
+                    alignContent="right"
+                    flexWrap="wrap"
+                  >
                     <Grid rowSpacing={2} container>
-                    <TimeBtn></TimeBtn>
+                      <TimeBtn></TimeBtn>
                     </Grid>
-                    
                   </Box>
                 </Grid>
-                
               </Grid>
             </Card>
           </Box>
