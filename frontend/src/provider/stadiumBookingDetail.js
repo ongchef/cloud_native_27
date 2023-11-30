@@ -10,44 +10,53 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 
-  const availableTime=[26,40]
-  const bookingList=[
-    {
-      num:4,
-      period:[26,30]
-    },
-    {
-      num:2,
-      period:[34,38]
-    },]
+const availableTime = [26, 40];
+const bookingList = [
+  {
+    num: 4,
+    period: [26, 30],
+  },
+  {
+    num: 2,
+    period: [34, 38],
+  },
+];
 
-function TimeBtn(){
-
-  const availableTimeList = Array.from(new Array(availableTime[1]-availableTime[0]+1),(x,i)=>(i+availableTime[0])/2)
-  const btnList = availableTimeList.map((time)=>{
+function TimeBtn() {
+  const availableTimeList = Array.from(
+    new Array(availableTime[1] - availableTime[0] + 1),
+    (x, i) => (i + availableTime[0]) / 2
+  );
+  const btnList = availableTimeList.map((time) => {
     return (
       <Grid item>
-        { 
-          bookingList.some(item=>(item.period[0])/2<=time && (item.period[1])/2>time)?(
-            <Tooltip
-              title={bookingList.find(item=>(item.period[0])/2<=time && (item.period[1])/2>time).num}
-              placement="top"
-              >
-              <Button variant="outlined" >{time}</Button>
-            </Tooltip>
-          ):(
-             <Button variant="outlined" >{time}</Button>
-          )
-        }
-        
+        {bookingList.some(
+          (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
+        ) ? (
+          <Tooltip
+            title={
+              bookingList.find(
+                (item) =>
+                  item.period[0] / 2 <= time && item.period[1] / 2 > time
+              ).num
+            }
+            placement="top"
+          >
+            <Button variant="outlined">
+              {Math.floor(time)}:{time % 1 ? "30" : "00"}
+            </Button>
+          </Tooltip>
+        ) : (
+          <Button variant="outlined" disabled>
+            {Math.floor(time)}:{time % 1 ? "30" : "00"}
+          </Button>
+        )}
       </Grid>
-    )
-  })
-  return (
-    btnList
-  )
+    );
+  });
+  return btnList;
 }
 export default function StadiumBookingDetail() {
   const navigate = useNavigate();
@@ -94,14 +103,17 @@ export default function StadiumBookingDetail() {
                       description
                     </Typography>
                   </CardContent>
-                  <Box paddingLeft={3} display='flex' alignContent='right' flexWrap='wrap'>
+                  <Box
+                    paddingLeft={3}
+                    display="flex"
+                    alignContent="right"
+                    flexWrap="wrap"
+                  >
                     <Grid rowSpacing={2} container>
-                    <TimeBtn></TimeBtn>
+                      <TimeBtn></TimeBtn>
                     </Grid>
-                    
                   </Box>
                 </Grid>
-                
               </Grid>
             </Card>
           </Box>
