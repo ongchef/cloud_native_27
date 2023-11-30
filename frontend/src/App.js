@@ -281,6 +281,7 @@ export default function App() {
         />
         <Route exact path="/readStadium" element={<ReadStadium />} />
         <Route exact path="/createStadium" element={<CreateStadium />} />
+        {/* admin */}
         <Route
           exact
           path="/adminStadiumStatus"
