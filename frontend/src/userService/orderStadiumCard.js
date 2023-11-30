@@ -77,7 +77,7 @@ export default function OrderStadiumCard({ id, image, title, description }) {
                 <Box display="flex" justifyContent="flex-end">
                   <Button
                     variant="contained"
-                    onClick={() => navigate(`/joinStadiumDetail?id=${id}`)} // Include the id in the string
+                    onClick={() => navigate(`/orderStadiumDetail?id=${id}`)} // Include the id in the string
                   >
                     預約場地
                   </Button>

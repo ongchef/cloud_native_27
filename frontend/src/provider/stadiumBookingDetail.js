@@ -26,7 +26,7 @@ const bookingList = [
 
 function TimeBtn() {
   const availableTimeList = Array.from(
-    new Array(availableTime[1] -1- availableTime[0] + 1),
+    new Array(availableTime[1] - 1 - availableTime[0] + 1),
     (x, i) => (i + availableTime[0]) / 2
   );
   const btnList = availableTimeList.map((time) => {

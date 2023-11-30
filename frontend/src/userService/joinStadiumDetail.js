@@ -144,7 +144,7 @@ export default function OrderStadiumDetail() {
                           }}
                         >
                           <ArrowForwardIcon />
-                          預約場地
+                          加入場地
                         </Button>
                       </Box>
                     </Box>

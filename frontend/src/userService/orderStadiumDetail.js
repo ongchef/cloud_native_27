@@ -16,9 +16,24 @@ import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
 import { Switch } from "antd";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+const availableTime = [32, 42];
+const bookingList = [
+  {
+    Founder: "Wonu Juan",
+    num: 4,
+    period: [32, 36],
+  },
+  {
+    Founder: "Gordon Sung",
+    num: 2,
+    period: [38, 41],
+  },
+];
 
 export default function OrderStadiumDetail() {
   const navigate = useNavigate();
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
@@ -26,17 +41,97 @@ export default function OrderStadiumDetail() {
       console.log(`key: ${pair[0]}, value: ${pair[1]}`);
     }
   });
-  const [selectedOptions, setSelectedOptions] = useState([""]);
+  const validateTime = () => {
+    if (selectedOptions === null || selectedOptions.length === 0) {
+      console.log("No time selected");
+      return false;
+    }
 
+    // Sort the selected times
+    const sortedTimes = selectedOptions.sort();
+
+    // Iterate over the sorted times
+    for (let i = 0; i < sortedTimes.length - 1; i++) {
+      // Parse the hours and minutes of the current time and the next time
+      const [currentHours, currentMinutes] = sortedTimes[i]
+        .split(":")
+        .map(Number);
+      const [nextHours, nextMinutes] = sortedTimes[i + 1]
+        .split(":")
+        .map(Number);
+
+      // Calculate the difference in minutes
+      const difference =
+        nextHours * 60 + nextMinutes - (currentHours * 60 + currentMinutes);
+
+      // If the difference is not 30 minutes, the times are not continuous
+      if (difference !== 30) {
+        console.log("Selected times are not continuous");
+        return false;
+      }
+    }
+
+    console.log("Selected times are continuous");
+    return [true, `${sortedTimes[0]}~${sortedTimes[sortedTimes.length - 1]}`];
+  };
+  // const handleButtonClick = (value) => {
+  //   const index = selectedOptions.indexOf(value);
+  //   console.log(index, selectedOptions);
+  //   if (index < 0) {
+  //     setSelectedOptions([...selectedOptions, value]);
+  //   } else {
+  //     setSelectedOptions([
+  //       ...selectedOptions.slice(0, index),
+  //       ...selectedOptions.slice(index + 1),
+  //     ]);
+  //   }
+  //   console.log(selectedOptions);
+  // };
+  function TimeBtn() {
+    const availableTimeList = Array.from(
+      new Array(availableTime[1] - 1 - availableTime[0] + 1),
+      (x, i) => (i + availableTime[0]) / 2
+    );
+    const btnList = availableTimeList.map((time) => {
+      const value = `${Math.floor(time)}:${time % 1 ? "30" : "00"}`;
+      return (
+        <Grid item>
+          {bookingList.some(
+            (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
+          ) ? (
+            <Button
+              variant="outlined"
+              color="inherit"
+              disabled
+              key={value}
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+            >
+              {value}
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="inherit"
+              key={value}
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+            >
+              {value}
+            </Button>
+          )}
+        </Grid>
+      );
+    });
+    return btnList;
+  }
   const handleButtonClick = (value) => {
-    const index = selectedOptions.indexOf(value);
-    if (index < 0) {
-      setSelectedOptions([...selectedOptions, value]);
+    if (selectedOptions.includes(value)) {
+      setSelectedOptions(selectedOptions.filter((option) => option !== value));
     } else {
-      setSelectedOptions([
-        ...selectedOptions.slice(0, index),
-        ...selectedOptions.slice(index + 1),
-      ]);
+      setSelectedOptions([...selectedOptions, value]);
     }
   };
   return (
@@ -132,46 +227,9 @@ export default function OrderStadiumDetail() {
                     </Typography>
 
                     <Box mx={1}>
-                      <Button
-                        type={
-                          selectedOptions.includes("a") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("a")}
-                      >
-                        16:00
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("b") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("b")}
-                      >
-                        16:30
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("c") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("c")}
-                      >
-                        17:00
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("d") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("d")}
-                      >
-                        17:30
-                      </Button>
-                      <Button
-                        type={
-                          selectedOptions.includes("e") ? "primary" : "default"
-                        }
-                        onClick={() => handleButtonClick("e")}
-                      >
-                        18:00
-                      </Button>
+                      <Grid container spacing={1}>
+                        <TimeBtn />
+                      </Grid>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
                       <Typography
@@ -183,10 +241,10 @@ export default function OrderStadiumDetail() {
                       >
                         強度：
                       </Typography>
-                      <Radio.Group defaultValue="a" buttonStyle="solid">
-                        <Radio.Button value="a">新手友善</Radio.Button>
-                        <Radio.Button value="b">Advanced</Radio.Button>
-                        <Radio.Button value="c">頂尖對決</Radio.Button>
+                      <Radio.Group defaultValue="newbie" buttonStyle="solid">
+                        <Radio.Button value="newbie">新手友善</Radio.Button>
+                        <Radio.Button value="advanced">Advanced</Radio.Button>
+                        <Radio.Button value="prestige">頂尖對決</Radio.Button>
                       </Radio.Group>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
@@ -236,7 +294,7 @@ export default function OrderStadiumDetail() {
                         width="300px"
                         variant="outlined"
                         onClick={() => {
-                          console.log("預約場地api");
+                          console.log(validateTime());
                         }}
                       >
                         <ArrowForwardIcon />
