@@ -32,6 +32,7 @@ import StadiumBoard from "./provider/stadiumBoard";
 import StadiumBookingDetail from "./provider/stadiumBookingDetail";
 import ReadStadium from "./provider/CRUD/readStadium";
 import CreateStadium from "./provider/CRUD/createStadium";
+import AdminStadiumDetail from "./adminService/adminStadiumDetail";
 
 const drawerWidth = 240;
 
@@ -285,7 +286,11 @@ export default function App() {
           path="/adminStadiumStatus"
           element={<AdminStadiumStatus />}
         />
-        
+        <Route
+          exact
+          path="/adminStadiumDetail"
+          element={<AdminStadiumDetail />}
+        />
       </Routes>
       <AuthVerify logOut={logOut} />
     </>

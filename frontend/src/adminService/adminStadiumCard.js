@@ -71,7 +71,7 @@ export default function AdminStadiumCard({ id, image, title, description }) {
                     variant="contained"
                     onClick={() => navigate(`/adminStadiumDetail?id=${id}`)} // Include the id in the string
                   >
-                    預約場地
+                    查看詳細預約狀況
                   </Button>
                 </Box>
               </Box>

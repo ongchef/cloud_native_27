@@ -135,33 +135,33 @@ export default function AdminStadiumStatus() {
         <StadiumCard
           id={1}
           image={pic}
-          title={"球場名稱2"}
+          title={"台大舊體育館 - 籃球 A場"}
           description={[
             "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
+            "週一至週四",
+            "16:00~21:00",
             4,
           ]}
         />
         <StadiumCard
           id={2}
           image={pic2}
-          title={"球場名稱2"}
+          title={"台大舊體育館 - 羽球 B場"}
           description={[
             "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
+            "週一至週五",
+            "18:00~22:00",
             6,
           ]}
         />
         <StadiumCard
           id={3}
           image={pic}
-          title={"球場名稱2"}
+          title={"台大醫體 - 羽球場 B場"}
           description={[
             "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
+            "週一、週三、週五",
+            "17:00~21:00",
             10,
           ]}
         />
