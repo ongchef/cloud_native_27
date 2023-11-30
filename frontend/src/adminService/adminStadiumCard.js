@@ -11,14 +11,27 @@ export default function AdminStadiumCard({ id, image, title, description }) {
   const navigate = useNavigate();
   return (
     <Box my={2}>
-      <Card sx={{ height: "35vh", width: "70vw", margin: "auto" }}>
+      <Card sx={{ height: "38vh", width: "70vw", margin: "auto" }}>
         <Grid paddingLeft="30px" container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <CardMedia
-              component="img"
-              image={image} // 替換為您的圖片URL
-              alt="Stadium"
-            />
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="100%"
+              width="100%"
+            >
+              <CardMedia
+                component="img"
+                image={image} // 替換為您的圖片URL
+                alt="Stadium"
+                sx={{
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                  objectFit: "contain",
+                }}
+              />
+            </Box>
           </Grid>
           <Grid item xs={6}>
             <CardContent>

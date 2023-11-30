@@ -16,22 +16,35 @@ export default function JoinStadiumCard({ id, image, title, description }) {
     <Box my={2}>
       <Card
         sx={{
-          height: "auto",
+          height: "38vh",
           width: "70%",
           margin: "auto",
-          "@media (max-width:600)": {
+          "@media (max-width:800px)": {
             height: "auto",
+            width: "100%",
           },
         }}
       >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <CardMedia
-              component="img"
-              image={image}
-              alt="Stadium"
-              sx={{ height: "100%", width: "100%" }}
-            />
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="100%"
+              width="100%"
+            >
+              <CardMedia
+                component="img"
+                image={image} // 替換為您的圖片URL
+                alt="Stadium"
+                sx={{
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                  objectFit: "contain",
+                }}
+              />
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
             <CardContent>
