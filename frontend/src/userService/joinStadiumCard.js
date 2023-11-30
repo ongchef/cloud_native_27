@@ -14,16 +14,39 @@ export default function JoinStadiumCard({ id, image, title, description }) {
 
   return (
     <Box my={2}>
-      <Card sx={{ height: "35vh", width: "70vw", margin: "auto" }}>
-        <Grid paddingLeft="30px" container spacing={2}>
+      <Card
+        sx={{
+          height: "38vh",
+          width: "70%",
+          margin: "auto",
+          "@media (max-width:800px)": {
+            height: "auto",
+            width: "100%",
+          },
+        }}
+      >
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <CardMedia
-              component="img"
-              image={image} // 替換為您的圖片URL
-              alt="Stadium"
-            />
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="100%"
+              width="100%"
+            >
+              <CardMedia
+                component="img"
+                image={image} // 替換為您的圖片URL
+                alt="Stadium"
+                sx={{
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                  objectFit: "contain",
+                }}
+              />
+            </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <CardContent>
               <Typography
                 variant="h5"
@@ -32,15 +55,7 @@ export default function JoinStadiumCard({ id, image, title, description }) {
               >
                 {title}
               </Typography>
-              <Box
-                mx={1}
-                my={1}
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                flexWrap="wrap"
-                gap={1}
-              >
+              <Box mx={1} my={1} display="flex" flexDirection="column" gap={1}>
                 <Typography variant="body2" color="text.secondary">
                   {description[0]}
                 </Typography>

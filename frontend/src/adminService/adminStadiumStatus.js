@@ -61,7 +61,7 @@ export default function AdminStadiumStatus() {
             </Select>
           </FormControl>
         </Box>
-        <Box m={1}>
+        <Box mx={1} display="flex" flexDirection="row" gap={1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               disablePast={true}

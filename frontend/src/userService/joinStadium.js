@@ -39,10 +39,10 @@ export default function JoinStadium() {
         flexDirection="row"
         justifyContent="center"
         alignItems="center"
-        width="70vw"
+        width="70%"
         margin="auto"
       >
-        <Box m={1}>
+        <Box m={1} display="flex" flexDirection="row" gap={1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               disablePast={true}
@@ -131,7 +131,7 @@ export default function JoinStadium() {
           <Button variant="contained">Search</Button>
         </Box>
       </Box>
-      <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
+      <Box m={0.5} sx={{ height: "65vh", overflowY: "auto" }}>
         <StadiumCard
           id={1}
           image={pic}
@@ -158,6 +158,30 @@ export default function JoinStadium() {
         />
         <StadiumCard
           id={3}
+          image={pic}
+          title={"球場名稱2"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "2023-11-02",
+            "19:00~21:00",
+            ["Basketball", "新手友善", "雙打"],
+            "Bryan Chen",
+          ]}
+        />
+        <StadiumCard
+          id={4}
+          image={pic}
+          title={"球場名稱2"}
+          description={[
+            "106台北市大安區羅斯福路四段1號",
+            "2023-11-02",
+            "19:00~21:00",
+            ["Basketball", "新手友善", "雙打"],
+            "Bryan Chen",
+          ]}
+        />
+        <StadiumCard
+          id={5}
           image={pic}
           title={"球場名稱2"}
           description={[

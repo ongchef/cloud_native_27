@@ -41,10 +41,10 @@ export default function OrderStadium() {
         flexDirection="row"
         justifyContent="center"
         alignItems="center"
-        width="70vw"
+        width="70%"
         margin="auto"
       >
-        <Box m={1}>
+        <Box m={1} display="flex" flexDirection="row">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               disablePast={true}

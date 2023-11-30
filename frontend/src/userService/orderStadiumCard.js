@@ -11,15 +11,37 @@ export default function OrderStadiumCard({ id, image, title, description }) {
   const navigate = useNavigate();
   return (
     <Box my={2}>
-      <Card sx={{ height: "100%", width: "70%", margin: "auto" }}>
+      <Card
+        sx={{
+          height: "38vh",
+          width: "70%",
+          margin: "auto",
+          "@media (max-width:800px)": {
+            height: "auto",
+            width: "100%",
+          },
+        }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <CardMedia
-              component="img"
-              image={image}
-              alt="Stadium"
-              sx={{ height: "100%", width: "100%" }}
-            />
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="100%"
+              width="100%"
+            >
+              <CardMedia
+                component="img"
+                image={image} // 替換為您的圖片URL
+                alt="Stadium"
+                sx={{
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                  objectFit: "fill",
+                }}
+              />
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
             <CardContent>
@@ -51,13 +73,6 @@ export default function OrderStadiumCard({ id, image, title, description }) {
                 <Typography variant="body2" color="000000">
                   建議最大使用人數： <strong>{description[3]}</strong>
                 </Typography>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  flexWrap="wrap"
-                  gap={1}
-                ></Box>
 
                 <Box display="flex" justifyContent="flex-end">
                   <Button
