@@ -26,7 +26,7 @@ const bookingList = [
     period: [34, 38],
   },
   {
-    Founder: "Gordon Sung",
+    Founder: "Mingyu Kim",
     num: 8,
     period: [38, 40],
   },
@@ -65,6 +65,23 @@ function TimeBtn() {
     );
   });
   return btnList;
+}
+function EventFounders() {
+  return (
+    <>
+      {bookingList.map((booking, index) => (
+        <Typography key={index}>
+          {Math.floor(booking.period[0] / 2)}:
+          {booking.period[0] % 2 ? "30" : "00"}~
+          {Math.floor(booking.period[1] / 2)}:
+          {booking.period[1] % 2 ? "30" : "00"} 主揪人:{booking.Founder}{" "}
+          <span style={{ color: booking.num === 8 ? "red" : "#1890FF" }}>
+            {booking.num}/8
+          </span>
+        </Typography>
+      ))}
+    </>
+  );
 }
 
 export default function AdminStadiumDetail() {
@@ -187,6 +204,9 @@ export default function AdminStadiumDetail() {
                       <Grid container spacing={1}>
                         <TimeBtn />
                       </Grid>
+                    </Box>
+                    <Box m={1}>
+                      <EventFounders></EventFounders>
                     </Box>
                     <Box display="flex" justifyContent="flex-end">
                       <Tooltip
