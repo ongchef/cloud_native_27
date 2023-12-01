@@ -131,7 +131,7 @@ export default function JoinStadium() {
           <Button variant="contained">Search</Button>
         </Box>
       </Box>
-      <Box m={0.5} sx={{ height: "65vh", overflowY: "auto" }}>
+      <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         <StadiumCard
           id={1}
           image={pic}
