@@ -38,6 +38,7 @@ export const getCourtsReservedByCourtId = async(req,res) => {
         return res.status(200).json(result);
 
     } else {
+
         const message = "You are not the owner of the court!"
         return res.status(401).send(message)
     }

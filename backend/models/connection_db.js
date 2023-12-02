@@ -1,10 +1,11 @@
 import mysql from "mysql2";
 import mysql_config from "../config/mysql.js";
 
+
 const poolConnection = mysql.createPool({
     connectionLimit: mysql_config.CONNECTION_LIMIT,
     host: mysql_config.HOST,
-    user: mysql_config.USER,
+    user: 'admin',
     password: mysql_config.PASSWORD,
     database: mysql_config.DB,
     multipleStatements: true
