@@ -34,6 +34,7 @@ import ReadStadium from './provider/CRUD/readStadium';
 import CreateStadium from './provider/CRUD/createStadium';
 import AdminStadiumDetail from './adminService/adminStadiumDetail';
 import AdminAddProvider from './adminService/adminAddProvider';
+import AdminUserHistory from './adminService/adminUserHistory';
 
 const drawerWidth = 240;
 
@@ -232,7 +233,7 @@ export default function App() {
 								</ListItemButton>
 							</ListItem>
 							<ListItem disablePadding>
-								<ListItemButton>
+								<ListItemButton to="/adminUserHistory">
 									<ListItemIcon></ListItemIcon>
 									<ListItemText primary={'使用者歷史紀錄'} />
 								</ListItemButton>
@@ -291,6 +292,7 @@ export default function App() {
 					element={<AdminStadiumDetail />}
 				/>
 				<Route exact path="/adminAddProvider" element={<AdminAddProvider />} />
+				<Route exact path="/adminUserHistory" element={<AdminUserHistory />} />
 			</Routes>
 			<AuthVerify logOut={logOut} />
 		</>
