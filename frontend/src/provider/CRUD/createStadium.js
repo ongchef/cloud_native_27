@@ -9,153 +9,195 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import moment from "moment";
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import HighlightOff from "@mui/icons-material/HighlightOff";
 
-function TimeBlock(props){
-  const {startTimeList,setStartTimeList, endTimeList, setEndTimeList,periodId, con} = props
-  console.log(periodId)
+function TimeBlock(props) {
+  const {
+    startTimeList,
+    setStartTimeList,
+    endTimeList,
+    setEndTimeList,
+    periodId,
+    handleDelete,
+  } = props;
+  console.log(periodId);
   return (
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['TimePicker', 'TimePicker']}>
-            <TimePicker
-              timeSteps={{ minutes: 30 }}
-              ampm={false}
-              label="起始時段"
-              // views={["hours","minutes"]}
-              format="hh:mm"
-              // defaultValue={dayjs("0000-00-00T9:00")}
-              onChange={(newTime) => {
-                console.log(newTime)
-                console.log(moment(newTime));
-                setStartTimeList(preState=>({
-                  ...preState,
-                  [periodId]:moment(newTime.get("hour")+":"+newTime.get("minute"), 'hh:mm'),
-                }))
-                
-              }}
-            />
-             <TimePicker
-              timeSteps={{ minutes: 30 }}
-              ampm={false}
-              label="結束時段"
-              // views={["hours","minutes"]}
-              format="hh:mm"
-              // defaultValue={dayjs("0000-00-00T9:00")}
-              onAccept={(newTime) => {
-                setEndTimeList(preState=>({
-                  ...preState,
-                  [periodId]:moment(newTime.get("hour")+":"+newTime.get("minute"), 'hh:mm'),
-                }))
-              }}
-            />
-            <Button onClick={con}>
-              <HighlightOff/>
-            </Button>
-            </DemoContainer>
-          </LocalizationProvider>
-  )
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={["TimePicker", "TimePicker"]}>
+        <TimePicker
+          timeSteps={{ minutes: 30 }}
+          ampm={false}
+          label="起始時段"
+          // views={["hours","minutes"]}
+          format="hh:mm"
+          // defaultValue={dayjs("0000-00-00T9:00")}
+          onChange={(newTime) => {
+            console.log(newTime);
+            console.log(moment(newTime));
+            setStartTimeList((preState) => ({
+              ...preState,
+              [periodId]: moment(
+                newTime.get("hour") + ":" + newTime.get("minute"),
+                "hh:mm"
+              ),
+            }));
+          }}
+        />
+        <TimePicker
+          timeSteps={{ minutes: 30 }}
+          ampm={false}
+          label="結束時段"
+          // views={["hours","minutes"]}
+          format="hh:mm"
+          // defaultValue={dayjs("0000-00-00T9:00")}
+          onAccept={(newTime) => {
+            setEndTimeList((preState) => ({
+              ...preState,
+              [periodId]: moment(
+                newTime.get("hour") + ":" + newTime.get("minute"),
+                "hh:mm"
+              ),
+            }));
+          }}
+        />
+        <Button onClick={() => handleDelete(periodId)}>
+          <HighlightOff />
+        </Button>
+      </DemoContainer>
+    </LocalizationProvider>
+  );
 }
-function checkTimeSeries(startTimeList,endTimeList){
-  for(const [id, time] of Object.entries(startTimeList)){
-    const startTime = time
-    const endTime = endTimeList[id]
-    if (endTime.isBefore(startTime)){
-      alert("起始時間與結束時間未按照順序")
-      return false
+function checkTimeSeries(startTimeList, endTimeList) {
+  for (const [id, time] of Object.entries(startTimeList)) {
+    const startTime = time;
+    const endTime = endTimeList[id];
+    if (endTime.isBefore(startTime)) {
+      alert("起始時間與結束時間未按照順序");
+      return false;
     }
   }
 }
-function checkTimeOverlap(startTimeList,endTimeList){
-  console.log(startTimeList)
-  console.log(endTimeList)
-  var timeList = []
-  for(const [id, time] of Object.entries(startTimeList)){
-    console.log(timeList)
-      timeList.push([time,endTimeList[id]])
+function checkTimeOverlap(startTimeList, endTimeList) {
+  console.log(startTimeList);
+  console.log(endTimeList);
+  var timeList = [];
+  for (const [id, time] of Object.entries(startTimeList)) {
+    console.log(timeList);
+    timeList.push([time, endTimeList[id]]);
   }
-  console.log(timeList)
-  timeList.sort(function(a,b){
-    if(a[0].isAfter(b[0])){
-      return 1
+  console.log(timeList);
+  timeList.sort(function (a, b) {
+    if (a[0].isAfter(b[0])) {
+      return 1;
+    } else {
+      return -1;
     }
-    else{
-      return -1
-    }  
-  })
-  for(var i =0; i<timeList.length-1;i++){
-    if(timeList[i][1].isAfter(timeList[i+1][0])){
-      alert("時段重疊")
+  });
+  for (var i = 0; i < timeList.length - 1; i++) {
+    if (timeList[i][1].isAfter(timeList[i + 1][0])) {
+      alert("時段重疊");
     }
   }
-  console.log(timeList)
+  console.log(timeList);
 }
 function FormDialog() {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({})
-  const [startTimeList, setStartTimeList] = useState([])
-  const [endTimeList, setEndTimeList] = useState([])
-  const [periodId, setPeriodId] = useState(0)
+  const [form, setForm] = useState({});
+  const [startTimeList, setStartTimeList] = useState([]);
+  const [endTimeList, setEndTimeList] = useState([]);
+  const [periodId, setPeriodId] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-    // checkTimeSeries(startTimeList,endTimeList)
-    checkTimeOverlap(startTimeList,endTimeList)
+    //checkTimeSeries(startTimeList,endTimeList)
+    checkTimeOverlap(startTimeList, endTimeList);
     // setOpen(false);
   };
-  useEffect(()=>{
-    
-    setForm({[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} con={con}/>})
-    setPeriodId(periodId+1)
-  },[])
-  useEffect(()=>{
-    console.log(startTimeList)
-    console.log(endTimeList)
-    console.log(form)
-  },[startTimeList,endTimeList,form])
+  useEffect(() => {
+    setForm({
+      [periodId]: (
+        <TimeBlock
+          startTimeList={startTimeList}
+          setStartTimeList={setStartTimeList}
+          endTimeList={endTimeList}
+          setEndTimeList={setEndTimeList}
+          periodId={periodId}
+          con={con}
+          handleDelete={handleDelete}
+        />
+      ),
+    });
+    setPeriodId(periodId + 1);
+  }, []);
+  useEffect(() => {
+    console.log(startTimeList);
+    console.log(endTimeList);
+    console.log(form);
+  }, [startTimeList, endTimeList, form]);
   // useEffect(()=>{
   //   console.log(form)
   // })
-  function con (){
-    console.log(form)
+  function con() {
+    console.log(form);
   }
+  const handleDelete = (timeToDelete) => {
+    setForm(form.filter((timeBlock) => timeBlock !== timeToDelete));
+    console.log(form);
+  };
   return (
     <>
-      <IconButton variant="outlined" onClick={handleClickOpen} >
-        <EditIcon/>
+      <IconButton variant="outlined" onClick={handleClickOpen}>
+        <EditIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>選取日期與時間</DialogTitle>
         <DialogContent>
           {Object.values(form)}
-          <Button variant="text" onClick={()=>{
-            
-            setForm({...form,[periodId]:<TimeBlock startTimeList={startTimeList} setStartTimeList={setStartTimeList} endTimeList={endTimeList} setEndTimeList={setEndTimeList} periodId = {periodId} con={con}/>})
-            setPeriodId(periodId+1)}}
-           >新增營業時間</Button>
-            
+          <Button
+            variant="text"
+            onClick={() => {
+              setForm({
+                ...form,
+                [periodId]: (
+                  <TimeBlock
+                    startTimeList={startTimeList}
+                    setStartTimeList={setStartTimeList}
+                    endTimeList={endTimeList}
+                    setEndTimeList={setEndTimeList}
+                    periodId={periodId}
+                    con={con}
+                    handleDelete={handleDelete}
+                  />
+                ),
+              });
+              setPeriodId(periodId + 1);
+            }}
+          >
+            新增營業時間
+          </Button>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Subscribe</Button>
         </DialogActions>
       </Dialog>
-      </>
+    </>
   );
 }
 
@@ -182,7 +224,7 @@ export default function CreateStadium() {
       //$("#banner_name").text(file.name);
     }
   }
-  
+
   return (
     <div>
       <h1> 新增場地資訊 </h1>
@@ -224,7 +266,7 @@ export default function CreateStadium() {
                     <TextField fullWidth size="small" />
                     <Typography>最大使用人數</Typography>
                     <TextField fullWidth size="small" />
-                    <FormDialog/>
+                    <FormDialog />
                   </CardContent>
                 </Grid>
               </Grid>
