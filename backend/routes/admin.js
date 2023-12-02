@@ -7,9 +7,9 @@ import {
 const router = express.Router();
 
 // GET /api/admin/courtsAppointmentDetails
-router.get("/getCourtsAppointments", getCourtsAppointments);
+router.get("/court", getCourtsAppointments);
 
 // GET /api/admin/:court_id
-router.get("/getCourtsAppointmentDetails/", getCourtsAppointmentDetails);
+router.get("/courtDetail/", getCourtsAppointmentDetails);
 
 export default router
