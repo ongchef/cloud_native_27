@@ -208,7 +208,7 @@ export default function AdminStadiumDetail() {
                     <Box m={1}>
                       <EventFounders></EventFounders>
                     </Box>
-                    <Box display="flex" justifyContent="flex-end">
+                    {/* <Box display="flex" justifyContent="flex-end">
                       <Tooltip
                         title="Click to reserve the stadium"
                         placement="top"
@@ -218,7 +218,7 @@ export default function AdminStadiumDetail() {
                           預約場地
                         </Button>
                       </Tooltip>
-                    </Box>
+                    </Box> */}
                   </CardContent>
                 </Grid>
               </Grid>
