@@ -16,7 +16,6 @@ export const getUsersQuery = () => {
 // get a user by id
 export const getUsersByIdQuery = (data) => {
     return new Promise((resolve, reject) => {
-        // try test id = 60b59b1f-b9c7-7bfe-43a6-9a42089ab18f
         db.query('SELECT * from STADIUM.USER WHERE user_id = ?', [data], (error, results) => {
             if (error) {
                 reject(error);
@@ -27,33 +26,68 @@ export const getUsersByIdQuery = (data) => {
     });
 }
 
-// put user info by id
-// TODO: check which columns should be edited and which user_id
-export const putUsersInfoByIdQuery = (data) => {
+// check duplicate name
+export const isDuplicateName = (name) => {
     return new Promise((resolve, reject) => {
-        db.query('UPDATE * from STADIUM.USER SET = ? WHERE = ?', [data], (error, results) => {
+        db.query('SELECT name FROM STADIUM.USER', (error, results) => {
+            
+            if (error) {
+                reject(false);
+            } else {
+                for (let i = 0; i < results.length; i++){
+                    if (results[i].name === name) {
+                        resolve(true)
+                    }
+                }
+                resolve(false)
+            }
+        });
+    })
+}
+
+// check duplicate email
+export const isDuplicateEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT email FROM STADIUM.USER', (error, results) => {
+            
+            if (error) {
+                reject(false);
+            } else {
+                for (let i = 0; i < results.length; i++){
+                    if (results[i].email === email) {
+                        resolve(true)
+                    }
+                }
+                resolve(false)
+            }
+        });
+    })
+}
+
+// check if users exist
+export const isUsersExist = (data) => {
+
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM STADIUM.USER WHERE name = ?`, [data], (error, results) => {
             if (error) {
                 reject(error);
             } else {
                 resolve(results);
             }
         });
-    });
+    });    
 }
 
+
 // post register users
-// TODO: check values(user data) need to be inserted
-// TODO: error handling(duplicate account/email)
 export const postUsersRegisterQuery = (data) => {
 
-    const user_columns = '(user_id, line_id, role_id, password, name, email, phone)'
-
     return new Promise((resolve, reject) => {
-        db.query(`INSERT INTO STADIUM.USER ${user_columns} VALUES ?`, [data], (error, results) => {
+        db.query(`INSERT INTO STADIUM.USER SET ?`, [data], (error, results) => {
             if (error) {
                 reject(error);
             } else {
-                resolve(results);
+                resolve("新增成功!");
             }
         });
     });
@@ -64,7 +98,50 @@ export const postUsersRegisterQuery = (data) => {
 export const postUsersLoginQuery = (data) => {
 
     return new Promise((resolve, reject) => {
-        db.query('SELECT STADIUM.USER WHERE ?', [data], (error, results) => {
+        db.query('SELECT user_id, password FROM STADIUM.USER WHERE name = ?', [data], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+// put user by id
+export const putUsersQuery = (data) => {
+
+    const { user_id, ...update_col_dict } = data
+    return new Promise((resolve, reject) => {
+        db.query('UPDATE STADIUM.USER SET ? WHERE user_id = ?', [update_col_dict, user_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve("變更完成!");
+            }
+        });
+    });
+}
+
+// get user appointment
+export const getUsersAppointmentQuery = (data) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM STADIUM.PARTICIPANT INNER JOIN 
+        STADIUM.APPOINTMENT ON APPOINTMENT.appointment_id = PARTICIPANT.id where user_id = ?`,[data],(error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+// order a court (post user appointment)
+export const postUsersAppointmentQuery = (data) => {
+
+    return new Promise((resolve, reject) => {
+        db.query('INSERT INTO STADIUM.APPOINTMENT SET ?', [data], (error, results) => {
             if (error) {
                 reject(error);
             } else {
