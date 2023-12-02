@@ -20,8 +20,8 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import pic from "../../pic/羽球1.png";
 import pic2 from "../../pic/羽球3.png";
 import fakeStadium from "../../testData/fakeStadium";
-import Pagination from "@mui/material/Pagination"; 
-import AddIcon from '@mui/icons-material/Add';
+import Pagination from "@mui/material/Pagination";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function ReadStadium() {
   const [sport, setSport] = useState(10);
@@ -65,9 +65,9 @@ export default function ReadStadium() {
                 setDate(newDate);
               }}
             />
-            </LocalizationProvider>
-          </Box>
-          <Box m={1}>
+          </LocalizationProvider>
+        </Box>
+        <Box m={1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               timeSteps={{ minutes: 30 }}
@@ -121,32 +121,28 @@ export default function ReadStadium() {
         <Box m={1}>
           <Button variant="contained">Search</Button>
         </Box>
-        
       </Box>
-      <Box >
-      <Grid
-            container
-          >
-    
-        <Grid item xs={1.5}>
-        </Grid>
-        <Grid item xs={4.5}>
-        <Typography variant="h4" color="text.secondary">
-                球場預約情況
-        </Typography>
-        </Grid>
-        <Grid item xs={3}>
-
-        </Grid>
-        <Grid item xs={3}>
-            <Button variant="outlined" startIcon={<AddIcon />} sx={{lineHeight:0}}>
-                新增球場
+      <Box>
+        <Grid container>
+          <Grid item xs={1.5}></Grid>
+          <Grid item xs={4.5}>
+            <Typography variant="h4" color="text.secondary">
+              球場預約情況
+            </Typography>
+          </Grid>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              sx={{ lineHeight: 0 }}
+            >
+              新增球場
             </Button>
+          </Grid>
         </Grid>
-        </Grid>    
-        </Box>
+      </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-      
         <StadiumCard
           id={1}
           image={pic2}
