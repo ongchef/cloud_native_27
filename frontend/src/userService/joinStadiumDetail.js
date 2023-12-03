@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-export default function OrderStadiumDetail() {
+export default function JoinStadiumDetail() {
   const navigate = useNavigate();
   const tags = ["Basketball", "現場報隊", "新手友善"];
   useEffect(() => {

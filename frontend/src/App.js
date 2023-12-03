@@ -35,6 +35,7 @@ import CreateStadium from "./provider/CRUD/createStadium";
 import AdminStadiumDetail from "./adminService/adminStadiumDetail";
 import AdminAddProvider from "./adminService/adminAddProvider";
 import AdminUserHistory from "./adminService/adminUserHistory";
+import UserProfile from "./userService/userProfile";
 
 const drawerWidth = 240;
 
@@ -192,6 +193,14 @@ export default function App() {
                   <ListItemText primary={"歷史紀錄"} />
                 </ListItemButton>
               </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton to="/userProfile">
+                  <ListItemIcon>
+                    {/* Add an icon here if needed */}
+                  </ListItemIcon>
+                  <ListItemText primary={"User Profile"} />
+                </ListItemButton>
+              </ListItem>
             </>
           ) : (
             ""
@@ -261,6 +270,7 @@ export default function App() {
           <>
             <Route exact path="/orderStadium" element={<OrderStadium />} />
             <Route exact path="/joinStadium" element={<JoinStadium />} />
+
             <Route
               exact
               path="/joinStadiumDetail"
@@ -273,6 +283,7 @@ export default function App() {
             />
           </>
         )}
+        <Route exact path="/userProfile" element={<UserProfile />} />
         <Route exact path="/userHistory" element={<UserHistory />} />
         {/* provider */}
         <Route exact path="/stadiumBoard" element={<StadiumBoard />} />
