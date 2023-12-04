@@ -2,7 +2,6 @@ import db from './connection_db.js';
 
 // get courts appointment query
 export const getCourtsAppointmentQuery = (params) => {
-    console.log(params);
     const name = params.name !== 'ALL' ? params.name : null;
     const ball = params.ball !== 'ALL' ? params.ball : null;
     const location = params.location !== 'ALL' ? params.location : null;
@@ -83,8 +82,6 @@ export const postCourtsProviderQuery = (data) => {
 export const putUsersByIdQuery = async(data) => {
 
     const { user_id, ...update_col_dict } = data;
-    console.log(user_id);
-    console.log(update_col_dict);
 
     return new Promise((resolve, reject) => {
         db.query('UPDATE STADIUM.USER SET ? WHERE user_id = ?', [update_col_dict, user_id], (error, results) => {
