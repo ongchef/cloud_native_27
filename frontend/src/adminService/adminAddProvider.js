@@ -11,10 +11,8 @@ import {
 
 const AdminAddProvider = () => {
 	const [unitName, setUnitName] = useState('');
-	const [contactName, setContactName] = useState('');
 	const [contactPhone, setContactPhone] = useState('');
 	const [contactEmail, setContactEmail] = useState('');
-	const [loginUsername, setLoginUsername] = useState('');
 	const [loginPassword, setLoginPassword] = useState('');
 	const [providerType, setProviderType] = useState('');
 
@@ -25,19 +23,15 @@ const AdminAddProvider = () => {
 		setLoading(true);
 		if (
 			unitName &&
-			contactName &&
 			contactPhone &&
 			contactEmail &&
-			loginUsername &&
 			loginPassword &&
 			providerType
 		) {
 			console.log({
 				unitName,
-				contactName,
 				contactPhone,
 				contactEmail,
-				loginUsername,
 				loginPassword,
 				providerType,
 			});
@@ -71,16 +65,6 @@ const AdminAddProvider = () => {
 				</FormControl>
 
 				<FormControl fullWidth margin="normal">
-					<Typography variant="subtitle1">聯絡人姓名</Typography>
-					<TextField
-						variant="outlined"
-						value={contactName}
-						onChange={(e) => setContactName(e.target.value)}
-						required
-					/>
-				</FormControl>
-
-				<FormControl fullWidth margin="normal">
 					<Typography variant="subtitle1">聯絡電話</Typography>
 					<TextField
 						variant="outlined"
@@ -97,16 +81,6 @@ const AdminAddProvider = () => {
 						variant="outlined"
 						value={contactEmail}
 						onChange={(e) => setContactEmail(e.target.value)}
-						required
-					/>
-				</FormControl>
-
-				<FormControl fullWidth margin="normal">
-					<Typography variant="subtitle1">登入帳號</Typography>
-					<TextField
-						variant="outlined"
-						value={loginUsername}
-						onChange={(e) => setLoginUsername(e.target.value)}
 						required
 					/>
 				</FormControl>
