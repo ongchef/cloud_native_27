@@ -4,7 +4,7 @@ import {
     putUsersQuery,
     postUsersRegisterQuery,
     postUsersLoginQuery,
-    getUsersAppointmentQuery,
+    getUsersAppointmentIdQuery,
     postUsersAppointmentQuery,
     isDuplicateName,
     isDuplicateEmail,
@@ -13,18 +13,23 @@ import {
 
 import {
     getCourtsAppointmentsQuery,
+    getCourtsInfoByAppointmentIdQuery,
     getCourtsIdByAppointmentIdQuery,
-    getCourtsInIdListQuery,
     getCourtsNotInIdListQuery,
+    getCourtsOrderInfoInIdListQuery,
     addParticipantQuery,
-    addAppointmentTimeQuery
+    addAppointmentTimeQuery,
+    getCourtsAvaTimeByIdQuery,
+    putAttendenceQuery,
 } from '../models/appointment.js';
 
 import {
     availableCourtChecker,
     joinableCourtChecker,
     hashPassword,
-    comparePassword
+    comparePassword,
+    generate_uuid,
+    parseISODate
 } from '../utils/helper.js';
 
 import {
@@ -67,6 +72,8 @@ export const postUsers = async(req,res) => {
         // hash password
         const hashed_password = await hashPassword(password);
         req.body['password'] = hashed_password;
+        // generate user uuid
+        req.body['user_id'] = generate_uuid();
         const result = await postUsersRegisterQuery(req.body)
         return res.status(200).json(result)
     }
@@ -100,12 +107,15 @@ export const postUsersLogin = async(req,res) => {
     }
 }
 
-export const getUsersAppointment = async(req,res) => {
+export const getUsersAppointmentHistory = async(req,res) => {
 
     const user_token = req.token;
 
-    const result = await getUsersAppointmentQuery(user_token);
-    return res.status(200).json(result);
+    const app_id = await getUsersAppointmentIdQuery(user_token);
+    const app_id_list = app_id.map(item => item.appointment_id);
+    const app_history = await getCourtsInfoByAppointmentIdQuery(app_id_list)
+
+    return res.status(200).json(app_history);
 }
 
 export const postUsersAppointment = async(req,res) => {
@@ -115,7 +125,11 @@ export const postUsersAppointment = async(req,res) => {
 
     try {
         // insert appointment table first
-        const app_result = await postUsersAppointmentQuery(appointment_cols);
+        const app_result = await postUsersAppointmentQuery({
+            "creator_id": user_id,
+            "attendence": 1, // first order a court, creator as an attendence
+            ...appointment_cols,
+        });
 
         // if sucessfully inserted, also insert participant table
         const par_data = {
@@ -138,12 +152,14 @@ export const postUsersAppointment = async(req,res) => {
     }
 }
 
-export const getUsersOrderCourts = async(req,res) => {
+export const getUsersAppointment = async(req,res) => {
     
     const appointments = await getCourtsAppointmentsQuery();
     const { query_time } = req.body;
     const unavailable_appointment_id_set = new Set();
     for (let i = 0; i < appointments.length; i++){
+        // solve the ISOdate issue
+        appointments[i]['date'] = parseISODate(appointments[i]['date'])
         if (availableCourtChecker(appointments[i], query_time)) {
             unavailable_appointment_id_set.add(appointments[i]['appointment_id']);
         }
@@ -155,41 +171,78 @@ export const getUsersOrderCourts = async(req,res) => {
         let unavailable_appointment_id_list = [...unavailable_appointment_id_set];
         const unavailable_courts_id = await getCourtsIdByAppointmentIdQuery(unavailable_appointment_id_list)
         const unavailable_court_id_list = unavailable_courts_id.map((item) => item.court_id);
-        const available_courts = await getCourtsNotInIdListQuery(unavailable_court_id_list)
-        return res.status(200).json(available_courts);
+        const available_courts_id = await getCourtsNotInIdListQuery(unavailable_court_id_list);
+        const available_courts_id_list = available_courts_id.map((item) => item.court_id);
+        const available_courts = await getCourtsOrderInfoInIdListQuery(available_courts_id_list);
+        const available_courts_with_time = await Promise.all(
+            available_courts.map(async({...item}) => ({
+                ...item,
+                available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
+            }))
+        )
+        return res.status(200).json(available_courts_with_time);
     
     // there are not unavailable courts according to the query time period
     // return all courts
     } else {
-
-        const result = await getCourtsQuery();
-        return res.status(200).json(result);
+        const all_courts = await getCourtsQuery();
+        const all_courts_id_list = all_courts.map((item) => item.court_id);
+        const result = await getCourtsOrderInfoInIdListQuery(all_courts_id_list);
+        const all_courts_with_time = await Promise.all(
+            result.map(async({...item}) => ({
+                ...item,
+                available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
+            }))
+        )
+        return res.status(200).json(all_courts_with_time);
     }
 }
 
-export const getUsersJoinCourts = async(req,res) => {
+
+
+export const getUsersAppointmentJoin = async(req,res) => {
     
     const appointments = await getCourtsAppointmentsQuery();
     const { query_time } = req.body;
+    const { public_index } = req.body;
     const joinable_appointment_id_set = new Set();
     for (let i = 0; i < appointments.length; i++){
+        // solve the ISOdate issue
+        appointments[i]['date'] = parseISODate(appointments[i]['date'])
         if (joinableCourtChecker(appointments[i], query_time)) {
-            joinable_appointment_id_set.add(appointments[i]['appointment_id']);
+            // check private or public
+            if (appointments[i]['public'] == public_index){
+                joinable_appointment_id_set.add(appointments[i]['appointment_id']);
+            }
         }
     }
-
     // there are joinable courts according to the query time period
     if (joinable_appointment_id_set.size !== 0) {
 
         let joinable_appointment_id_list = [...joinable_appointment_id_set];
-        const joinable_courts_id = await getCourtsIdByAppointmentIdQuery(joinable_appointment_id_list)
-        const joinable_court_id_list = joinable_courts_id.map((item) => item.court_id);
-        const joinable_courts = await getCourtsInIdListQuery(joinable_court_id_list)
-        return res.status(200).json(joinable_courts);
+        const joinable_courts_info = await getCourtsInfoByAppointmentIdQuery(joinable_appointment_id_list)
+        return res.status(200).json(joinable_courts_info);
     
     // there are not joinable courts according to the query time period
     } else {
 
-        return res.status(200).json("查詢時段無可預約的球場!");
+        return res.status(200).json("查詢時段無可加入的球場!");
     }
+}
+
+// TODO: if attendence > available -> join failed
+export const postUsersAppointmentJoin = async(req,res) => {
+
+    const user_id = req.token;
+    const { appointment_id } = req.body;
+
+    const par_data = {
+        "user_id": user_id,
+        "appointment_id": appointment_id
+    }
+    const par_result = await addParticipantQuery(par_data);
+    // update attendence column
+    const app_result = await putAttendenceQuery(appointment_id);
+    res.status(200).json("加入成功!");
+        
 }

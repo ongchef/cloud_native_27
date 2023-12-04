@@ -124,10 +124,9 @@ export const putUsersQuery = (data) => {
 }
 
 // get user appointment
-export const getUsersAppointmentQuery = (data) => {
+export const getUsersAppointmentIdQuery = (data) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM STADIUM.PARTICIPANT INNER JOIN 
-        STADIUM.APPOINTMENT ON APPOINTMENT.appointment_id = PARTICIPANT.id where user_id = ?`,[data],(error, result) => {
+        db.query(`SELECT appointment_id FROM STADIUM.PARTICIPANT where user_id = ?`,[data],(error, result) => {
             if (error) {
                 reject(error);
             } else {

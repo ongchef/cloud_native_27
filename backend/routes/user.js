@@ -7,8 +7,9 @@ import {
     getUsersAppointment,
     postUsersAppointment,
     postUsersLogin,
-    getUsersOrderCourts,
-    getUsersJoinCourts,
+    getUsersAppointmentJoin,
+    postUsersAppointmentJoin,
+    getUsersAppointmentHistory,
 } from "../controllers/user.js";
 
 const router = express.Router();
@@ -25,17 +26,20 @@ router.put("/", putUsers);
 // GET /api/users/id
 router.get("/id", getUsersById);
 
-// GET /api/users/order
-router.get("/order", getUsersOrderCourts);
+// GET /api/users/appointment
+router.get("/appointment", getUsersAppointment);
 
-// POST /api/users/order
-router.post("/order", postUsersAppointment);
+// POST /api/users/appointment
+router.post("/appointment", postUsersAppointment);
 
-// GET /api/users/order/history
-router.get("/order/history", getUsersAppointment);
+// GET /api/users/appointment/histories
+router.get("/appointment/histories", getUsersAppointmentHistory);
 
-// GET /api/users/order/join
-router.get("/order/join", getUsersJoinCourts)
+// GET /api/users/appointment/join
+router.get("/appointment/join", getUsersAppointmentJoin)
+
+// POST /api/users/appointment/join
+router.post("/appointment/join", postUsersAppointmentJoin)
 
 // POST /api/users/login
 router.post("/login", postUsersLogin)
