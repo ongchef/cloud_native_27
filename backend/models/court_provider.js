@@ -50,8 +50,27 @@ export const isCourtsProvider = (data) => {
     });
 }
 
+export const getCourtsAppointmentByDate = (data) => {
+    
+    const { court_id, date, date_add_one_day } = data;
+
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM STADIUM.APPOINTMENT_TIME INNER JOIN 
+        STADIUM.APPOINTMENT ON STADIUM.APPOINTMENT_TIME.appointment_id = STADIUM.APPOINTMENT.appointment_id 
+        WHERE court_id = ? AND 
+        APPOINTMENT_TIME.date >= ? AND
+        APPOINTMENT_TIME.date < ?`, [court_id, date, date_add_one_day], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
 // get court's reserved time by court id
-export const getCourtsReservedByCourtIdQuery = async(data) => {
+export const getCourtsReservedByCourtIdQuery = (data) => {
     
     const court_id = data['court_id']
 
@@ -70,7 +89,7 @@ export const getCourtsReservedByCourtIdQuery = async(data) => {
 }
 
 // put court info by court_id
-export const putCourtsByIdQuery = async(data) => {
+export const putCourtsByIdQuery = (data) => {
 
     const { court_id, admin_id, ...update_col_dict } = data;
 
@@ -100,7 +119,7 @@ export const postCourtsQuery = (data) => {
 }
 
 // delete courts
-export const deleteCourtsByIdQuery = async(data) => {
+export const deleteCourtsByIdQuery = (data) => {
 
     const { court_id } = data;
 

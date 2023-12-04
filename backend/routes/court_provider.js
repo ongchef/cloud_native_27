@@ -16,17 +16,17 @@ router.get("/", getCourts);
 // POST /api/courts
 router.post("/", postCourts)
 
-// PUT /api/courts/:court_id
-router.put("/:court_id", putCourtsById);
+// PUT /api/courts
+router.put("/", putCourtsById);
 
-// DELETE /api/courts/:court_id
-router.delete("/:court_id", deleteCourtsById)
+// DELETE /api/courts
+router.delete("/", deleteCourtsById)
 
 // GET /api/courts/admin
 router.get("/admin", getCourtsByAdminId)
 
-// GET /api/courts/:court_id/reserved
-router.get("/:court_id/reserved", getCourtsReservedByCourtId);
+// GET /api/courts/reserved
+router.get("/reserved", getCourtsReservedByCourtId);
 
 
 export default router
