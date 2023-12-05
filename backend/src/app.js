@@ -25,6 +25,11 @@ app.use("/api/users", userRoutes);
 app.use("/api/courts", courtRoutes);
 app.use("/api/admin", adminRoutes);
 
+//swagger
+import swaggerUi from 'swagger-ui-express';
+import swaggerFile from '../swagger_output.json' assert { type: 'json' };
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

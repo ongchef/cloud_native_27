@@ -48,6 +48,7 @@ export const getUserHistories = async(req,res) => {
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
     let data = {};
+    
     const admin_id = req.token;
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
@@ -89,8 +90,8 @@ export const getCourtsAppointments = async(req,res) => {
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
     let data = {};
-    const admin_id = req.token;
     console.log(req.query);
+    const admin_id = req.token;
 
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
