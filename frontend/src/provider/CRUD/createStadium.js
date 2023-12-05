@@ -207,7 +207,6 @@ const  FormDialog=()=>{
                 </DemoContainer>
                 )
         })} */}
-          {/* {console.log(Object.values(form))} */}
           <Button
             variant="text"
             onClick={() => {
