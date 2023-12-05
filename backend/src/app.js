@@ -34,3 +34,43 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// {
+//   "name": "body",
+//   "in": "body",
+//   "schema": {
+//     "type": "object",
+//     "properties": {
+//       "court_id": {
+//         "example": "2"
+//       },
+//       "public": {
+//         "example": "1"
+//       },
+//       "ball": {
+//         "example": "羽球"
+//       },
+//       "level": {
+//         "example": "菜雞"
+//       },
+//       "rule": {
+//         "example": "單打"
+//       },
+//       "password": {
+//         "example": ""
+//       },
+//       "note": {
+//         "example": ""
+//       },
+//       "date": {
+//         "example": "2023-12-01"
+//       },
+//       "start_time": {
+//         "example": "12:00:00"
+//       },
+//       "end_time": {
+//         "example": "13:00:00"
+//       }
+//     }
+//   }
+// }
