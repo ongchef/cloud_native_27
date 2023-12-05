@@ -23,30 +23,34 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import moment from "moment";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import HighlightOff from "@mui/icons-material/HighlightOff";
-
-function TimeBlock(props) {
+import dayjs from "dayjs";
+const TimeBlock=(props)=> {
   const {
-    startTimeList,
     setStartTimeList,
-    endTimeList,
+    startTimeList,
     setEndTimeList,
     periodId,
     handleDelete,
   } = props;
+  
+  const[startTime, setStartTime] = useState(setStartTimeList[periodId])
+  // set con(newCon){
+  //   this.con = handleDelete
+  // }
   console.log(periodId);
+  console.log(startTime);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={["TimePicker", "TimePicker"]}>
+      
         <TimePicker
           timeSteps={{ minutes: 30 }}
           ampm={false}
           label="起始時段"
           // views={["hours","minutes"]}
           format="hh:mm"
-          // defaultValue={dayjs("0000-00-00T9:00")}
+          value={startTime?dayjs(startTime):undefined}
           onChange={(newTime) => {
-            console.log(newTime);
-            console.log(moment(newTime));
+            setStartTime(newTime)
             setStartTimeList((preState) => ({
               ...preState,
               [periodId]: moment(
@@ -63,7 +67,7 @@ function TimeBlock(props) {
           // views={["hours","minutes"]}
           format="hh:mm"
           // defaultValue={dayjs("0000-00-00T9:00")}
-          onAccept={(newTime) => {
+          onChange={(newTime) => {
             setEndTimeList((preState) => ({
               ...preState,
               [periodId]: moment(
@@ -73,10 +77,7 @@ function TimeBlock(props) {
             }));
           }}
         />
-        <Button onClick={() => handleDelete(periodId)}>
-          <HighlightOff />
-        </Button>
-      </DemoContainer>
+      
     </LocalizationProvider>
   );
 }
@@ -113,9 +114,9 @@ function checkTimeOverlap(startTimeList, endTimeList) {
   }
   console.log(timeList);
 }
-function FormDialog() {
+const  FormDialog=()=>{
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({})
   const [startTimeList, setStartTimeList] = useState([]);
   const [endTimeList, setEndTimeList] = useState([]);
   const [periodId, setPeriodId] = useState(0);
@@ -125,10 +126,28 @@ function FormDialog() {
   };
 
   const handleClose = () => {
-    //checkTimeSeries(startTimeList,endTimeList)
-    checkTimeOverlap(startTimeList, endTimeList);
-    // setOpen(false);
+    setOpen(false);
+    setForm({
+      0: (
+        <TimeBlock
+          startTimeList={startTimeList}
+          setStartTimeList={setStartTimeList}
+          endTimeList={endTimeList}
+          setEndTimeList={setEndTimeList}
+          periodId={0}
+        />
+      ),
+    });
+    setStartTimeList({})
+    setEndTimeList({})
+    setPeriodId(1)
+    
   };
+  const handleSubmit = () =>{
+    checkTimeSeries(startTimeList,endTimeList)
+    checkTimeOverlap(startTimeList, endTimeList)
+    console.log(startTimeList)
+  }
   useEffect(() => {
     setForm({
       [periodId]: (
@@ -138,8 +157,6 @@ function FormDialog() {
           endTimeList={endTimeList}
           setEndTimeList={setEndTimeList}
           periodId={periodId}
-          con={con}
-          handleDelete={handleDelete}
         />
       ),
     });
@@ -148,17 +165,13 @@ function FormDialog() {
   useEffect(() => {
     console.log(startTimeList);
     console.log(endTimeList);
-    console.log(form);
-  }, [startTimeList, endTimeList, form]);
-  // useEffect(()=>{
-  //   console.log(form)
-  // })
-  function con() {
-    console.log(form);
-  }
-  const handleDelete = (timeToDelete) => {
-    setForm(form.filter((timeBlock) => timeBlock !== timeToDelete));
-    console.log(form);
+  }, [startTimeList, endTimeList]);
+
+  const handleDelete = (periodId) => {
+    delete form[periodId]
+    delete startTimeList[periodId]
+    delete endTimeList[periodId]
+    setForm({...form})
   };
   return (
     <>
@@ -168,11 +181,37 @@ function FormDialog() {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>選取日期與時間</DialogTitle>
         <DialogContent>
-          {Object.values(form)}
+        {Object.values(form).map((value)=>{
+
+            return (
+                <DemoContainer components={["TimePicker", "TimePicker"]}>
+                
+                {value}
+                <Button onClick={() => handleDelete(value.props.periodId)}>
+                <HighlightOff />
+                </Button>
+          
+                </DemoContainer>
+                )
+        })} 
+        {/* {Object.keys(form).map((key)=>{
+            console.log(form[key])
+          return (
+                <DemoContainer components={["TimePicker", "TimePicker"]}>
+                
+                {form[key]}
+                <Button onClick={() => handleDelete(key)}>
+                <HighlightOff />
+                </Button>
+          
+                </DemoContainer>
+                )
+        })} */}
+          {/* {console.log(Object.values(form))} */}
           <Button
             variant="text"
             onClick={() => {
-              setForm({
+            setForm({
                 ...form,
                 [periodId]: (
                   <TimeBlock
@@ -181,11 +220,10 @@ function FormDialog() {
                     endTimeList={endTimeList}
                     setEndTimeList={setEndTimeList}
                     periodId={periodId}
-                    con={con}
-                    handleDelete={handleDelete}
                   />
                 ),
-              });
+              })
+            
               setPeriodId(periodId + 1);
             }}
           >
@@ -193,8 +231,8 @@ function FormDialog() {
           </Button>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose}>取消</Button>
+          <Button onClick={handleSubmit}>確認</Button>
         </DialogActions>
       </Dialog>
     </>
