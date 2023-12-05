@@ -112,10 +112,15 @@ export const getUsersAppointmentHistory = async(req,res) => {
     const user_token = req.token;
 
     const app_id = await getUsersAppointmentIdQuery(user_token);
-    const app_id_list = app_id.map(item => item.appointment_id);
-    const app_history = await getCourtsInfoByAppointmentIdQuery(app_id_list)
+    if (app_id.length == 0){
+        res.send("目前尚無預約紀錄!")
+    } else {
+        const app_id_list = app_id.map(item => item.appointment_id);
+        const app_history = await getCourtsInfoByAppointmentIdQuery(app_id_list)
 
-    return res.status(200).json(app_history);
+        return res.status(200).json(app_history);
+    }
+
 }
 
 export const postUsersAppointment = async(req,res) => {
@@ -240,6 +245,7 @@ export const postUsersAppointmentJoin = async(req,res) => {
         "user_id": user_id,
         "appointment_id": appointment_id
     }
+    console.log(par_data)
     const par_result = await addParticipantQuery(par_data);
     // update attendence column
     const app_result = await putAttendenceQuery(appointment_id);
