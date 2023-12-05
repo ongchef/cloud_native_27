@@ -36,6 +36,7 @@ import AdminStadiumDetail from "./adminService/adminStadiumDetail";
 import AdminAddProvider from "./adminService/adminAddProvider";
 import AdminUserHistory from "./adminService/adminUserHistory";
 import UserProfile from "./userService/userProfile";
+import  Map  from "./commonService/map";
 
 const drawerWidth = 240;
 
@@ -294,6 +295,7 @@ export default function App() {
         />
         <Route exact path="/readStadium" element={<ReadStadium />} />
         <Route exact path="/createStadium" element={<CreateStadium />} />
+        <Route exact path="/map" element={<Map />} />
         {/* admin */}
         <Route
           exact
