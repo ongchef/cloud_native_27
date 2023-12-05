@@ -245,7 +245,6 @@ export const postUsersAppointmentJoin = async(req,res) => {
         "user_id": user_id,
         "appointment_id": appointment_id
     }
-    console.log(par_data)
     const par_result = await addParticipantQuery(par_data);
     // update attendence column
     const app_result = await putAttendenceQuery(appointment_id);
