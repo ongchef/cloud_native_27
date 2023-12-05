@@ -3,11 +3,9 @@ import Button from "@mui/material/Button"; // 引入Button元件
 import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
-import pic from "../pic/羽球1.png";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import { Card } from "@mui/material";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
+
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
@@ -35,7 +33,7 @@ export default function UserProfile() {
 
   return (
     <div>
-      <h1>Order Stadium Detail</h1>
+      <h1>user Profile</h1>
       <Box
         display="flex"
         flexDirection="column"
