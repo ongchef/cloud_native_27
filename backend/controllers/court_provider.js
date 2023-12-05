@@ -46,20 +46,22 @@ export const getCourtsReservedByCourtId = async(req,res) => {
 
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
-    req.body['court_id'] = req.query['court_id'];
-    req.body['admin_id'] = req.token;
-    req.body['date_add_one_day'] = add_one_day(req.body.date);
+    const data = {}
+    data['court_id'] = req.query['court_id'];
+    data['date'] = req.query['date']
+    data['date_add_one_day'] = add_one_day(req.query['date']);
+    data['admin_id'] = req.token;
 
-    const iscourtproiver = await isCourtsProvider(req.body)
+    const iscourtproiver = await isCourtsProvider(data)
 
     if (iscourtproiver) {
 
         // check whether appointment exists on the query date
-        const get_appointment_date = await getCourtsAppointmentByDate(req.body);
+        const get_appointment_date = await getCourtsAppointmentByDate(data);
         // the court have appointment on the query date
         if (get_appointment_date.length > 0) {
             const appointment_date = get_appointment_date.map((item)=>({
-                "date": req.body.date,
+                "date": req.query['date'],
                 "start_time": item.start_time,
                 "end_time": item.end_time
             }))
@@ -69,7 +71,7 @@ export const getCourtsReservedByCourtId = async(req,res) => {
         // just return the query date
         } else {
             const appointment_date = {
-                "date": req.body.date
+                "date": req.query['date']
             }
             res.status(200).json(appointment_date);
         }

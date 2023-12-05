@@ -155,7 +155,7 @@ export const postUsersAppointment = async(req,res) => {
 export const getUsersAppointment = async(req,res) => {
     
     const appointments = await getCourtsAppointmentsQuery();
-    const { query_time } = req.body;
+    const { query_time } = req.query;
     const unavailable_appointment_id_set = new Set();
     for (let i = 0; i < appointments.length; i++){
         // solve the ISOdate issue
@@ -203,8 +203,8 @@ export const getUsersAppointment = async(req,res) => {
 export const getUsersAppointmentJoin = async(req,res) => {
     
     const appointments = await getCourtsAppointmentsQuery();
-    const { query_time } = req.body;
-    const { public_index } = req.body;
+    const { query_time } = req.query;
+    const { public_index } = req.query;
     const joinable_appointment_id_set = new Set();
     for (let i = 0; i < appointments.length; i++){
         // solve the ISOdate issue
