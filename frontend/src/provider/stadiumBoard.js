@@ -21,14 +21,20 @@ import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; 
-
+import axios from 'axios';
+async function SearchCourt(){
+  return await axios.get("http://localhost:3000/api/courts")
+}
 export default function StadiumBoard() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
+  const [courtList, setCourtList] = useState([])
   useEffect(() => {
-    fakeStadium();
+    SearchCourt().then((res)=>
+      setCourtList(res.data)
+    )
   });
   const handleSportChange = (event) => {
     setSport(event.target.value);
@@ -140,40 +146,55 @@ export default function StadiumBoard() {
         </Grid>    
         </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-      
-        <StadiumCard
-          id={1}
-          image={pic2}
-          title={"球場名稱1"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週五",
-            "16:00~22:00",
-            6,
-          ]}
-        />
-        <StadiumCard
-          id={2}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週五",
-            "16:00~22:00",
-            7,
-          ]}
-        />
-        <StadiumCard
-          id={3}
-          image={pic2}
-          title={"球場名稱3"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週五",
-            "16:00~22:00",
-            8,
-          ]}
-        />
+        {
+          courtList.map((court)=>
+             <StadiumCard
+            id={court.court_id}
+            image={pic}
+            title={court.name}
+
+            description={[
+              court.location,
+              "週一至週五",
+              "16:00~22:00",
+              court.available,
+            ]}
+          />
+          )
+        }
+        {/* // <StadiumCard
+        //   id={1}
+        //   image={pic2}
+        //   title={"球場名稱1"}
+        //   description={[
+        //     "106台北市大安區羅斯福路四段1號",
+        //     "週一至週五",
+        //     "16:00~22:00",
+        //     6,
+        //   ]}
+        // />
+        // <StadiumCard
+        //   id={2}
+        //   image={pic}
+        //   title={"球場名稱2"}
+        //   description={[
+        //     "106台北市大安區羅斯福路四段1號",
+        //     "週一至週五",
+        //     "16:00~22:00",
+        //     7,
+        //   ]}
+        // />
+        // <StadiumCard
+        //   id={3}
+        //   image={pic2}
+        //   title={"球場名稱3"}
+        //   description={[
+        //     "106台北市大安區羅斯福路四段1號",
+        //     "週一至週五",
+        //     "16:00~22:00",
+        //     8,
+        //   ]}
+        // /> */}
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
