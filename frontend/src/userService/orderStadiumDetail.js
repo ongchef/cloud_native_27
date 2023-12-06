@@ -5,7 +5,7 @@ import Box from "@mui/material/Box"; // 引入Box元件
 import pic2 from "../pic/羽球3.png";
 import { Input } from "antd";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Card } from "@mui/material";
+import { Card, IconButton } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -16,6 +16,8 @@ import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
 import { Switch } from "antd";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import PlaceIcon from '@mui/icons-material/Place';
+import Map from "../commonService/map";
 const availableTime = [32, 42];
 const bookingList = [
   {
@@ -33,7 +35,7 @@ const bookingList = [
 export default function OrderStadiumDetail() {
   const navigate = useNavigate();
   const [selectedOptions, setSelectedOptions] = useState([]);
-
+  const [hidden, setHidden] = useState(true)
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
@@ -137,6 +139,7 @@ export default function OrderStadiumDetail() {
   return (
     <div>
       <h1>Order Stadium Detail</h1>
+      
       <Box
         display="flex"
         width="70vw"
@@ -154,6 +157,10 @@ export default function OrderStadiumDetail() {
               返回搜尋頁
             </ButtonM>
           </Box>
+          <IconButton onClick = {()=>setHidden(false)}>
+          <PlaceIcon/>
+          <Map hidden = {hidden} setHidden = {setHidden}/>
+          </IconButton>
           <Typography variant="h4">組隊詳細資料</Typography>
           {/* 內容1 */}
         </Container>

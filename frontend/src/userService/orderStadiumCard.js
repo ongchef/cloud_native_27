@@ -7,6 +7,7 @@ import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
 import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 
+
 export default function OrderStadiumCard({ id, image, title, description }) {
   const navigate = useNavigate();
   return (
@@ -68,6 +69,7 @@ export default function OrderStadiumCard({ id, image, title, description }) {
                   >
                     {description[1]} {description[2]} 開放預約
                   </span>
+                  
                 </Typography>
 
                 <Typography variant="body2" color="000000">
