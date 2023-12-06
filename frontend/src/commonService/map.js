@@ -54,6 +54,7 @@ export default function Map(props){
     }).addTo(mymap);
   },[])
     return (
+      
       <div id="mapid" hidden={hidden} style={{ height: "100vh", width: "100vw" }} />
       // <>
       // <IconButton onClick={handleClickOpen}>

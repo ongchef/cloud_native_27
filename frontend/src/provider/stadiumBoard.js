@@ -22,9 +22,10 @@ import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; 
 import axios from 'axios';
+import authHeader from "../authService/authHeader";
 async function SearchCourt(){
   
-  return await axios.get("http://localhost:3000/api/courts")
+  return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
 }
 export default function StadiumBoard() {
   const [sport, setSport] = useState(10);

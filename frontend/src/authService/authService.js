@@ -38,10 +38,10 @@ const login = (userName, password) => {
     //   return response.data;
     // });
     return axios.post("http://localhost:3000/api/users/login",{
-      name:"admin",
-      password:"cloud123"
+      name:userName,
+      password:password
     }).then((res)=>{
-      localStorage.setItem("token:", JSON.stringify({
+      localStorage.setItem("user", JSON.stringify({
         role:["ROLE_ADMIN"],
         accessToken:res.data}))
       return res
