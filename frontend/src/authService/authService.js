@@ -29,14 +29,23 @@ const login = (userName, password) => {
       }, 1000);
      
     });}
-    return delay()
-      .then((response) => {
-      if (response.data.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      }
-      console.log(response.data)
-      return response.data;
-    });
+    // return delay()
+    //   .then((response) => {
+    //   if (response.data.accessToken) {
+    //     localStorage.setItem("user", JSON.stringify(response.data));
+    //   }
+    //   console.log(response.data)
+    //   return response.data;
+    // });
+    return axios.post("http://localhost:3000/api/users/login",{
+      name:"admin",
+      password:"cloud123"
+    }).then((res)=>{
+      localStorage.setItem("token:", JSON.stringify({
+        role:["ROLE_ADMIN"],
+        accessToken:res.data}))
+      return res
+    })
     
   // return axios
   //   .post(API_URL + "signin", {

@@ -23,6 +23,7 @@ import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; 
 import axios from 'axios';
 async function SearchCourt(){
+  
   return await axios.get("http://localhost:3000/api/courts")
 }
 export default function StadiumBoard() {
@@ -35,7 +36,7 @@ export default function StadiumBoard() {
     SearchCourt().then((res)=>
       setCourtList(res.data)
     )
-  });
+  },[]);
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
