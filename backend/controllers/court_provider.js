@@ -31,6 +31,13 @@ export const getCourtsByAdminId = async(req,res) => {
     // This api has been tested by postman
     req.body['admin_id'] = req.token;
     const all_courts = await getCourtsByAdminIdQuery(req.body)
+
+    // if the court provider do not have any courts registerd
+    // return empty array
+    if (all_courts.length == 0) {
+        return res.status(200).json([]);
+    }
+
     const all_courts_id_list = all_courts.map((item) => item.court_id);
     const all_courts_info = await getCourtsOrderInfoInIdListQuery(all_courts_id_list);
     const all_courts_info_with_time = await Promise.all(
@@ -52,6 +59,14 @@ export const getCourtsReservedByCourtId = async(req,res) => {
     data['date_add_one_day'] = add_one_day(req.query['date']);
     data['admin_id'] = req.token;
 
+    const all_courts = await getCourtsByAdminIdQuery(data)
+
+    // if the court provider do not have any courts registerd
+    // return empty array
+    if (all_courts.length == 0) {
+        return res.status(200).json([]);
+    }
+
     const iscourtproiver = await isCourtsProvider(data)
 
     if (iscourtproiver) {
@@ -68,12 +83,9 @@ export const getCourtsReservedByCourtId = async(req,res) => {
             res.status(200).json(appointment_date);
 
         // the court does not have appointment on the query date
-        // just return the query date
+        // just return a empty array
         } else {
-            const appointment_date = {
-                "date": req.query['date']
-            }
-            res.status(200).json(appointment_date);
+            res.status(200).json([]);
         }
 
     } else {
