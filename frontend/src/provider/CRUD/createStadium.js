@@ -75,7 +75,8 @@ function checkTimeOverlap(startTimeList, endTimeList) {
 }
 const EditDialog=(props)=>{
   const [open, setOpen] = useState(false);
-  const{startTime,endTime,selectedDay}=props
+  const [newTime, setNewTime] = useState([])
+  const{availableTime,setAvailableTime,selectedDay,id,}=props
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -84,10 +85,14 @@ const EditDialog=(props)=>{
     setOpen(false);    
   };
   const handleSubmit = () =>{
+    console.log(newTime)
+    setAvailableTime({...availableTime,[selectedDay]:{...availableTime[selectedDay],[id]:newTime}})
+    handleClose()
     // checkTimeSeries(startTimeList,endTimeList)
     // checkTimeOverlap(startTimeList, endTimeList)
     // console.log(startTimeList)
   }
+  
   return (
     <>
     <IconButton variant="outlined" onClick={handleClickOpen}>
@@ -95,7 +100,7 @@ const EditDialog=(props)=>{
       </IconButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>選取日期與時間</DialogTitle>
-        <DialogContent><FormDialog startTime={startTime} endTime={endTime} selectedDay={selectedDay} disabled={true}/></DialogContent>
+        <DialogContent><FormDialog startTime={availableTime[selectedDay][id][0]} endTime={availableTime[selectedDay][id][1]} selectedDay={selectedDay} disabled={true} newTime = {newTime} setNewTime={setNewTime}/></DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>取消</Button>
           <Button onClick={handleSubmit}>確認</Button>
@@ -115,6 +120,7 @@ const AddDialog=(props)=>{
     setOpen(false);    
   };
   const handleSubmit = () =>{
+    
     // checkTimeSeries(startTimeList,endTimeList)
     // checkTimeOverlap(startTimeList, endTimeList)
     // console.log(startTimeList)
@@ -141,21 +147,19 @@ const  FormDialog=(props)=>{
   const [endTime, setEndTime] = useState([]);
   const [periodId, setPeriodId] = useState(0);
   const [selectedDay, setSelectedDay] = useState([]);
+  const {newTime,setNewTime} = props
 
-
-
-  const handleSubmit = () =>{
-    // checkTimeSeries(startTimeList,endTimeList)
-    // checkTimeOverlap(startTimeList, endTimeList)
-    // console.log(startTimeList)
-  }
   useEffect(() => {
     setStartTime(props.startTime)
     setEndTime(props.endTime)
     if(props.selectedDay){
       setSelectedDay(props.selectedDay)
     }
+    setNewTime([props.startTime,props.endTime])
   }, []);
+  useEffect(()=>{
+    console.log(newTime)
+  },[newTime])
   return (
     <>
       
@@ -188,8 +192,9 @@ const  FormDialog=(props)=>{
           // views={["hours","minutes"]}
           format="HH:mm"
           value={startTime?dayjs(startTime):dayjs("9:00",'HH:mm')}
-          onChange={(newTime) => {
-            setStartTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
+          onChange={(value) => {
+            console.log()
+            setNewTime([dayjs(value.get("hour") + ":" + value.get("minute"),"HH:m"),newTime[1]])
           }}
         />
         <TimePicker
@@ -200,8 +205,8 @@ const  FormDialog=(props)=>{
           format="HH:mm"
           value={endTime?dayjs(endTime):dayjs("22:00",'HH:mm')}
           // defaultValue={dayjs("0000-00-00T9:00")}
-          onChange={(newTime) => {
-            setEndTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
+          onChange={(value) => {
+            setNewTime([newTime[0],dayjs(value.get("hour") + ":" + value.get("minute"),"HH:mm")])
           }}
         />
       </DemoContainer>
@@ -215,13 +220,14 @@ export default function CreateStadium() {
   const navigate = useNavigate();
   const [image, setImage] = useState();
   const [ availableTime, setAvailableTime] = useState({
-    mon:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
-    tue:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
-    wed:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
-    thu:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
-    fri:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
-    sat:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
-    sun:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]
+    mon:{0:[dayjs("9:00",'HH:mm'),dayjs("11:00",'HH:mm')],
+    1:[dayjs("13:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
+    tue:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
+    wed:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
+    thu:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
+    fri:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
+    sat:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
+    sun:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]}
   })
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -243,7 +249,9 @@ export default function CreateStadium() {
       //$("#banner_name").text(file.name);
     }
   }
-
+  useEffect(()=>{
+    console.log(availableTime)
+  },[availableTime])
 
   return (
     <div>
@@ -282,13 +290,19 @@ export default function CreateStadium() {
                   <CardContent>
                     <Typography>球場名稱</Typography>
                     <TextField fullWidth size="small" />
+                    <Typography>球場名稱</Typography>
+                    <TextField fullWidth size="small" />
                     <Typography>球場地址</Typography>
                     <TextField fullWidth size="small" />
                     <Typography>最大使用人數</Typography>
                     <TextField fullWidth size="small" />
                     {Object.keys(availableTime).map((day)=>{
-                      console.log(availableTime[day][0].hour())
-                      return <Typography>星期{week[day]}{availableTime[day][0].format('HH:mm')}-{availableTime[day][1].format('HH:mm')}<EditDialog startTime={availableTime[day][0]} endTime={availableTime[day][1]} selectedDay={day}/></Typography>
+                      return(
+                      Object.keys(availableTime[day]).map((id)=>{
+                        return <Typography>星期{week[day]}{availableTime[day][id][0].format('HH:mm')}-{availableTime[day][id][1].format('HH:mm')}
+                        <EditDialog availableTime={availableTime} setAvailableTime={setAvailableTime} id={id} selectedDay={day}/></Typography>
+                      })
+                      )
                     })}
                     <AddDialog/>
                   </CardContent>
