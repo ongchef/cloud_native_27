@@ -18,10 +18,11 @@ import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
 import Map from "../commonService/map";
-
+import axios from "axios";
+import authHeader from "../authService/authHeader";
 export default function OrderStadium() {
-  const [sport, setSport] = useState(10);
-  const [location, setLocation] = useState(20);
+  const [sport, setSport] = useState("basketball");
+  const [location, setLocation] = useState("Da an");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
   useEffect(() => {
@@ -34,10 +35,33 @@ export default function OrderStadium() {
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
+  const handleSearch = async () => {
+    try {
+      const result = await SearchStadium();
+      // handle the result
+      setStadiumList(result.data);
+    } catch (error) {
+      // handle the error
+      console.log("Error:" + error);
+    }
+  };
+  async function SearchStadium() {
+    console.log(date);
+    console.log(time);
+    return await axios.get("http://localhost:3000/api/users/appointment", {
+      headers: authHeader(),
+      querytime: date + time,
+    });
+  }
+  const [stadiumList, setStadiumList] = useState([]);
+  useEffect(() => {
+    SearchStadium().then((res) => setStadiumList(res.data));
+  }, []);
+
   return (
     <div>
       <h1>Order Stadium</h1>
-      
+
       <Box
         display="flex"
         flexDirection="row"
@@ -58,8 +82,11 @@ export default function OrderStadium() {
               onChange={(newDate) => {
                 newDate = moment(
                   new Date(newDate.year(), newDate.month(), newDate.date())
-                ).format("YYYY-MM-DD");
+                );
+                const weekday = newDate.day(); // get the weekday
+                newDate = newDate.format("YYYY-MM-DD");
                 setDate(newDate);
+                // do something with weekday...
               }}
             />
           </LocalizationProvider>
@@ -76,9 +103,7 @@ export default function OrderStadium() {
               format="hh:mm"
               // defaultValue={dayjs("0000-00-00T9:00")}
               onChange={(newTime) => {
-                console.log(newTime);
-                console.log(newTime.get("hour"));
-                setTime(newTime.get("hour"));
+                setTime(newTime);
               }}
             />
           </LocalizationProvider>
@@ -93,9 +118,9 @@ export default function OrderStadium() {
               onChange={handleSportChange}
               label="球類"
             >
-              <MenuItem value={10}>籃球</MenuItem>
-              <MenuItem value={20}>羽球</MenuItem>
-              <MenuItem value={30}>排球</MenuItem>
+              <MenuItem value={"basketball"}>籃球</MenuItem>
+              <MenuItem value={"badminton"}>羽球</MenuItem>
+              <MenuItem value={"volleyball"}>排球</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -109,14 +134,16 @@ export default function OrderStadium() {
               onChange={handleLocationChange}
               label="Location"
             >
-              <MenuItem value={10}>大安區</MenuItem>
-              <MenuItem value={20}>中正區</MenuItem>
-              <MenuItem value={30}>信義區</MenuItem>
+              <MenuItem value={"Da an"}>大安區</MenuItem>
+              <MenuItem value={"CC"}>中正區</MenuItem>
+              <MenuItem value={"Xinyi"}>信義區</MenuItem>
             </Select>
           </FormControl>
         </Box>
         <Box m={1}>
-          <Button variant="contained">Search</Button>
+          <Button variant="contained" onClick={handleSearch}>
+            Search
+          </Button>
         </Box>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
@@ -131,7 +158,26 @@ export default function OrderStadium() {
             6,
           ]}
         />
-        <StadiumCard
+        {stadiumList.map((court) => {
+          const date = moment(court.date); // assuming court.date is the date you're interested in
+          const weekday = date.day(); // get the weekday
+          const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
+          const weekdayInChinese = weekdayMapping[weekday];
+          return (
+            <StadiumCard
+              id={court.court_id}
+              image={pic}
+              title={court.name + " - " + court.location}
+              description={[
+                court.location,
+                "週" + weekdayInChinese,
+                "16:00~22:00",
+                court.available,
+              ]}
+            />
+          );
+        })}
+        {/* <StadiumCard
           id={2}
           image={pic}
           title={"台大舊體育館 - 羽球場 A場"}
@@ -152,7 +198,7 @@ export default function OrderStadium() {
             "16:00~22:00",
             8,
           ]}
-        />
+        /> */}
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
