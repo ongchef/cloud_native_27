@@ -259,7 +259,7 @@ export default function App() {
         <Divider />
         {user ? (
           <DrawerFooter>
-            <List>
+            <List style={{ position: "absolute", bottom: "0" }}>
               <ListItem disablePadding>
                 <ListItemButton to="/userProfile">
                   <ListItemIcon></ListItemIcon>

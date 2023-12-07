@@ -114,11 +114,11 @@ function checkTimeOverlap(startTimeList, endTimeList) {
   }
   console.log(timeList);
 }
-const  FormDialog=()=>{
+const  FormDialog=(props)=>{
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({})
-  const [startTimeList, setStartTimeList] = useState([]);
-  const [endTimeList, setEndTimeList] = useState([]);
+  const [startTime, setStartTime] = useState([]);
+  const [endTime, setEndTime] = useState([]);
   const [periodId, setPeriodId] = useState(0);
 
   const handleClickOpen = () => {
@@ -127,52 +127,42 @@ const  FormDialog=()=>{
 
   const handleClose = () => {
     setOpen(false);
-    setForm({
-      0: (
-        <TimeBlock
-          startTimeList={startTimeList}
-          setStartTimeList={setStartTimeList}
-          endTimeList={endTimeList}
-          setEndTimeList={setEndTimeList}
-          periodId={0}
-        />
-      ),
-    });
-    setStartTimeList({})
-    setEndTimeList({})
+    // setForm({
+    //   0: (
+    //     <TimeBlock
+    //       startTimeList={startTimeList}
+    //       setStartTimeList={setStartTimeList}
+    //       endTimeList={endTimeList}
+    //       setEndTimeList={setEndTimeList}
+    //       periodId={0}
+    //     />
+    //   ),
+    // });
+    // setStartTimeList({})
+    // setEndTimeList({})
     setPeriodId(1)
     
   };
   const handleSubmit = () =>{
-    checkTimeSeries(startTimeList,endTimeList)
-    checkTimeOverlap(startTimeList, endTimeList)
-    console.log(startTimeList)
+    // checkTimeSeries(startTimeList,endTimeList)
+    // checkTimeOverlap(startTimeList, endTimeList)
+    // console.log(startTimeList)
   }
   useEffect(() => {
-    setForm({
-      [periodId]: (
-        <TimeBlock
-          startTimeList={startTimeList}
-          setStartTimeList={setStartTimeList}
-          endTimeList={endTimeList}
-          setEndTimeList={setEndTimeList}
-          periodId={periodId}
-        />
-      ),
-    });
-    setPeriodId(periodId + 1);
+    setStartTime(props.startTime)
+    setEndTime(props.endTime)
   }, []);
-  useEffect(() => {
-    console.log(startTimeList);
-    console.log(endTimeList);
-  }, [startTimeList, endTimeList]);
+  // useEffect(() => {
+  //   console.log(startTimeList);
+  //   console.log(endTimeList);
+  // }, [startTimeList, endTimeList]);
 
-  const handleDelete = (periodId) => {
-    delete form[periodId]
-    delete startTimeList[periodId]
-    delete endTimeList[periodId]
-    setForm({...form})
-  };
+  // const handleDelete = (periodId) => {
+  //   delete form[periodId]
+  //   delete startTimeList[periodId]
+  //   delete endTimeList[periodId]
+  //   setForm({...form})
+  // };
   return (
     <>
       <IconButton variant="outlined" onClick={handleClickOpen}>
@@ -181,19 +171,33 @@ const  FormDialog=()=>{
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>選取日期與時間</DialogTitle>
         <DialogContent>
-        {Object.values(form).map((value)=>{
-
-            return (
-                <DemoContainer components={["TimePicker", "TimePicker"]}>
-                
-                {value}
-                <Button onClick={() => handleDelete(value.props.periodId)}>
-                <HighlightOff />
-                </Button>
-          
-                </DemoContainer>
-                )
-        })} 
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+      
+        <TimePicker
+          timeSteps={{ minutes: 30 }}
+          ampm={false}
+          label="起始時段"
+          // views={["hours","minutes"]}
+          format="hh:mm"
+          value={startTime?dayjs(startTime):undefined}
+          onChange={(newTime) => {
+            setStartTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
+          }}
+        />
+        <TimePicker
+          timeSteps={{ minutes: 30 }}
+          ampm={false}
+          label="結束時段"
+          // views={["hours","minutes"]}
+          format="hh:mm"
+          value={endTime?dayjs(endTime):undefined}
+          // defaultValue={dayjs("0000-00-00T9:00")}
+          onChange={(newTime) => {
+            setEndTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
+          }}
+        />
+      
+    </LocalizationProvider>
         {/* {Object.keys(form).map((key)=>{
             console.log(form[key])
           return (
@@ -206,28 +210,7 @@ const  FormDialog=()=>{
           
                 </DemoContainer>
                 )
-        })} */}
-          <Button
-            variant="text"
-            onClick={() => {
-            setForm({
-                ...form,
-                [periodId]: (
-                  <TimeBlock
-                    startTimeList={startTimeList}
-                    setStartTimeList={setStartTimeList}
-                    endTimeList={endTimeList}
-                    setEndTimeList={setEndTimeList}
-                    periodId={periodId}
-                  />
-                ),
-              })
-            
-              setPeriodId(periodId + 1);
-            }}
-          >
-            新增營業時間
-          </Button>
+        })} */} 
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>取消</Button>
@@ -241,6 +224,15 @@ const  FormDialog=()=>{
 export default function CreateStadium() {
   const navigate = useNavigate();
   const [image, setImage] = useState();
+  const [ availableTime, setAvailableTime] = useState({
+    mon:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
+    tue:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
+    wed:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
+    thu:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
+    fri:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
+    sat:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')],
+    sun:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]
+  })
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       let img = URL.createObjectURL(e.target.files[0]);
@@ -261,6 +253,7 @@ export default function CreateStadium() {
       //$("#banner_name").text(file.name);
     }
   }
+
 
   return (
     <div>
@@ -303,7 +296,11 @@ export default function CreateStadium() {
                     <TextField fullWidth size="small" />
                     <Typography>最大使用人數</Typography>
                     <TextField fullWidth size="small" />
-                    <FormDialog />
+                    {Object.keys(availableTime).map((day)=>{
+                      console.log(availableTime[day][0].hour())
+                      return <Typography>{day}{availableTime[day][0].format('LT')}-{availableTime[day][1].format('LT')}<FormDialog startTime={availableTime[day][0]} endTime={availableTime[day][1]}/></Typography>
+                    })}
+                    
                   </CardContent>
                 </Grid>
               </Grid>
