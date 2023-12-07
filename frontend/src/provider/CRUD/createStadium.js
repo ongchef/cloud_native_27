@@ -22,6 +22,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import JButton from '@mui/joy/Button';
 import JToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import dayjs from "dayjs";
 const week = {
@@ -233,6 +234,12 @@ export default function CreateStadium() {
       setImage(img);
     }
   };
+  function handleDelete (day,id){
+
+    delete availableTime[day][id]
+    console.log(availableTime)
+    setAvailableTime({...availableTime})
+  }
   function showMyImage(fileInput) {
     var files = fileInput.files;
     console.log(files);
@@ -297,8 +304,15 @@ export default function CreateStadium() {
                     {Object.keys(availableTime).map((day)=>{
                       return(
                       Object.keys(availableTime[day]).map((id)=>{
-                        return <Typography>星期{week[day]}{availableTime[day][id][0].format('HH:mm')}-{availableTime[day][id][1].format('HH:mm')}
-                        <EditDialog availableTime={availableTime} setAvailableTime={setAvailableTime} id={id} selectedDay={day}/></Typography>
+                        return (
+                        <Typography>
+                          星期{week[day]}{availableTime[day][id][0].format('HH:mm')}-{availableTime[day][id][1].format('HH:mm')}
+                        <EditDialog availableTime={availableTime} setAvailableTime={setAvailableTime} id={id} selectedDay={day}/>
+                        <IconButton onClick={()=>handleDelete(day,id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                        </Typography>
+                        )
                       })
                       )
                     })}
