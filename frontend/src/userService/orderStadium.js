@@ -24,7 +24,7 @@ export default function OrderStadium() {
   const [sport, setSport] = useState("basketball");
   const [location, setLocation] = useState("Da an");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
-  const [time, setTime] = useState(dayjs("00:00:00","HH:mm:ss"));
+  const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   useEffect(() => {
     fakeStadium();
   });
@@ -46,15 +46,14 @@ export default function OrderStadium() {
     }
   };
   async function SearchStadium() {
-    console.log(dayjs(date+time.format('HH:mm:ss')));
+    //console.log(dayjs(date + time.format("HH:mm:ss")));
     console.log(time);
-    console.log(date+time.format('HH:mm:ss'));
+    console.log(date + time.format("HH:mm:ss"));
     return await axios.get("http://localhost:3000/api/users/appointment", {
       headers: authHeader(),
-      params:{
-        querytime:(date+time.format('HH:mm:ss')), 
-      }
-     
+      params: {
+        querytime: date + time.format("HH:mm:ss"),
+      },
     });
   }
   const [stadiumList, setStadiumList] = useState([]);
@@ -83,7 +82,8 @@ export default function OrderStadium() {
                 return date.date() > new Date().getDate() + 7;
               }}
               formatDate={(date) => moment(date).format("DD-MM-YYYY")}
-              onChange={(newDate) => {setDate(newDate);
+              onChange={(newDate) => {
+                setDate(newDate);
                 // do something with weekday...
               }}
             />
