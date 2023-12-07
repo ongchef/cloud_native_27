@@ -41,9 +41,11 @@ const login = (userName, password) => {
       name:userName,
       password:password
     }).then((res)=>{
+      console.log(res)
+      const role = res.data.role_id===1?"ROLE_USER":res.data.role_id===2?"ROLE_ADMIN":"ROLE_PROVIDER"
       localStorage.setItem("user", JSON.stringify({
-        role:["ROLE_ADMIN"],
-        accessToken:res.data}))
+        role:role,
+        accessToken:res.data.user_id}))
       return res
     })
     

@@ -76,11 +76,11 @@ export default function App() {
     console.log(user);
     if (user) {
       setVerified(true);
-      if (user.role.includes("ROLE_USER")) {
+      if (user.role===("ROLE_USER")) {
         setUser(true);
-      } else if (user.role.includes("ROLE_ADMIN")) {
+      } else if (user.role===("ROLE_ADMIN")) {
         setAdmin(true);
-      } else if (user.role.includes("ROLE_PROVIDER")) {
+      } else if (user.role===("ROLE_PROVIDER")) {
         setProvider(true);
       }
     }
