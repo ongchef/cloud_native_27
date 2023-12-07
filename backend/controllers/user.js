@@ -60,13 +60,13 @@ export const postUsers = async(req,res) => {
 
     if (isduplicatename && isduplicateemail) {
 
-        return res.send("名稱和電子郵件重複!");
+        return res.status(400).json("名稱和電子郵件重複!");
     } else if (isduplicatename) {
 
-        return res.send("名稱重複!");
+        return res.status(400).json("名稱重複!");
     } else if (isduplicateemail){
 
-        return res.send("電子郵件重複!");
+        return res.status(400).json("電子郵件重複!");
     } else {
 
         // hash password
@@ -97,13 +97,17 @@ export const postUsersLogin = async(req,res) => {
         const hashed_password_in_db = result[0].password;
         const isSamePassword = await comparePassword(password, hashed_password_in_db);
         if (isSamePassword) {
-            // login success, return user token
-            return res.status(200).json(result[0].user_id);
+            // login success, return user token and role_id
+            const login_result = {
+                "user_id": result[0].user_id,
+                "role_id": result[0].role_id
+            }
+            return res.status(200).json(login_result);
         } else {
-            return res.send("密碼錯誤!")
+            return res.status(401).json("密碼錯誤!")
         }
     } else {
-        return res.send("查無用戶名稱!")
+        return res.status(401).json("查無用戶名稱!")
     }
 }
 

@@ -98,7 +98,7 @@ export const postUsersRegisterQuery = (data) => {
 export const postUsersLoginQuery = (data) => {
 
     return new Promise((resolve, reject) => {
-        db.query('SELECT user_id, password FROM STADIUM.USER WHERE name = ?', [data], (error, results) => {
+        db.query('SELECT user_id, role_id, password FROM STADIUM.USER WHERE name = ?', [data], (error, results) => {
             if (error) {
                 reject(error);
             } else {
