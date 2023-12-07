@@ -20,25 +20,19 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import moment from "moment";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import HighlightOff from "@mui/icons-material/HighlightOff";
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import ButtonGroup from '@mui/material/ButtonGroup';
-
 import JButton from '@mui/joy/Button';
 import JToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import dayjs from "dayjs";
 const week = {
-  mon:"一",
-  tue:"二",
-  wed:"三",
-  thu:"四",
-  fri:"五",
-  sat:"六",
-  sun:"日"
+  "mon":"一",
+  "tue":"二",
+  "wed":"三",
+  "thu":"四",
+  "fri":"五",
+  "sat":"六",
+  "sun":"日"
 }
 function checkTimeSeries(startTimeList, endTimeList) {
   for (const [id, time] of Object.entries(startTimeList)) {
@@ -80,7 +74,6 @@ const EditDialog=(props)=>{
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);    
   };
@@ -88,9 +81,6 @@ const EditDialog=(props)=>{
     console.log(newTime)
     setAvailableTime({...availableTime,[selectedDay]:{...availableTime[selectedDay],[id]:newTime}})
     handleClose()
-    // checkTimeSeries(startTimeList,endTimeList)
-    // checkTimeOverlap(startTimeList, endTimeList)
-    // console.log(startTimeList)
   }
   
   return (
@@ -111,16 +101,30 @@ const EditDialog=(props)=>{
 }
 const AddDialog=(props)=>{
   const [open, setOpen] = useState(false);
-  const{startTime,endTime,selectedDay}=props
+  const [newTime, setNewTime] = useState([])
+  const [selectedDay, setSelectedDay] = useState([])
+  const{availableTime,setAvailableTime}=props
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setNewTime([])
+    setSelectedDay([])
     setOpen(false);    
   };
   const handleSubmit = () =>{
-    
+    console.log(newTime)
+    console.log(availableTime)
+    console.log(selectedDay)
+    var newAvailableTime  = availableTime
+    selectedDay.map((day)=>
+      newAvailableTime = {...newAvailableTime,[day]:{...newAvailableTime[day],[Object.keys(newAvailableTime[day]).length]:newTime}}
+    )
+    console.log(newAvailableTime)
+    setAvailableTime(newAvailableTime)
+
+    handleClose()
     // checkTimeSeries(startTimeList,endTimeList)
     // checkTimeOverlap(startTimeList, endTimeList)
     // console.log(startTimeList)
@@ -132,7 +136,7 @@ const AddDialog=(props)=>{
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>選取日期與時間</DialogTitle>
-        <DialogContent><FormDialog startTime={startTime} endTime={endTime} selectedDay={selectedDay} disabled={false}/></DialogContent>
+        <DialogContent><FormDialog  startTime={dayjs("9:00",'HH:mm')} endTime={dayjs("22:00",'HH:mm')} selectedDay={selectedDay} setSelectedDay={setSelectedDay} disabled={false} newTime = {newTime} setNewTime={setNewTime}/></DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>取消</Button>
           <Button onClick={handleSubmit}>確認</Button>
@@ -146,15 +150,11 @@ const  FormDialog=(props)=>{
   const [startTime, setStartTime] = useState([]);
   const [endTime, setEndTime] = useState([]);
   const [periodId, setPeriodId] = useState(0);
-  const [selectedDay, setSelectedDay] = useState([]);
-  const {newTime,setNewTime} = props
+  const {newTime,setNewTime,selectedDay,setSelectedDay} = props
 
   useEffect(() => {
     setStartTime(props.startTime)
     setEndTime(props.endTime)
-    if(props.selectedDay){
-      setSelectedDay(props.selectedDay)
-    }
     setNewTime([props.startTime,props.endTime])
   }, []);
   useEffect(()=>{
@@ -162,12 +162,12 @@ const  FormDialog=(props)=>{
   },[newTime])
   return (
     <>
-      
-        
         <JToggleButtonGroup
           value={selectedDay}
           disabled = {props.disabled}
-          onChange={(event,value)=>setSelectedDay(value)}
+          onChange={(event,value)=>{
+            console.log(selectedDay)
+            setSelectedDay(value)}}
           sx={{display:'flex', justifyContent:'center', borderLeft:'' }}    
           spacing={3}
           color="primary"   
@@ -193,7 +193,6 @@ const  FormDialog=(props)=>{
           format="HH:mm"
           value={startTime?dayjs(startTime):dayjs("9:00",'HH:mm')}
           onChange={(value) => {
-            console.log()
             setNewTime([dayjs(value.get("hour") + ":" + value.get("minute"),"HH:m"),newTime[1]])
           }}
         />
@@ -235,6 +234,12 @@ export default function CreateStadium() {
       setImage(img);
     }
   };
+  function handleDelete (day,id){
+
+    delete availableTime[day][id]
+    console.log(availableTime)
+    setAvailableTime({...availableTime})
+  }
   function showMyImage(fileInput) {
     var files = fileInput.files;
     console.log(files);
@@ -299,12 +304,19 @@ export default function CreateStadium() {
                     {Object.keys(availableTime).map((day)=>{
                       return(
                       Object.keys(availableTime[day]).map((id)=>{
-                        return <Typography>星期{week[day]}{availableTime[day][id][0].format('HH:mm')}-{availableTime[day][id][1].format('HH:mm')}
-                        <EditDialog availableTime={availableTime} setAvailableTime={setAvailableTime} id={id} selectedDay={day}/></Typography>
+                        return (
+                        <Typography>
+                          星期{week[day]}{availableTime[day][id][0].format('HH:mm')}-{availableTime[day][id][1].format('HH:mm')}
+                        <EditDialog availableTime={availableTime} setAvailableTime={setAvailableTime} id={id} selectedDay={day}/>
+                        <IconButton onClick={()=>handleDelete(day,id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                        </Typography>
+                        )
                       })
                       )
                     })}
-                    <AddDialog/>
+                    <AddDialog availableTime={availableTime} setAvailableTime={setAvailableTime}/>
                   </CardContent>
                 </Grid>
               </Grid>
