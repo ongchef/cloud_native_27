@@ -1,0 +1,243 @@
+import React, { Component, useState, useRef } from 'react';
+import Form from 'react-validation/build/form';
+import Input from 'react-validation/build/input';
+import CheckButton from 'react-validation/build/button';
+import { isEmail } from 'validator';
+
+import AuthService from './authService';
+
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+const required = (value) => {
+	if (!value) {
+		return (
+			<div className="alert alert-danger" role="alert">
+				This field is required!
+			</div>
+		);
+	}
+};
+
+const validEmail = (value) => {
+	if (!isEmail(value)) {
+		return (
+			<div className="alert alert-danger" role="alert">
+				This is not a valid email.
+			</div>
+		);
+	}
+};
+
+const vusername = (value) => {
+	if (value.length < 3 || value.length > 20) {
+		return (
+			<div className="alert alert-danger" role="alert">
+				The username must be between 3 and 20 characters.
+			</div>
+		);
+	}
+};
+
+const vpassword = (value) => {
+	if (value.length < 6 || value.length > 40) {
+		return (
+			<div className="alert alert-danger" role="alert">
+				The password must be between 6 and 40 characters.
+			</div>
+		);
+	}
+};
+
+const Register = () => {
+	const form = useRef();
+	const checkBtn = useRef();
+
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [phoneNumber, setPhoneNumber] = useState('');
+	const [lineId, setLineId] = useState('');
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [successful, setSuccessful] = useState(false);
+	const [message, setMessage] = useState('');
+
+	const onChangeUsername = (e) => {
+		const username = e.target.value;
+		setUsername(username);
+	};
+
+	const onChangePassword = (e) => {
+		const password = e.target.value;
+		setPassword(password);
+	};
+
+	const onChangeName = (e) => {
+		const name = e.target.value;
+		setName(name);
+	};
+
+	const onChangeEmail = (e) => {
+		const email = e.target.value;
+		setEmail(email);
+	};
+
+	const onChangePhoneNumber = (e) => {
+		const phoneNumber = e.target.value;
+		setPhoneNumber(phoneNumber);
+	};
+
+	const onChangeLineId = (e) => {
+		const lineId = e.target.value;
+		setPhoneNumber(lineId);
+	};
+
+	const handleRegister = (e) => {
+		e.preventDefault();
+
+		setMessage('');
+		setSuccessful(false);
+
+		// form.current.validateAll();
+
+		AuthService.register(username, email, name, phoneNumber, password).then(
+			(response) => {
+				setMessage(response.data.message);
+				setSuccessful(true);
+			},
+			(error) => {
+				const resMessage =
+					(error.response &&
+						error.response.data &&
+						error.response.data.message) ||
+					error.message ||
+					error.toString();
+
+				setMessage(resMessage);
+				setSuccessful(false);
+			}
+		);
+	};
+
+	return (
+		<Container component="main" maxWidth="xs">
+			<CssBaseline />
+			<Box
+				sx={{
+					marginTop: 8,
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+				}}>
+				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+					<LockOutlinedIcon />
+				</Avatar>
+				<Typography component="h1" variant="h5">
+					Sign up
+				</Typography>
+				<Box
+					component="form"
+					noValidate
+					onSubmit={handleRegister}
+					sx={{ mt: 3 }}>
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								name="username"
+								label="Username"
+								type="username"
+								id="username"
+								autoComplete="new-username"
+								onChange={onChangeUsername}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								name="password"
+								label="Password"
+								type="password"
+								id="password"
+								autoComplete="new-password"
+								onChange={onChangePassword}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								id="name"
+								label="Name"
+								name="name"
+								autoComplete="name"
+								onChange={onChangeName}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								id="email"
+								label="Email Address"
+								name="email"
+								autoComplete="email"
+								onChange={onChangeEmail}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								id="phone"
+								label="Phone Number"
+								name="phone"
+								autoComplete="phone"
+								onChange={onChangePhoneNumber}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								id="lineId"
+								label="Line Id"
+								name="lineId"
+								autoComplete="lineId"
+								onChange={onChangeLineId}
+							/>
+						</Grid>
+					</Grid>
+					<Button
+						type="submit"
+						fullWidth
+						variant="contained"
+						sx={{ mt: 3, mb: 2 }}>
+						Sign Up
+					</Button>
+					<Grid container justifyContent="flex-end">
+						<Grid item>
+							<Link href="/login" variant="body2">
+								Already have an account? Sign in
+							</Link>
+						</Grid>
+					</Grid>
+				</Box>
+			</Box>
+		</Container>
+	);
+};
+
+export default Register;
