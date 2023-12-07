@@ -42,7 +42,7 @@ const login = (userName, password) => {
       password:password
     }).then((res)=>{
       console.log(res)
-      const role = res.data.role_id===1?"ROLE_USER":res.data.role_id===2?"ROLE_ADMIN":"ROLE_PROVIDER"
+      const role = res.data.role_id===1?"ROLE_ADMIN":res.data.role_id===2?"ROLE_USER":"ROLE_PROVIDER"
       localStorage.setItem("user", JSON.stringify({
         role:role,
         accessToken:res.data.user_id}))
