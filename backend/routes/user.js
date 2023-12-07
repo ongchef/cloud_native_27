@@ -6,10 +6,12 @@ import {
     putUsers,
     getUsersAppointment,
     postUsersAppointment,
+    getUsersAppointmentDetail,
     postUsersLogin,
     getUsersAppointmentJoin,
     postUsersAppointmentJoin,
     getUsersAppointmentHistory,
+    getUsersAppointmentJoinDetail,
 } from "../controllers/user.js";
 
 const router = express.Router();
@@ -32,6 +34,9 @@ router.get("/appointment", getUsersAppointment);
 // POST /api/users/appointment
 router.post("/appointment", postUsersAppointment);
 
+// GET /api/users/appointmentDetail
+router.get("/appointmentDetail", getUsersAppointmentDetail);
+
 // GET /api/users/appointment/histories
 router.get("/appointment/histories", getUsersAppointmentHistory);
 
@@ -40,6 +45,9 @@ router.get("/appointment/join", getUsersAppointmentJoin)
 
 // POST /api/users/appointment/join
 router.post("/appointment/join", postUsersAppointmentJoin)
+
+// GET /api/users/appointmentDetail/join
+router.get("/appointmentDetail/join", getUsersAppointmentJoinDetail)
 
 // POST /api/users/login
 router.post("/login", postUsersLogin)

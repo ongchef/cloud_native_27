@@ -14,6 +14,21 @@ export const getCourtsAppointmentsQuery = () => {
     });
 }
 
+export const searchCourtsAppointmentsQuery = (searchQuery) => {
+
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * from STADIUM.APPOINTMENT_TIME
+        INNER JOIN STADIUM.APPOINTMENT ON APPOINTMENT_TIME.appointment_id = APPOINTMENT.appointment_id
+        INNER JOIN STADIUM.COURT ON APPOINTMENT.court_id = COURT.court_id ${searchQuery}`, [], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
 export const getCourtsInfoByAppointmentIdQuery = (data) => {
     return new Promise((resolve, reject) => {
         db.query(`SELECT c.name as court_name, c.location, app_t.date, app_t.start_time, app_t.end_time, 

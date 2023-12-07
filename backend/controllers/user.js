@@ -13,6 +13,7 @@ import {
 
 import {
     getCourtsAppointmentsQuery,
+    searchCourtsAppointmentsQuery,
     getCourtsInfoByAppointmentIdQuery,
     getCourtsIdByAppointmentIdQuery,
     getCourtsNotInIdListQuery,
@@ -29,11 +30,13 @@ import {
     hashPassword,
     comparePassword,
     generate_uuid,
-    parseISODate
+    parseISODate,
+    add_one_day
 } from '../utils/helper.js';
 
 import {
-    getCourtsQuery
+    getCourtsQuery,
+    getCourtsAppointmentByDate
 } from '../models/court_provider.js';
 
 
@@ -117,7 +120,7 @@ export const getUsersAppointmentHistory = async(req,res) => {
 
     const app_id = await getUsersAppointmentIdQuery(user_token);
     if (app_id.length == 0){
-        res.send("目前尚無預約紀錄!")
+        return res.status(200).json([]);
     } else {
         const app_id_list = app_id.map(item => item.appointment_id);
         const app_history = await getCourtsInfoByAppointmentIdQuery(app_id_list)
@@ -157,7 +160,7 @@ export const postUsersAppointment = async(req,res) => {
         res.status(200).json("預約成功!");
         
     } catch {
-        res.send("預約失敗!")
+        res.status(200).json("預約失敗!")
     }
 }
 
@@ -207,13 +210,60 @@ export const getUsersAppointment = async(req,res) => {
     }
 }
 
+export const getUsersAppointmentDetail = async(req,res) => {
 
+    const { court_id, query_time } = req.query;
+
+    const data = {}
+    data['court_id'] = court_id;
+    data['date'] = parseISODate(query_time);
+    data['date_add_one_day'] = add_one_day(data['date']);
+
+    const courts_order_info = await getCourtsOrderInfoInIdListQuery([court_id]);
+    const courts_order_info_with_time = await Promise.all(
+        courts_order_info.map(async({...item}) => ({
+            ...item,
+            available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
+        }))
+    )
+
+    // check whether appointment exists on the query date
+    const get_appointment_date = await getCourtsAppointmentByDate(data);
+    // the court have appointment on the query date
+    if (get_appointment_date.length > 0) {
+        const appointment_date = get_appointment_date.map((item)=>({
+            "date": data['date'],
+            "start_time": item.start_time,
+            "end_time": item.end_time
+        }))
+
+        courts_order_info_with_time[0]["appointment_time"] = appointment_date;
+    // the court does not have appointment on the query date
+    // just add an empty array
+    } else {
+        courts_order_info_with_time[0]["appointment_time"] = [];
+    }
+    
+    return res.status(200).json(courts_order_info_with_time);
+}
 
 export const getUsersAppointmentJoin = async(req,res) => {
     
-    const appointments = await getCourtsAppointmentsQuery();
-    const { query_time } = req.query;
-    const { public_index } = req.query;
+    const { ball, address, query_time, public_index } = req.query;
+
+    // modify search query according to request query
+    let searchQuery = "";
+    if (typeof ball !== "undefined") {
+        searchQuery = `WHERE ball = ${ball}`;
+    }
+    if (typeof address !== "undefined") {
+        searchQuery = `WHERE address like '%${address}%'`;
+    }
+    if (typeof ball !== "undefined" && typeof address !== "undefined") {
+        searchQuery = `WHERE ball = ${ball} and address like '%${address}%'`;
+    }
+    const appointments = await searchCourtsAppointmentsQuery(searchQuery);
+
     const joinable_appointment_id_set = new Set();
     for (let i = 0; i < appointments.length; i++){
         // solve the ISOdate issue
@@ -235,7 +285,7 @@ export const getUsersAppointmentJoin = async(req,res) => {
     // there are not joinable courts according to the query time period
     } else {
 
-        return res.status(200).json("查詢時段無可加入的球場!");
+        return res.status(200).json([]);
     }
 }
 
@@ -254,4 +304,11 @@ export const postUsersAppointmentJoin = async(req,res) => {
     const app_result = await putAttendenceQuery(appointment_id);
     res.status(200).json("加入成功!");
         
+}
+
+export const getUsersAppointmentJoinDetail = async(req,res) => {
+
+    const { appointment_id } = req.query;
+    const joinable_courts_info = await getCourtsInfoByAppointmentIdQuery(appointment_id)
+    return res.status(200).json(joinable_courts_info);
 }
