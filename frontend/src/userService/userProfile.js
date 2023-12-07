@@ -34,55 +34,117 @@ export default function UserProfile() {
   return (
     <div>
       <h1>user Profile</h1>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Container maxWidth="sm" width="90%">
-          <Typography variant="h4">個人資料修改</Typography>
-          {/* 內容1 */}
-        </Container>
+      <Box display="flex" flexDirection="column" alignItems="center" gap={5}>
+        <Container maxWidth="sm"></Container>
         <Container maxWidth="sm">
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <Box>
             <Card sx={{ width: "50vw", margin: "auto" }}>
               <form>
                 <Box
-                  my={2}
+                  my={4}
                   display="flex"
                   flexDirection="column"
                   justifyContent="center"
                   alignItems="center"
                   gap={2}
                 >
+                  <Typography variant="h4">User Profile</Typography>
                   <Box
-                    mx={2}
                     display="flex"
                     flexDirection="row"
-                    justifyContent="center"
+                    justifyContent="space-between"
                     alignItems="center"
+                    width="70%"
                   >
-                    <Typography variant="h6">Name : </Typography>
-                    <TextField label="Name" onChange={handleChange} />
+                    <Typography variant="h5" style={{}}>
+                      Name :
+                    </Typography>
+                    <TextField
+                      label="Name"
+                      onChange={handleChange}
+                      style={{ width: "70%" }}
+                    />
                   </Box>
-                  <div>
-                    <TextField label="Email" onChange={handleChange} />
-                  </div>
-                  <div>
-                    <TextField label="Phone" onChange={handleChange} />
-                  </div>
-                  <div>
-                    <TextField label="Line ID" onChange={handleChange} />
-                  </div>
-                  <div>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    width="70%"
+                  >
+                    <Typography variant="h5" style={{}}>
+                      Email :
+                    </Typography>
+                    <TextField
+                      label="Email"
+                      onChange={handleChange}
+                      style={{ width: "70%" }}
+                    />
+                  </Box>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    width="70%"
+                  >
+                    <Typography variant="h5" style={{}}>
+                      Line ID :
+                    </Typography>
+                    <TextField
+                      label="Line ID"
+                      onChange={handleChange}
+                      style={{ width: "70%" }}
+                    />
+                  </Box>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    width="70%"
+                  >
+                    <Typography variant="h5" style={{}}>
+                      Phone :
+                    </Typography>
+                    <TextField
+                      label="Phone"
+                      onChange={handleChange}
+                      style={{ width: "70%" }}
+                    />
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    width="70%"
+                  >
+                    <Typography variant="h5" style={{}}>
+                      Password :
+                    </Typography>
                     <TextField
                       label="Password"
                       type="password"
                       onChange={handleChange}
+                      style={{ width: "70%" }}
                     />
-                  </div>
-                  <Button type="submit">Submit</Button>
+                  </Box>
+                  <Box display="flex" justifyContent="center" gap={2}>
+                    <Button variant="contained" style={{ width: "100px" }}>
+                      Cancel
+                    </Button>
+
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{ width: "100px" }}
+                    >
+                      Save
+                    </Button>
+                  </Box>
+                  {/* 其他輸入字段 */}
                 </Box>
               </form>
             </Card>
