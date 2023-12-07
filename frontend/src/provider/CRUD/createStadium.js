@@ -121,9 +121,9 @@ const AddDialog=(props)=>{
   }
   return (
     <>
-    <IconButton variant="outlined" onClick={handleClickOpen}>
-        <EditIcon />
-      </IconButton>
+    <Button variant="outlined" onClick={handleClickOpen}>
+        新增開放時間
+      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>選取日期與時間</DialogTitle>
         <DialogContent><FormDialog startTime={startTime} endTime={endTime} selectedDay={selectedDay} disabled={false}/></DialogContent>
@@ -140,7 +140,7 @@ const  FormDialog=(props)=>{
   const [startTime, setStartTime] = useState([]);
   const [endTime, setEndTime] = useState([]);
   const [periodId, setPeriodId] = useState(0);
-  const [selectedDay, setSelectedDay] = useState();
+  const [selectedDay, setSelectedDay] = useState([]);
 
 
 
@@ -152,7 +152,9 @@ const  FormDialog=(props)=>{
   useEffect(() => {
     setStartTime(props.startTime)
     setEndTime(props.endTime)
-    setSelectedDay(props.selectedDay)
+    if(props.selectedDay){
+      setSelectedDay(props.selectedDay)
+    }
   }, []);
   return (
     <>
@@ -185,7 +187,7 @@ const  FormDialog=(props)=>{
           label="起始時段"
           // views={["hours","minutes"]}
           format="HH:mm"
-          value={startTime?dayjs(startTime):undefined}
+          value={startTime?dayjs(startTime):dayjs("9:00",'HH:mm')}
           onChange={(newTime) => {
             setStartTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
           }}
@@ -196,7 +198,7 @@ const  FormDialog=(props)=>{
           label="結束時段"
           // views={["hours","minutes"]}
           format="HH:mm"
-          value={endTime?dayjs(endTime):undefined}
+          value={endTime?dayjs(endTime):dayjs("22:00",'HH:mm')}
           // defaultValue={dayjs("0000-00-00T9:00")}
           onChange={(newTime) => {
             setEndTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
