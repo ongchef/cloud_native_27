@@ -16,7 +16,7 @@ import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
 import { Switch } from "antd";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import PlaceIcon from '@mui/icons-material/Place';
+import PlaceIcon from "@mui/icons-material/Place";
 import Map from "../commonService/map";
 const availableTime = [32, 42];
 const bookingList = [
@@ -35,7 +35,7 @@ const bookingList = [
 export default function OrderStadiumDetail() {
   const navigate = useNavigate();
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [hidden, setHidden] = useState(true)
+  const [hidden, setHidden] = useState(true);
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
@@ -139,7 +139,7 @@ export default function OrderStadiumDetail() {
   return (
     <div>
       <h1>Order Stadium Detail</h1>
-      
+
       <Box
         display="flex"
         width="70vw"
@@ -157,8 +157,7 @@ export default function OrderStadiumDetail() {
               返回搜尋頁
             </ButtonM>
           </Box>
-          
-          
+
           <Typography variant="h4">組隊詳細資料</Typography>
           {/* 內容1 */}
         </Container>
@@ -311,8 +310,8 @@ export default function OrderStadiumDetail() {
               </Grid>
             </Card>
             <Box>
-                      <Map/>
-                    </Box>
+              <Map />
+            </Box>
           </Box>
         </Container>
       </Box>

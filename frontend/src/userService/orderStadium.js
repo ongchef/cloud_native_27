@@ -46,9 +46,6 @@ export default function OrderStadium() {
     }
   };
   async function SearchStadium() {
-    //console.log(dayjs(date + time.format("HH:mm:ss")));
-    //console.log(time);
-    //console.log(date + time.format("HH:mm:ss"));
     setWeekday(moment(date).day());
     return await axios.get("http://localhost:3000/api/users/appointment", {
       headers: authHeader(),
