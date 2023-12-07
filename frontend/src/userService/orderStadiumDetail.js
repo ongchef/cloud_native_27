@@ -157,10 +157,8 @@ export default function OrderStadiumDetail() {
               返回搜尋頁
             </ButtonM>
           </Box>
-          <IconButton onClick = {()=>setHidden(false)}>
-          <PlaceIcon/>
-          <Map hidden = {hidden} setHidden = {setHidden}/>
-          </IconButton>
+          
+          
           <Typography variant="h4">組隊詳細資料</Typography>
           {/* 內容1 */}
         </Container>
@@ -312,6 +310,9 @@ export default function OrderStadiumDetail() {
                 </Grid>
               </Grid>
             </Card>
+            <Box>
+                      <Map/>
+                    </Box>
           </Box>
         </Container>
       </Box>

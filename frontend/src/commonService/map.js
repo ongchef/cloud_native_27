@@ -1,4 +1,5 @@
 import L from "leaflet";
+// import "./map.css"
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 
 export default function Map(props){
   const [open, setOpen] = useState(false);
-  const {hidden, setHidden} = props
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -54,34 +55,9 @@ export default function Map(props){
     }).addTo(mymap);
   },[])
     return (
-      
-      <div id="mapid" hidden={hidden} style={{ height: "100vh", width: "100vw" }} />
-      // <>
-      // <IconButton onClick={handleClickOpen}>
-      //   <PlaceIcon/>
-      // </IconButton>
-      // <Dialog
-      //   open={open}
-      //   onClose={handleClose}
-      //   aria-labelledby="alert-dialog-title"
-      //   aria-describedby="alert-dialog-description"
-      // >
-      //   <DialogTitle id="alert-dialog-title">
-      //     {"Use Google's location service?"}
-      //   </DialogTitle>
-      //   <DialogContent>
-      //     <DialogContentText id="alert-dialog-description">
-      //     <div id="mapid" style={{ height: "100vh", width: "100vw" }} />
-      //     </DialogContentText>
-      //   </DialogContent>
-      //   <DialogActions>
-      //     <Button onClick={handleClose}>Disagree</Button>
-      //     <Button onClick={handleClose} autoFocus>
-      //       Agree
-      //     </Button>
-      //   </DialogActions>
-      // </Dialog>
-      // </>
+
+      <div id="mapid"  style={{ height: "50vh", width: "50vw" }} />
+
       
         // <>
         
