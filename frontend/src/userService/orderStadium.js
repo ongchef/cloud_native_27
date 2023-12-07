@@ -17,7 +17,6 @@ import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
-import Map from "../commonService/map";
 import axios from "axios";
 import authHeader from "../authService/authHeader";
 export default function OrderStadium() {
@@ -25,6 +24,7 @@ export default function OrderStadium() {
   const [location, setLocation] = useState("Da an");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
+  const [weekday, setWeekday] = useState(moment(date).day());
   useEffect(() => {
     fakeStadium();
   });
@@ -47,8 +47,9 @@ export default function OrderStadium() {
   };
   async function SearchStadium() {
     //console.log(dayjs(date + time.format("HH:mm:ss")));
-    console.log(time);
-    console.log(date + time.format("HH:mm:ss"));
+    //console.log(time);
+    //console.log(date + time.format("HH:mm:ss"));
+    setWeekday(moment(date).day());
     return await axios.get("http://localhost:3000/api/users/appointment", {
       headers: authHeader(),
       params: {
@@ -83,7 +84,8 @@ export default function OrderStadium() {
               }}
               formatDate={(date) => moment(date).format("DD-MM-YYYY")}
               onChange={(newDate) => {
-                setDate(newDate);
+                setDate(newDate.format("YYYY-MM-DD"));
+                //console.log(newDate);
                 // do something with weekday...
               }}
             />
@@ -157,10 +159,19 @@ export default function OrderStadium() {
           ]}
         />
         {stadiumList.map((court) => {
-          const date = moment(court.date); // assuming court.date is the date you're interested in
-          const weekday = date.day(); // get the weekday
           const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
           const weekdayInChinese = weekdayMapping[weekday];
+
+          const availableTime = court.available_time.find(
+            (time) => time.weekday === weekday
+          );
+          const startTime = availableTime
+            ? availableTime.start_time.substring(0, 5)
+            : "";
+          const endTime = availableTime
+            ? availableTime.end_time.substring(0, 5)
+            : "";
+
           return (
             <StadiumCard
               id={court.court_id}
@@ -169,7 +180,7 @@ export default function OrderStadium() {
               description={[
                 court.location,
                 "週" + weekdayInChinese,
-                "16:00~22:00",
+                startTime + "~" + endTime,
                 court.available,
               ]}
             />
