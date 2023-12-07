@@ -23,63 +23,22 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import moment from "moment";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import HighlightOff from "@mui/icons-material/HighlightOff";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ButtonGroup from '@mui/material/ButtonGroup';
+
+import JButton from '@mui/joy/Button';
+import JToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
+
 import dayjs from "dayjs";
-const TimeBlock=(props)=> {
-  const {
-    setStartTimeList,
-    startTimeList,
-    setEndTimeList,
-    periodId,
-    handleDelete,
-  } = props;
-  
-  const[startTime, setStartTime] = useState(setStartTimeList[periodId])
-  // set con(newCon){
-  //   this.con = handleDelete
-  // }
-  console.log(periodId);
-  console.log(startTime);
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      
-        <TimePicker
-          timeSteps={{ minutes: 30 }}
-          ampm={false}
-          label="起始時段"
-          // views={["hours","minutes"]}
-          format="hh:mm"
-          value={startTime?dayjs(startTime):undefined}
-          onChange={(newTime) => {
-            setStartTime(newTime)
-            setStartTimeList((preState) => ({
-              ...preState,
-              [periodId]: moment(
-                newTime.get("hour") + ":" + newTime.get("minute"),
-                "hh:mm"
-              ),
-            }));
-          }}
-        />
-        <TimePicker
-          timeSteps={{ minutes: 30 }}
-          ampm={false}
-          label="結束時段"
-          // views={["hours","minutes"]}
-          format="hh:mm"
-          // defaultValue={dayjs("0000-00-00T9:00")}
-          onChange={(newTime) => {
-            setEndTimeList((preState) => ({
-              ...preState,
-              [periodId]: moment(
-                newTime.get("hour") + ":" + newTime.get("minute"),
-                "hh:mm"
-              ),
-            }));
-          }}
-        />
-      
-    </LocalizationProvider>
-  );
+const week = {
+  mon:"一",
+  tue:"二",
+  wed:"三",
+  thu:"四",
+  fri:"五",
+  sat:"六",
+  sun:"日"
 }
 function checkTimeSeries(startTimeList, endTimeList) {
   for (const [id, time] of Object.entries(startTimeList)) {
@@ -114,35 +73,77 @@ function checkTimeOverlap(startTimeList, endTimeList) {
   }
   console.log(timeList);
 }
-const  FormDialog=(props)=>{
+const EditDialog=(props)=>{
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({})
-  const [startTime, setStartTime] = useState([]);
-  const [endTime, setEndTime] = useState([]);
-  const [periodId, setPeriodId] = useState(0);
-
+  const{startTime,endTime,selectedDay}=props
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
-    // setForm({
-    //   0: (
-    //     <TimeBlock
-    //       startTimeList={startTimeList}
-    //       setStartTimeList={setStartTimeList}
-    //       endTimeList={endTimeList}
-    //       setEndTimeList={setEndTimeList}
-    //       periodId={0}
-    //     />
-    //   ),
-    // });
-    // setStartTimeList({})
-    // setEndTimeList({})
-    setPeriodId(1)
-    
+    setOpen(false);    
   };
+  const handleSubmit = () =>{
+    // checkTimeSeries(startTimeList,endTimeList)
+    // checkTimeOverlap(startTimeList, endTimeList)
+    // console.log(startTimeList)
+  }
+  return (
+    <>
+    <IconButton variant="outlined" onClick={handleClickOpen}>
+        <EditIcon />
+      </IconButton>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>選取日期與時間</DialogTitle>
+        <DialogContent><FormDialog startTime={startTime} endTime={endTime} selectedDay={selectedDay} disabled={true}/></DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>取消</Button>
+          <Button onClick={handleSubmit}>確認</Button>
+        </DialogActions>
+      </Dialog>
+      </>
+  )
+}
+const AddDialog=(props)=>{
+  const [open, setOpen] = useState(false);
+  const{startTime,endTime,selectedDay}=props
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);    
+  };
+  const handleSubmit = () =>{
+    // checkTimeSeries(startTimeList,endTimeList)
+    // checkTimeOverlap(startTimeList, endTimeList)
+    // console.log(startTimeList)
+  }
+  return (
+    <>
+    <IconButton variant="outlined" onClick={handleClickOpen}>
+        <EditIcon />
+      </IconButton>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>選取日期與時間</DialogTitle>
+        <DialogContent><FormDialog startTime={startTime} endTime={endTime} selectedDay={selectedDay} disabled={false}/></DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>取消</Button>
+          <Button onClick={handleSubmit}>確認</Button>
+        </DialogActions>
+      </Dialog>
+      </>
+  )
+}
+const  FormDialog=(props)=>{
+
+  const [startTime, setStartTime] = useState([]);
+  const [endTime, setEndTime] = useState([]);
+  const [periodId, setPeriodId] = useState(0);
+  const [selectedDay, setSelectedDay] = useState();
+
+
+
   const handleSubmit = () =>{
     // checkTimeSeries(startTimeList,endTimeList)
     // checkTimeOverlap(startTimeList, endTimeList)
@@ -151,34 +152,39 @@ const  FormDialog=(props)=>{
   useEffect(() => {
     setStartTime(props.startTime)
     setEndTime(props.endTime)
+    setSelectedDay(props.selectedDay)
   }, []);
-  // useEffect(() => {
-  //   console.log(startTimeList);
-  //   console.log(endTimeList);
-  // }, [startTimeList, endTimeList]);
-
-  // const handleDelete = (periodId) => {
-  //   delete form[periodId]
-  //   delete startTimeList[periodId]
-  //   delete endTimeList[periodId]
-  //   setForm({...form})
-  // };
   return (
     <>
-      <IconButton variant="outlined" onClick={handleClickOpen}>
-        <EditIcon />
-      </IconButton>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>選取日期與時間</DialogTitle>
-        <DialogContent>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
       
+        
+        <JToggleButtonGroup
+          value={selectedDay}
+          disabled = {props.disabled}
+          onChange={(event,value)=>setSelectedDay(value)}
+          sx={{display:'flex', justifyContent:'center', borderLeft:'' }}    
+          spacing={3}
+          color="primary"   
+             
+        >
+        {Object.keys(week).map((eng)=>{
+
+          return (
+          <JButton value={eng} >
+            {week[eng]}
+          </JButton >)
+        })}
+        </JToggleButtonGroup>
+        
+        <br></br>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['TimePicker', 'TimePicker']}>
         <TimePicker
           timeSteps={{ minutes: 30 }}
           ampm={false}
           label="起始時段"
           // views={["hours","minutes"]}
-          format="hh:mm"
+          format="HH:mm"
           value={startTime?dayjs(startTime):undefined}
           onChange={(newTime) => {
             setStartTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
@@ -189,34 +195,16 @@ const  FormDialog=(props)=>{
           ampm={false}
           label="結束時段"
           // views={["hours","minutes"]}
-          format="hh:mm"
+          format="HH:mm"
           value={endTime?dayjs(endTime):undefined}
           // defaultValue={dayjs("0000-00-00T9:00")}
           onChange={(newTime) => {
             setEndTime(moment(newTime.get("hour") + ":" + newTime.get("minute"),"hh:mm"))
           }}
         />
-      
+      </DemoContainer>
     </LocalizationProvider>
-        {/* {Object.keys(form).map((key)=>{
-            console.log(form[key])
-          return (
-                <DemoContainer components={["TimePicker", "TimePicker"]}>
-                
-                {form[key]}
-                <Button onClick={() => handleDelete(key)}>
-                <HighlightOff />
-                </Button>
-          
-                </DemoContainer>
-                )
-        })} */} 
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>取消</Button>
-          <Button onClick={handleSubmit}>確認</Button>
-        </DialogActions>
-      </Dialog>
+        
     </>
   );
 }
@@ -298,9 +286,9 @@ export default function CreateStadium() {
                     <TextField fullWidth size="small" />
                     {Object.keys(availableTime).map((day)=>{
                       console.log(availableTime[day][0].hour())
-                      return <Typography>{day}{availableTime[day][0].format('LT')}-{availableTime[day][1].format('LT')}<FormDialog startTime={availableTime[day][0]} endTime={availableTime[day][1]}/></Typography>
+                      return <Typography>星期{week[day]}{availableTime[day][0].format('HH:mm')}-{availableTime[day][1].format('HH:mm')}<EditDialog startTime={availableTime[day][0]} endTime={availableTime[day][1]} selectedDay={day}/></Typography>
                     })}
-                    
+                    <AddDialog/>
                   </CardContent>
                 </Grid>
               </Grid>
