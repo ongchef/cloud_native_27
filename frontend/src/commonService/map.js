@@ -12,7 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import PlaceIcon from "@mui/icons-material/Place";
 import IconButton from "@mui/material/IconButton";
 
-export default function Map(props) {
+export default function Map(latitude, longitude, name) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {

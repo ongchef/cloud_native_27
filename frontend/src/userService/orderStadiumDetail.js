@@ -310,7 +310,11 @@ export default function OrderStadiumDetail() {
               </Grid>
             </Card>
             <Box>
-              <Map />
+              <Map
+                latitude={25.014057657671447}
+                longtitude={121.53812819619687}
+                name={"台大綜合體育館 - 一樓多功能球場"}
+              />
             </Box>
           </Box>
         </Container>
