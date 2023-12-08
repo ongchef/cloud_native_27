@@ -165,9 +165,22 @@ export const postUsersAppointment = async(req,res) => {
 }
 
 export const getUsersAppointment = async(req,res) => {
+
+    const { ball, address, query_time } = req.query;
+
+    // modify search query according to request query
+    let searchQuery = "";
+    if (typeof ball !== "undefined") {
+        searchQuery = `WHERE ball_type_id in (${ball})`;
+    }
+    if (typeof address !== "undefined") {
+        searchQuery = `WHERE address like '%${address}%'`;
+    }
+    if (typeof ball !== "undefined" && typeof address !== "undefined") {
+        searchQuery = `WHERE ball_type_id in (${ball}) and address like '%${address}%'`;
+    }
+    const appointments = await searchCourtsAppointmentsQuery(searchQuery);
     
-    const appointments = await getCourtsAppointmentsQuery();
-    const { query_time } = req.query;
     const unavailable_appointment_id_set = new Set();
     for (let i = 0; i < appointments.length; i++){
         // solve the ISOdate issue
