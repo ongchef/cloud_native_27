@@ -5,8 +5,9 @@ import {
     putCourtsByIdQuery,
     postCourtsQuery,
     deleteCourtsByIdQuery,
+    isCourtsAdmin,
     isCourtsProvider,
-    getCourtsAppointmentByDate
+    getCourtsAppointmentByDate,
 } from "../models/court_provider.js";
 
 import {
@@ -30,68 +31,80 @@ export const getCourtsByAdminId = async(req,res) => {
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
     req.body['admin_id'] = req.token;
-    const all_courts = await getCourtsByAdminIdQuery(req.body)
+    const verify_data = {
+        "user_id": req.token
+    };
+    const iscourtsprovider = await isCourtsProvider(verify_data);
 
-    // if the court provider do not have any courts registerd
-    // return empty array
-    if (all_courts.length == 0) {
-        return res.status(200).json([]);
+    if (iscourtsprovider) {
+        const all_courts = await getCourtsByAdminIdQuery(req.body)
+
+        // if the court provider do not have any courts registerd
+        // return empty array
+        if (all_courts.length == 0) {
+            return res.status(200).json([]);
+        }
+
+        const all_courts_id_list = all_courts.map((item) => item.court_id);
+        const all_courts_info = await getCourtsOrderInfoInIdListQuery(all_courts_id_list);
+        const all_courts_info_with_time = await Promise.all(
+            all_courts_info.map(async({...item}) => ({
+                ...item,
+                available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
+            }))
+        )
+        return res.status(200).json(all_courts_info_with_time);
+
+    } else {
+        return res.status(401).json("You are not the court provider!")
     }
-
-    const all_courts_id_list = all_courts.map((item) => item.court_id);
-    const all_courts_info = await getCourtsOrderInfoInIdListQuery(all_courts_id_list);
-    const all_courts_info_with_time = await Promise.all(
-        all_courts_info.map(async({...item}) => ({
-            ...item,
-            available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
-        }))
-    )
-    return res.status(200).json(all_courts_info_with_time);
 }
 
 export const getCourtsReservedByCourtId = async(req,res) => {
 
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
-    const data = {}
-    data['court_id'] = req.query['court_id'];
-    data['date'] = req.query['date']
-    data['date_add_one_day'] = add_one_day(req.query['date']);
-    data['admin_id'] = req.token;
+    const verify_data = {
+        "user_id": req.token
+    };
+    const iscourtsprovider = await isCourtsProvider(verify_data);
+    if (iscourtsprovider) {
 
-    const all_courts = await getCourtsByAdminIdQuery(data)
+        const data = {};
+        data['court_id'] = req.query['court_id'];
+        data['date'] = req.query['date']
+        data['date_add_one_day'] = add_one_day(req.query['date']);
+        data['admin_id'] = req.token;
 
-    // if the court provider do not have any courts registerd
-    // return empty array
-    if (all_courts.length == 0) {
-        return res.status(200).json([]);
-    }
+        const iscourtadmin = await isCourtsAdmin(data);
+        if (iscourtadmin){
+            const all_courts = await getCourtsByAdminIdQuery(data)
+            if (all_courts.length == 0) {
+                return res.status(200).json([]);
+            }
+            // check whether appointment exists on the query date
+            const get_appointment_date = await getCourtsAppointmentByDate(data);
+            // the court have appointment on the query date
+            if (get_appointment_date.length > 0) {
+                const appointment_date = get_appointment_date.map((item)=>({
+                    "date": req.query['date'],
+                    "start_time": item.start_time,
+                    "end_time": item.end_time
+                }))
+                return res.status(200).json(appointment_date);
 
-    const iscourtproiver = await isCourtsProvider(data)
+            // the court does not have appointment on the query date
+            // just return a empty array
+            } else {
+                return res.status(200).json([]);
+            }
 
-    if (iscourtproiver) {
-
-        // check whether appointment exists on the query date
-        const get_appointment_date = await getCourtsAppointmentByDate(data);
-        // the court have appointment on the query date
-        if (get_appointment_date.length > 0) {
-            const appointment_date = get_appointment_date.map((item)=>({
-                "date": req.query['date'],
-                "start_time": item.start_time,
-                "end_time": item.end_time
-            }))
-            res.status(200).json(appointment_date);
-
-        // the court does not have appointment on the query date
-        // just return a empty array
         } else {
-            res.status(200).json([]);
+            const message = "You are not the owner of the court!"
+            return res.status(401).json(message)
         }
-
     } else {
-
-        const message = "You are not the owner of the court!"
-        return res.status(401).send(message)
+        return res.status(401).json("You are not the court provider!")
     }
 }
 
@@ -99,21 +112,28 @@ export const putCourtsById = async(req,res) => {
 
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
+    const verify_data = {
+        "user_id": req.token
+    };
+    const iscourtsprovider = await isCourtsProvider(verify_data);
+    if (iscourtsprovider) {
+        req.body['court_id'] = req.query['court_id'];
+        req.body['admin_id'] = req.token;
+        const iscourtadmin = await isCourtsAdmin(req.body)
+        if (iscourtadmin) {
+            if (typeof req.body['ball_type_id'] !== "undefined") {
+                req.body['ball_type_id'] = req.body['ball_type_id'].toString();
+            }
+            const result = await putCourtsByIdQuery(req.body);
+            return res.status(200).json(result);
     
-    req.body['court_id'] = req.query['court_id'];
-    req.body['admin_id'] = req.token;
-    const iscourtproiver = await isCourtsProvider(req.body)
-    if (iscourtproiver) {
-        if (typeof req.body['ball_type_id'] !== "undefined") {
-            req.body['ball_type_id'] = req.body['ball_type_id'].toString();
+        } else {
+    
+            const message = "You are not the owner of the court!"
+            return res.status(401).json(message)
         }
-        const result = await putCourtsByIdQuery(req.body);
-        return res.status(200).json(result);
-
     } else {
-
-        const message = "You are not the owner of the court!"
-        return res.status(401).send(message)
+        return res.status(401).json("You are not the court provider!")
     }
 }
 
@@ -121,30 +141,45 @@ export const postCourts = async(req,res) => {
     
     // TODO: the fields shoud be automatically added in the req.body (got it from Frontend)
     // This api has been tested by postman
+    const verify_data = {
+        "user_id": req.token
+    };
+    const iscourtsprovider = await isCourtsProvider(verify_data);
+    if (iscourtsprovider) {
+        const result = await postCourtsQuery(req.body);
 
-    const result = await postCourtsQuery(req.body);
-
-    return res.status(200).json(result);
-
+        return res.status(200).json(result);
+    } else {
+        return res.status(401).json("You are not the court provider!")
+    }
 }
 
 export const deleteCourtsById = async(req,res) => {
 
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
+    const verify_data = {
+        "user_id": req.token
+    };
+    const iscourtsprovider = await isCourtsProvider(verify_data);
+    if (iscourtsprovider) {
+
+        req.body['court_id'] = req.query['court_id'];
+        req.body['admin_id'] = req.token;
+        const iscourtadmin = await isCourtsAdmin(req.body)
     
-    req.body['court_id'] = req.query['court_id'];
-    req.body['admin_id'] = req.token;
-    const iscourtproiver = await isCourtsProvider(req.body)
-
-    if (iscourtproiver) {
-
-        const result = await deleteCourtsByIdQuery(req.body);
-        return res.status(200).json(result);
+        if (iscourtadmin) {
+    
+            const result = await deleteCourtsByIdQuery(req.body);
+            return res.status(200).json(result);
+    
+        } else {
+    
+            const message = "You are not the owner of the court!"
+            return res.status(401).json(message)
+        }
 
     } else {
-
-        const message = "You are not the owner of the court!"
-        return res.status(401).send(message)
+        return res.status(401).json("You are not the court provider!")
     }
 }

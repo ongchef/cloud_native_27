@@ -30,7 +30,7 @@ export const getCourtsByAdminIdQuery = (data) => {
 }
 
 // check admin_id of the court
-export const isCourtsProvider = (data) => {
+export const isCourtsAdmin = (data) => {
     return new Promise((resolve, reject) => {
 
         const { court_id, admin_id } = data
@@ -45,6 +45,29 @@ export const isCourtsProvider = (data) => {
                     resolve(true);
                 }
                 resolve(false)
+            }
+        });
+    });
+}
+
+// check the role_id of the request issuer
+export const isCourtsProvider = (data) => {
+    return new Promise((resolve, reject) => {
+
+        const { user_id } = data
+
+        db.query('SELECT role_id FROM STADIUM.USER WHERE user_id = ?', [user_id], (error, results) => {
+            
+            if (error) {
+                reject(false);
+            } else {
+                if (typeof results[0] === "undefined"){
+                    resolve(false)
+                } else if (results[0]['role_id'] == "3"){
+                    resolve(true);
+                } else {
+                    resolve(false)
+                }
             }
         });
     });
