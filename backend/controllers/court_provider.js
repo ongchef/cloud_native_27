@@ -104,7 +104,9 @@ export const putCourtsById = async(req,res) => {
     req.body['admin_id'] = req.token;
     const iscourtproiver = await isCourtsProvider(req.body)
     if (iscourtproiver) {
-
+        if (typeof req.body['ball_type_id'] !== "undefined") {
+            req.body['ball_type_id'] = req.body['ball_type_id'].toString();
+        }
         const result = await putCourtsByIdQuery(req.body);
         return res.status(200).json(result);
 
