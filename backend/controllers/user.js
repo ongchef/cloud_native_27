@@ -22,6 +22,7 @@ import {
     addAppointmentTimeQuery,
     getCourtsAvaTimeByIdQuery,
     putAttendenceQuery,
+    checkAppointmentByIdQuery,
 } from '../models/appointment.js';
 
 import {
@@ -307,16 +308,34 @@ export const postUsersAppointmentJoin = async(req,res) => {
 
     const user_id = req.token;
     const { appointment_id } = req.body;
+    const appointment_info = await checkAppointmentByIdQuery(appointment_id);
 
-    const par_data = {
-        "user_id": user_id,
-        "appointment_id": appointment_id
-    }
-    const par_result = await addParticipantQuery(par_data);
-    // update attendence column
-    const app_result = await putAttendenceQuery(appointment_id);
-    res.status(200).json("加入成功!");
-        
+    // user join a private appointment
+    if (appointment_info[0]['public'] == 0) {
+        const { password } = req.body;
+        if ( password !== appointment_info[0]['password']) {
+            res.status(401).json("加入失敗!密碼錯誤!");
+        } else {
+            const par_data = {
+                "user_id": user_id,
+                "appointment_id": appointment_id
+            }
+            const par_result = await addParticipantQuery(par_data);
+            // update attendence column
+            const app_result = await putAttendenceQuery(appointment_id);
+            res.status(200).json("加入成功!");
+        }
+    // user join a public appointment
+    } else {
+        const par_data = {
+            "user_id": user_id,
+            "appointment_id": appointment_id
+        }
+        const par_result = await addParticipantQuery(par_data);
+        // update attendence column
+        const app_result = await putAttendenceQuery(appointment_id);
+        res.status(200).json("加入成功!");
+    }   
 }
 
 export const getUsersAppointmentJoinDetail = async(req,res) => {

@@ -131,3 +131,15 @@ export const putAttendenceQuery = (data) => {
         });
     });
 }
+
+export const checkAppointmentByIdQuery = (data) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT public, password FROM STADIUM.APPOINTMENT WHERE appointment_id = ?`, [data], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
