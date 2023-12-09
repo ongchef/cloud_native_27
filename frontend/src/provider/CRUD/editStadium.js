@@ -34,24 +34,24 @@ const week = {
   "sat":"六",
   "sun":"日"
 }
-function checkTimeSeries(availableTime) {
-  for (const daytime of Object.values(availableTime)) {
-    for (const time of Object.values(daytime)){
-      if (time[1].isBefore(time[0])) {
-        alert("起始時間與結束時間未按照順序");
-        return false;
-      }
+function checkTimeSeries(startTimeList, endTimeList) {
+  for (const [id, time] of Object.entries(startTimeList)) {
+    const startTime = time;
+    const endTime = endTimeList[id];
+    if (endTime.isBefore(startTime)) {
+      alert("起始時間與結束時間未按照順序");
+      return false;
     }
   }
 }
-function checkTimeOverlap(availableTime,startTimeList, endTimeList) {
+function checkTimeOverlap(startTimeList, endTimeList) {
   console.log(startTimeList);
   console.log(endTimeList);
   var timeList = [];
-  // for (const [day, daytime] of Object.entries(availableTime)) {
-  //   console.log(timeList);
-  //   timeList.push([time, endTimeList[id]]);
-  // }
+  for (const [id, time] of Object.entries(startTimeList)) {
+    console.log(timeList);
+    timeList.push([time, endTimeList[id]]);
+  }
   console.log(timeList);
   timeList.sort(function (a, b) {
     if (a[0].isAfter(b[0])) {
@@ -80,7 +80,6 @@ const EditDialog=(props)=>{
   const handleSubmit = () =>{
     console.log(newTime)
     setAvailableTime({...availableTime,[selectedDay]:{...availableTime[selectedDay],[id]:newTime}})
-    checkTimeSeries(availableTime)
     handleClose()
   }
   
@@ -124,8 +123,9 @@ const AddDialog=(props)=>{
     )
     console.log(newAvailableTime)
     setAvailableTime(newAvailableTime)
-    checkTimeSeries(availableTime)
-    // handleClose()
+
+    handleClose()
+    // checkTimeSeries(startTimeList,endTimeList)
     // checkTimeOverlap(startTimeList, endTimeList)
     // console.log(startTimeList)
   }
@@ -215,7 +215,7 @@ const  FormDialog=(props)=>{
   );
 }
 
-export default function CreateStadium() {
+export default function EditStadium() {
   const navigate = useNavigate();
   const [image, setImage] = useState();
   const [ availableTime, setAvailableTime] = useState({

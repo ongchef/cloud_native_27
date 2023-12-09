@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Link, Router } from "react-router-dom";
+import { Routes, Route, Link, Router, Navigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Login from "./authService/login-new";
 import Register from "./authService/register-new";
@@ -275,7 +275,8 @@ export default function App() {
       <Routes>
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
-        {/* {user && ( */}
+        <Route exact path="*" element={<Navigate to="/"/>}/>
+        {user && (
         <>
           <Route exact path="/orderStadium" element={<OrderStadium />} />
           <Route exact path="/joinStadium" element={<JoinStadium />} />
@@ -291,7 +292,7 @@ export default function App() {
             element={<OrderStadiumDetail />}
           />
         </>
-        {/* )} */}
+         )} 
         <Route exact path="/userProfile" element={<UserProfile />} />
         <Route exact path="/userHistory" element={<UserHistory />} />
         {/* provider */}
