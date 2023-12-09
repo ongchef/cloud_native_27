@@ -23,9 +23,10 @@ import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; 
 import axios from 'axios';
 import authHeader from "../authService/authHeader";
+import FetchData from "../authService/fetchData";
 async function SearchCourt(){
-  
-  return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
+  return FetchData.getData("http://localhost:3000/api/courts/admin",10)
+  // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
 }
 export default function StadiumBoard() {
   const [sport, setSport] = useState(10);
@@ -35,7 +36,7 @@ export default function StadiumBoard() {
   const [courtList, setCourtList] = useState([])
   useEffect(() => {
     SearchCourt().then((res)=>
-      setCourtList(res.data)
+      setCourtList(res)
     )
   },[]);
   const handleSportChange = (event) => {
