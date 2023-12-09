@@ -280,7 +280,7 @@ export default function CreateStadium() {
             <Card sx={{ width: "70vw", margin: "auto" }}>
               <Grid container>
                 <Grid item xs={6}>
-                  <CardMedia component="img" src={image} alt="Stadium" />
+                  {image&&<CardMedia component="img" src={image} alt="Stadium" />}
                   <TextField
                     type="file"
                     onChange={(e) => {
