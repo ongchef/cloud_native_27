@@ -8,6 +8,7 @@ import {
     postUsersAppointmentQuery,
     isDuplicateName,
     isDuplicateEmail,
+    isUsersNameExist,
     isUsersExist,
 } from '../models/users.js'
 
@@ -51,6 +52,10 @@ export const getUsers = async(req,res) =>{
 export const getUsersById = async(req,res) =>{
     
     const user_token = req.token
+    const isusersexist = await isUsersExist(user_token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
     const result = await getUsersByIdQuery(user_token)
     return res.status(200).json(result)
 }
@@ -86,7 +91,10 @@ export const postUsers = async(req,res) => {
 export const putUsers = async(req,res) => {
 
     req.body["user_id"] = req.token;
-    
+    const isusersexist = await isUsersExist(req.token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
     const result = await putUsersQuery(req.body);
     return res.status(200).json(result);
 
@@ -95,8 +103,8 @@ export const putUsers = async(req,res) => {
 export const postUsersLogin = async(req,res) => {
     
     const { name, password } = req.body;
-    const isusersexist = await isUsersExist(name);
-    if (isusersexist.length > 0){
+    const isusersnameexist = await isUsersNameExist(name);
+    if (isusersnameexist.length > 0){
         const result = await postUsersLoginQuery(name);
         const hashed_password_in_db = result[0].password;
         const isSamePassword = await comparePassword(password, hashed_password_in_db);
@@ -118,7 +126,10 @@ export const postUsersLogin = async(req,res) => {
 export const getUsersAppointmentHistory = async(req,res) => {
 
     const user_token = req.token;
-
+    const isusersexist = await isUsersExist(user_token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
     const app_id = await getUsersAppointmentIdQuery(user_token);
     if (app_id.length == 0){
         return res.status(200).json([]);
@@ -134,6 +145,10 @@ export const getUsersAppointmentHistory = async(req,res) => {
 export const postUsersAppointment = async(req,res) => {
 
     const user_id = req.token;
+    const isusersexist = await isUsersExist(user_id);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
     const { date, start_time, end_time, ...appointment_cols } = req.body;
 
     try {
@@ -167,12 +182,16 @@ export const postUsersAppointment = async(req,res) => {
 
 export const getUsersAppointment = async(req,res) => {
 
-    const { ball, address, query_time } = req.query;
+    const isusersexist = await isUsersExist(req.token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
 
+    const { ball, address, query_time } = req.query;
     // modify search query according to request query
     let searchQuery = "";
     if (typeof ball !== "undefined") {
-        searchQuery = `WHERE ball_type_id in (${ball})`;
+        searchQuery = `WHERE ball_type_id in (${ball.toString()})`;
     }
     if (typeof address !== "undefined") {
         searchQuery = `WHERE address like '%${address}%'`;
@@ -226,6 +245,11 @@ export const getUsersAppointment = async(req,res) => {
 
 export const getUsersAppointmentDetail = async(req,res) => {
 
+    const isusersexist = await isUsersExist(req.token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
+
     const { court_id, query_time } = req.query;
 
     const data = {}
@@ -263,6 +287,11 @@ export const getUsersAppointmentDetail = async(req,res) => {
 
 export const getUsersAppointmentJoin = async(req,res) => {
     
+    const isusersexist = await isUsersExist(req.token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
+
     const { ball, address, query_time, public_index } = req.query;
 
     // modify search query according to request query
@@ -307,6 +336,11 @@ export const getUsersAppointmentJoin = async(req,res) => {
 export const postUsersAppointmentJoin = async(req,res) => {
 
     const user_id = req.token;
+    const isusersexist = await isUsersExist(user_id);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
+
     const { appointment_id } = req.body;
     const appointment_info = await checkAppointmentByIdQuery(appointment_id);
 
@@ -340,6 +374,10 @@ export const postUsersAppointmentJoin = async(req,res) => {
 
 export const getUsersAppointmentJoinDetail = async(req,res) => {
 
+    const isusersexist = await isUsersExist(req.token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
     const { appointment_id } = req.query;
     const joinable_courts_info = await getCourtsInfoByAppointmentIdQuery(appointment_id)
     return res.status(200).json(joinable_courts_info);
