@@ -27,10 +27,6 @@ app.use("/api/admin", adminRoutes);
 
 //swagger
 import swaggerUi from 'swagger-ui-express';
-// swaggerAutogen(outputFile, endpointsFiles); // swaggerAutogen 的方法
-import { createRequire } from 'node:module';
-// const require = createRequire(import.meta.url);
-// const swaggerFile = require("../swagger_output.json");
 import swaggerFile from '../swagger_output.json' assert { type: 'json' };
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
@@ -39,42 +35,3 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// {
-//   "name": "body",
-//   "in": "body",
-//   "schema": {
-//     "type": "object",
-//     "properties": {
-//       "court_id": {
-//         "example": "2"
-//       },
-//       "public": {
-//         "example": "1"
-//       },
-//       "ball": {
-//         "example": "羽球"
-//       },
-//       "level": {
-//         "example": "菜雞"
-//       },
-//       "rule": {
-//         "example": "單打"
-//       },
-//       "password": {
-//         "example": ""
-//       },
-//       "note": {
-//         "example": ""
-//       },
-//       "date": {
-//         "example": "2023-12-01"
-//       },
-//       "start_time": {
-//         "example": "12:00:00"
-//       },
-//       "end_time": {
-//         "example": "13:00:00"
-//       }
-//     }
-//   }
-// }

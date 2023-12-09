@@ -90,7 +90,6 @@ export const getCourtsAppointments = async(req,res) => {
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
     let data = {};
-    console.log(req.query);
     const admin_id = req.token;
 
     const isadmin = await isAdmin(admin_id)
@@ -121,6 +120,7 @@ export const courtsProvider = async(req,res) => {
     data['name'] = req.body['name'];
     data['email'] = req.body['email'];
     data['phone'] = req.body['phone'];
+    data['line_id'] = req.body['line_id']
 
     const isduplicateemail = await isDuplicateEmail(data['email']);
     const isduplicatename = await isDuplicateName(data['name']);
@@ -142,7 +142,10 @@ export const courtsProvider = async(req,res) => {
         const isadmin = await isAdmin(admin_id)
         if (isadmin) {
             
-            const result = await postCourtsProviderQuery(data)
+            let result = {}
+            result['message'] = await postCourtsProviderQuery(data)
+            result['user_id'] = newUserId
+            result['role_id'] = 3
             return res.status(200).json(result)
 
         } else {
