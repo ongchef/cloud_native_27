@@ -44,16 +44,15 @@ function checkTimeSeries(availableTime) {
     }
   }
 }
-function checkTimeOverlap(availableTime,startTimeList, endTimeList) {
-  console.log(startTimeList);
-  console.log(endTimeList);
-  var timeList = [];
-  // for (const [day, daytime] of Object.entries(availableTime)) {
-  //   console.log(timeList);
-  //   timeList.push([time, endTimeList[id]]);
-  // }
-  console.log(timeList);
-  timeList.sort(function (a, b) {
+function checkTimeOverlap(availableTime) {
+
+  for (const [day, daytime] of Object.entries(availableTime)) {
+    var timeList = [];
+    for (const time of Object.values(daytime)){
+      timeList.push(time)
+    }
+    console.log(timeList);
+    timeList.sort(function (a, b) {
     if (a[0].isAfter(b[0])) {
       return 1;
     } else {
@@ -62,10 +61,12 @@ function checkTimeOverlap(availableTime,startTimeList, endTimeList) {
   });
   for (var i = 0; i < timeList.length - 1; i++) {
     if (timeList[i][1].isAfter(timeList[i + 1][0])) {
-      alert("時段重疊");
+      alert("星期"+week[day]+"時段重疊");
     }
   }
   console.log(timeList);
+  }
+  
 }
 const EditDialog=(props)=>{
   const [open, setOpen] = useState(false);
@@ -125,7 +126,7 @@ const AddDialog=(props)=>{
     console.log(newAvailableTime)
     setAvailableTime(newAvailableTime)
     checkTimeSeries(availableTime)
-    // handleClose()
+    handleClose()
     // checkTimeOverlap(startTimeList, endTimeList)
     // console.log(startTimeList)
   }
@@ -317,6 +318,9 @@ export default function CreateStadium() {
                       )
                     })}
                     <AddDialog availableTime={availableTime} setAvailableTime={setAvailableTime}/>
+                    <Button onClick={()=>checkTimeOverlap(availableTime)}>
+                      送出
+                    </Button>
                   </CardContent>
                 </Grid>
               </Grid>
