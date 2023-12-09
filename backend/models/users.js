@@ -64,8 +64,8 @@ export const isDuplicateEmail = (email) => {
     })
 }
 
-// check if users exist
-export const isUsersExist = (data) => {
+// check if users name exist
+export const isUsersNameExist = (data) => {
 
     return new Promise((resolve, reject) => {
         db.query(`SELECT * FROM STADIUM.USER WHERE name = ?`, [data], (error, results) => {
@@ -78,6 +78,22 @@ export const isUsersExist = (data) => {
     });    
 }
 
+// check if users exist
+export const isUsersExist = (data) => {
+
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM STADIUM.USER WHERE user_id = ?`, [data], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                if (typeof results[0] === 'undefined'){
+                    resolve(false);
+                }
+                resolve(true)
+            }
+        });
+    });    
+}
 
 // post register users
 export const postUsersRegisterQuery = (data) => {
