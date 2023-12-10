@@ -16,12 +16,25 @@ import {
 } from "../models/appointment.js";
 
 import {
+    isUsersExist,
+} from '../models/users.js'
+
+import {
     add_one_day
 } from "../utils/helper.js";
 
 export const getCourts = async(req,res) => {
 
-    const result = await getCourtsQuery();
+    const user_token = req.token
+    const isusersexist = await isUsersExist(user_token);
+    if (!isusersexist) {
+        return res.status(401).json("You are not the user!")
+    }
+
+    const data = {
+        "page": req.query.page
+    }
+    const result = await getCourtsQuery(data);
     return res.status(200).json(result);
 
 }

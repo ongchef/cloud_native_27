@@ -1,13 +1,21 @@
 import db from './connection_db.js';
 
 // get all courts
-export const getCourtsQuery = () => {
+export const getCourtsQuery = (data) => {
+    const page = data['page'] || 1;
+    const limit = 10;
+    let offset = (page - 1) * limit;
     return new Promise((resolve, reject) => {
-        db.query('SELECT * from STADIUM.COURT', (error, results) => {
+        db.query('SELECT * from STADIUM.COURT LIMIT ? OFFSET ?', [limit, offset], (error, results) => {
             if (error) {
                 reject(error);
             } else {
-                resolve(results);
+                const total_page = Math.ceil(results.length/limit);
+                const retrun_json = {
+                    "total_page": total_page,
+                    "courts": results
+                }
+                resolve(retrun_json);
             }
         });
     });
