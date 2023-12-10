@@ -15,6 +15,7 @@ import {
 import {
     getCourtsAppointmentsQuery,
     searchCourtsAppointmentsQuery,
+    searchCourtsQuery,
     getCourtsInfoByAppointmentIdQuery,
     getCourtsIdByAppointmentIdQuery,
     getCourtsNotInIdListQuery,
@@ -188,19 +189,24 @@ export const getUsersAppointment = async(req,res) => {
     }
 
     const { ball, address, query_time } = req.query;
-    // modify search query according to request query
-    let searchQuery = "";
-    if (typeof ball !== "undefined") {
-        searchQuery = `WHERE ball_type_id in (${ball.toString()})`;
+    const page = req.query['page'] || 1;
+    const limit = 10;
+    let offset = (page - 1) * limit;
+
+    // search courts according to ball and address query first
+    const search_res = await searchCourtsQuery(ball, address)
+    // get the list of court id according to search results
+    const search_res_list = search_res.map((item) => item.court_id);
+
+    // no search results according to ball and address query
+    if (typeof search_res_list === "undefined") {
+        return res.status(200).json([])
     }
-    if (typeof address !== "undefined") {
-        searchQuery = `WHERE address like '%${address}%'`;
-    }
-    if (typeof ball !== "undefined" && typeof address !== "undefined") {
-        searchQuery = `WHERE ball_type_id in (${ball}) and address like '%${address}%'`;
-    }
+
+    // check query time, check if courts have appointment on the query time
+    const searchQuery = `WHERE COURT.court_id in (${search_res_list.toString()})`;
     const appointments = await searchCourtsAppointmentsQuery(searchQuery);
-    
+
     const unavailable_appointment_id_set = new Set();
     for (let i = 0; i < appointments.length; i++){
         // solve the ISOdate issue
@@ -216,30 +222,62 @@ export const getUsersAppointment = async(req,res) => {
         let unavailable_appointment_id_list = [...unavailable_appointment_id_set];
         const unavailable_courts_id = await getCourtsIdByAppointmentIdQuery(unavailable_appointment_id_list)
         const unavailable_court_id_list = unavailable_courts_id.map((item) => item.court_id);
-        const available_courts_id = await getCourtsNotInIdListQuery(unavailable_court_id_list);
-        const available_courts_id_list = available_courts_id.map((item) => item.court_id);
-        const available_courts = await getCourtsOrderInfoInIdListQuery(available_courts_id_list);
+
+        const available_courts_id_list = search_res_list.filter((item) => {
+            return !unavailable_court_id_list.includes(item);
+          });
+
+        // if all courts in search_res_list have appointment according to query time
+        if (available_courts_id_list.length == 0) {
+            return res.status(200).json([])
+        }
+
+        // return courts do not have appointment according to query time
+        // paging
+        if (offset > available_courts_id_list.length) {
+            offset = offset%limit
+        }
+        const available_courts_id_list_page = available_courts_id_list.slice(offset, offset+limit)
+        const available_courts = await getCourtsOrderInfoInIdListQuery(available_courts_id_list_page);
         const available_courts_with_time = await Promise.all(
             available_courts.map(async({...item}) => ({
                 ...item,
                 available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
             }))
         )
-        return res.status(200).json(available_courts_with_time);
+        // return json
+        const total_page = Math.ceil(available_courts_id_list.length/limit);
+        const retrun_json = {
+            "total_page": total_page,
+            "courts": available_courts_with_time
+        }
+        return res.status(200).json(retrun_json);
     
     // there are not unavailable courts according to the query time period
-    // return all courts
+    // return all courts search results
     } else {
-        const all_courts = await getCourtsQuery();
-        const all_courts_id_list = all_courts.map((item) => item.court_id);
-        const result = await getCourtsOrderInfoInIdListQuery(all_courts_id_list);
-        const all_courts_with_time = await Promise.all(
+
+        // paging
+        if (offset > search_res_list.length) {
+            offset = offset%limit
+        }
+        const search_res_list_page = search_res_list.slice(offset, offset+limit)
+
+        const result = await getCourtsOrderInfoInIdListQuery(search_res_list_page);
+        const appointments_with_time = await Promise.all(
             result.map(async({...item}) => ({
                 ...item,
                 available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
             }))
         )
-        return res.status(200).json(all_courts_with_time);
+
+        // return json
+        const total_page = Math.ceil(search_res_list.length/limit);
+        const retrun_json = {
+            "total_page": total_page,
+            "courts": appointments_with_time
+        }
+        return res.status(200).json(retrun_json);
     }
 }
 
@@ -293,6 +331,9 @@ export const getUsersAppointmentJoin = async(req,res) => {
     }
 
     const { ball, address, query_time, public_index } = req.query;
+    const page = req.query['page'] || 1;
+    const limit = 10;
+    let offset = (page - 1) * limit;
 
     // modify search query according to request query
     let searchQuery = "";
@@ -322,9 +363,20 @@ export const getUsersAppointmentJoin = async(req,res) => {
     if (joinable_appointment_id_set.size !== 0) {
 
         let joinable_appointment_id_list = [...joinable_appointment_id_set];
-        const joinable_courts_info = await getCourtsInfoByAppointmentIdQuery(joinable_appointment_id_list)
-        return res.status(200).json(joinable_courts_info);
-    
+        // paging
+        if (offset > joinable_appointment_id_list.length) {
+            offset = offset%limit
+        }
+        const joinable_appointment_id_list_page = joinable_appointment_id_list.slice(offset, offset+limit)
+        // return json
+        const total_page = Math.ceil(joinable_appointment_id_list.length/limit);
+        const joinable_courts_info = await getCourtsInfoByAppointmentIdQuery(joinable_appointment_id_list_page)
+
+        const retrun_json = {
+            "total_page": total_page,
+            "courts": joinable_courts_info
+        }
+        return res.status(200).json(retrun_json);    
     // there are not joinable courts according to the query time period
     } else {
 

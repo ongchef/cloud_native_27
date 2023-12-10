@@ -19,11 +19,44 @@ export const searchCourtsAppointmentsQuery = (searchQuery) => {
     return new Promise((resolve, reject) => {
         db.query(`SELECT * from STADIUM.APPOINTMENT_TIME
         INNER JOIN STADIUM.APPOINTMENT ON APPOINTMENT_TIME.appointment_id = APPOINTMENT.appointment_id
-        INNER JOIN STADIUM.COURT ON APPOINTMENT.court_id = COURT.court_id ${searchQuery}`, [], (error, results) => {
+        INNER JOIN STADIUM.COURT ON APPOINTMENT.court_id = COURT.court_id ${searchQuery}`, (error, results) => {
             if (error) {
                 reject(error);
             } else {
                 resolve(results);
+            }
+        });
+    });
+}
+
+export const searchCourtsQuery = (ball, address) => {
+
+    let searchQuery = "";
+    if (typeof address !== "undefined") {
+        searchQuery = `WHERE address like '%${address}%'`;
+    }
+
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * from STADIUM.COURT ${searchQuery}`, (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                // no need to search ball type id
+                if (typeof ball === "undefined") {
+                    resolve(results);
+                // need to search ball type id
+                } else {
+                    const search_results = results.reduce((result, court) => {
+                        const ball_type_id_list = court['ball_type_id'].split(',')
+                        const ball_query = ball.toString().split(',')
+                        const found = ball_query.some(r=> ball_type_id_list.includes(r))
+                        if (found) {
+                            result.push(court)
+                        }
+                        return result
+                    }, [])
+                    resolve(search_results);
+                }
             }
         });
     });
