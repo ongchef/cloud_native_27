@@ -201,6 +201,7 @@ export default function OrderStadium() {
                 startTime + "~" + endTime,
                 court.available,
               ]}
+              datetime={date + " " + time.format("HH:mm:ss")}
             />
           );
         })}

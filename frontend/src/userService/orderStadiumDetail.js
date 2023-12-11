@@ -1,41 +1,101 @@
-import { useNavigate } from "react-router-dom"; // 引入useNavigate
-import { useEffect } from "react";
-import Container from "@mui/material/Container"; // 引入Container元件
-import Box from "@mui/material/Box"; // 引入Box元件
-import pic2 from "../pic/羽球3.png";
-import { Input } from "antd";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+// React and hooks
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+// Material UI components
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 import { Card, IconButton } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { Button } from "antd";
-import React, { useState } from "react";
-import { Radio } from "antd";
 import ButtonM from "@mui/material/Button";
-import { Switch } from "antd";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaceIcon from "@mui/icons-material/Place";
+// Ant Design components
+import { Input } from "antd";
+import { Button } from "antd";
+import { Radio } from "antd";
+import { Switch } from "antd";
+// Other imports
+import axios from "axios";
 import Map from "../commonService/map";
-const availableTime = [32, 42];
-const bookingList = [
-  {
-    Founder: "Wonu Juan",
-    num: 4,
-    period: [32, 36],
-  },
-  {
-    Founder: "Gordon Sung",
-    num: 2,
-    period: [38, 41],
-  },
-];
+import authHeader from "../authService/authHeader";
+import pic2 from "../pic/羽球3.png";
+
+// const availableTime = [32, 42];
+// const bookingList = [
+//   {
+//     num: 4,
+//     period: [32, 36],
+//   },
+//   {
+//     num: 2,
+//     period: [38, 41],
+//   },
+// ];
 
 export default function OrderStadiumDetail() {
+  // Inside your component
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+  const datetime = searchParams.get("time");
+  console.log(id, datetime);
   const navigate = useNavigate();
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [hidden, setHidden] = useState(true);
+  const [availableTime, setAvailableTime] = useState([]);
+  const [bookingList, setBookingList] = useState([]);
+  async function StadiumDetail() {
+    return await axios.get(
+      "http://localhost:3000/api/users/appointmentDetail",
+      {
+        headers: authHeader(),
+        params: {
+          court_id: id,
+          query_time: datetime,
+        },
+      }
+    );
+  }
+  const [stadiumDetail, setStadiumDetail] = useState([]);
+
+  useEffect(() => {
+    StadiumDetail().then((res) => {
+      setStadiumDetail(res.data);
+      SetDetails(res.data);
+    });
+  }, []);
+
+  function SetDetails(data) {
+    const date = new Date(data[0].appointment_time[0].date);
+    const weekday = date.getDay() || 7; // Convert Sunday from 0 to 7
+    const availableTimeObj = data[0].available_time.find(
+      (time) => time.weekday === weekday
+    );
+    const availableTime1 = [
+      parseInt(availableTimeObj.start_time.split(":")[0]) * 2,
+      parseInt(availableTimeObj.end_time.split(":")[0]) * 2,
+    ];
+    const bookingList1 = data[0].appointment_time.map((time) => ({
+      period: [
+        parseInt(time.start_time.split(":")[0]) * 2,
+        parseInt(time.end_time.split(":")[0]) * 2,
+      ],
+    }));
+    // console.log(availableTime1); // Logs: [16, 24]
+    // console.log(bookingList1);
+    setAvailableTime(availableTime1);
+    setBookingList(bookingList1);
+    setDataLoaded(true);
+    console.log(availableTime);
+    console.log(bookingList);
+  }
+
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
@@ -48,10 +108,8 @@ export default function OrderStadiumDetail() {
       console.log("No time selected");
       return false;
     }
-
     // Sort the selected times
     const sortedTimes = selectedOptions.sort();
-
     // Iterate over the sorted times
     for (let i = 0; i < sortedTimes.length - 1; i++) {
       // Parse the hours and minutes of the current time and the next time
@@ -61,37 +119,23 @@ export default function OrderStadiumDetail() {
       const [nextHours, nextMinutes] = sortedTimes[i + 1]
         .split(":")
         .map(Number);
-
       // Calculate the difference in minutes
       const difference =
         nextHours * 60 + nextMinutes - (currentHours * 60 + currentMinutes);
-
       // If the difference is not 30 minutes, the times are not continuous
       if (difference !== 30) {
         console.log("Selected times are not continuous");
         return false;
       }
     }
-
     console.log("Selected times are continuous");
     return [true, `${sortedTimes[0]}~${sortedTimes[sortedTimes.length - 1]}`];
   };
-  // const handleButtonClick = (value) => {
-  //   const index = selectedOptions.indexOf(value);
-  //   console.log(index, selectedOptions);
-  //   if (index < 0) {
-  //     setSelectedOptions([...selectedOptions, value]);
-  //   } else {
-  //     setSelectedOptions([
-  //       ...selectedOptions.slice(0, index),
-  //       ...selectedOptions.slice(index + 1),
-  //     ]);
-  //   }
-  //   console.log(selectedOptions);
-  // };
-  function TimeBtn() {
+
+  function TimeBtn(availableTime, bookingList) {
+    console.log(availableTime[1] - availableTime[0]);
     const availableTimeList = Array.from(
-      new Array(availableTime[1] - 1 - availableTime[0] + 1),
+      new Array(availableTime[1] - availableTime[0]),
       (x, i) => (i + availableTime[0]) / 2
     );
     const btnList = availableTimeList.map((time) => {
@@ -137,6 +181,8 @@ export default function OrderStadiumDetail() {
     }
   };
   return (
+    // <div>
+    //   {dataLoaded ? (
     <div>
       <h1>Order Stadium Detail</h1>
 
@@ -158,7 +204,7 @@ export default function OrderStadiumDetail() {
             </ButtonM>
           </Box>
 
-          <Typography variant="h4">組隊詳細資料</Typography>
+          <Typography variant="h4">預約球場詳細資訊</Typography>
           {/* 內容1 */}
         </Container>
         <Container maxWidth="sm">
@@ -232,7 +278,10 @@ export default function OrderStadiumDetail() {
 
                     <Box mx={1}>
                       <Grid container spacing={1}>
-                        <TimeBtn />
+                        {/* <TimeBtn
+                              bookingList={bookingList}
+                              availableTime={availableTime}
+                            /> */}
                       </Grid>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
@@ -319,7 +368,11 @@ export default function OrderStadiumDetail() {
           </Box>
         </Container>
       </Box>
-      {/* 添加這一行 */}
     </div>
+    //   ) : (
+    //     // Loading indicator
+    //     <p>Loading...</p>
+    //   )}
+    // </div>
   );
 }
