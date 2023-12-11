@@ -34,15 +34,15 @@ const week = {
   "sat":"六",
   "sun":"日"
 }
-function checkTimeSeries(availableTime) {
-  for (const daytime of Object.values(availableTime)) {
-    for (const time of Object.values(daytime)){
-      if (time[1].isBefore(time[0])) {
+function checkTimeSeries(newTime) {
+  
+      if (newTime[1].isBefore(newTime[0])) {
         alert("起始時間與結束時間未按照順序");
         return false;
       }
-    }
-  }
+      else{
+        return true;
+      }
 }
 function checkTimeOverlap(availableTime) {
 
@@ -80,8 +80,11 @@ const EditDialog=(props)=>{
   };
   const handleSubmit = () =>{
     console.log(newTime)
-    setAvailableTime({...availableTime,[selectedDay]:{...availableTime[selectedDay],[id]:newTime}})
-    checkTimeSeries(availableTime)
+    if (checkTimeSeries(newTime)){
+      setAvailableTime({...availableTime,[selectedDay]:{...availableTime[selectedDay],[id]:newTime}})
+    }
+    
+    
     handleClose()
   }
   
@@ -119,13 +122,15 @@ const AddDialog=(props)=>{
     console.log(newTime)
     console.log(availableTime)
     console.log(selectedDay)
-    var newAvailableTime  = availableTime
-    selectedDay.map((day)=>
-      newAvailableTime = {...newAvailableTime,[day]:{...newAvailableTime[day],[Object.keys(newAvailableTime[day]).length]:newTime}}
-    )
-    console.log(newAvailableTime)
-    setAvailableTime(newAvailableTime)
-    checkTimeSeries(availableTime)
+    if(checkTimeSeries(newTime)){
+      var newAvailableTime  = availableTime
+      selectedDay.map((day)=>
+        newAvailableTime = {...newAvailableTime,[day]:{...newAvailableTime[day],[Object.keys(newAvailableTime[day]).length]:newTime}}
+      )
+      console.log(newAvailableTime)
+      setAvailableTime(newAvailableTime)
+    }
+  
     handleClose()
     // checkTimeOverlap(startTimeList, endTimeList)
     // console.log(startTimeList)

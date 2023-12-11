@@ -322,7 +322,7 @@ export default function App() {
         />
         <Route exact path="/adminAddProvider" element={<AdminAddProvider />} />
         <Route exact path="/adminUserHistory" element={<AdminUserHistory />} />
-        {/* <Route exact path="/*" element={<Navigate to="/"/>}/> */}
+        {/* <Route exact path="*" element={<Navigate to="/"/>}/> */}
       </Routes>
       <AuthVerify logOut={logOut} />
     </div>
