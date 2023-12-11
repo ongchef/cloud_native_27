@@ -20,8 +20,8 @@ import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
 import axios from "axios";
 import authHeader from "../authService/authHeader";
 export default function OrderStadium() {
-  const [sport, setSport] = useState("basketball");
-  const [location, setLocation] = useState("Da an");
+  const [sport, setSport] = useState("1");
+  const [location, setLocation] = useState("大安區");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [weekday, setWeekday] = useState(moment(date).day());
@@ -39,24 +39,32 @@ export default function OrderStadium() {
     try {
       const result = await SearchStadium();
       // handle the result
-      setStadiumList(result.data);
+      setStadiumList(result.data.courts);
     } catch (error) {
       // handle the error
       console.log("Error:" + error);
     }
   };
   async function SearchStadium() {
-    setWeekday(moment(date).day());
+    let day = moment(date).day();
+    if (day === 0) {
+      setWeekday(7);
+    } else {
+      setWeekday(day);
+    }
+
     return await axios.get("http://localhost:3000/api/users/appointment", {
       headers: authHeader(),
       params: {
         querytime: date + time.format("HH:mm:ss"),
+        ball: sport,
+        // address: location,
       },
     });
   }
   const [stadiumList, setStadiumList] = useState([]);
   useEffect(() => {
-    SearchStadium().then((res) => setStadiumList(res.data));
+    SearchStadium().then((res) => setStadiumList(res.data.courts));
   }, []);
 
   return (
@@ -101,6 +109,7 @@ export default function OrderStadium() {
               // defaultValue={dayjs("0000-00-00T9:00")}
               onChange={(newTime) => {
                 setTime(newTime);
+                console.log(time);
               }}
             />
           </LocalizationProvider>
@@ -115,9 +124,10 @@ export default function OrderStadium() {
               onChange={handleSportChange}
               label="球類"
             >
-              <MenuItem value={"basketball"}>籃球</MenuItem>
-              <MenuItem value={"badminton"}>羽球</MenuItem>
-              <MenuItem value={"volleyball"}>排球</MenuItem>
+              <MenuItem value={"2"}>籃球</MenuItem>
+              <MenuItem value={"1"}>羽球</MenuItem>
+              <MenuItem value={"3"}>排球</MenuItem>
+              <MenuItem value={"4"}>桌球</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -131,9 +141,9 @@ export default function OrderStadium() {
               onChange={handleLocationChange}
               label="Location"
             >
-              <MenuItem value={"Da an"}>大安區</MenuItem>
-              <MenuItem value={"CC"}>中正區</MenuItem>
-              <MenuItem value={"Xinyi"}>信義區</MenuItem>
+              <MenuItem value={"大安區"}>大安區</MenuItem>
+              <MenuItem value={"文山區"}>文山區</MenuItem>
+              <MenuItem value={"信義區"}>信義區</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -156,7 +166,16 @@ export default function OrderStadium() {
           ]}
         />
         {stadiumList.map((court) => {
-          const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
+          const weekdayMapping = [
+            "日",
+            "一",
+            "二",
+            "三",
+            "四",
+            "五",
+            "六",
+            "日",
+          ];
           const weekdayInChinese = weekdayMapping[weekday];
 
           const availableTime = court.available_time.find(
@@ -175,7 +194,7 @@ export default function OrderStadium() {
               image={pic}
               title={court.name + " - " + court.location}
               description={[
-                court.location,
+                court.address,
                 "週" + weekdayInChinese,
                 startTime + "~" + endTime,
                 court.available,
