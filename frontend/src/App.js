@@ -276,10 +276,12 @@ export default function App() {
       <Routes>
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
-        {/* <Route exact path="*" element={<Navigate to="/"/>}/> */}
+        
         {user && (
         <>
           <Route exact path="/orderStadium" element={<OrderStadium />} />
+            
+         
           <Route exact path="/joinStadium" element={<JoinStadium />} />
 
           <Route
@@ -293,7 +295,7 @@ export default function App() {
             element={<OrderStadiumDetail />}
           />
         </>
-         )} 
+          )}
         <Route exact path="/userProfile" element={<UserProfile />} />
         <Route exact path="/userHistory" element={<UserHistory />} />
         {/* provider */}
@@ -320,6 +322,7 @@ export default function App() {
         />
         <Route exact path="/adminAddProvider" element={<AdminAddProvider />} />
         <Route exact path="/adminUserHistory" element={<AdminUserHistory />} />
+        {/* <Route exact path="/*" element={<Navigate to="/"/>}/> */}
       </Routes>
       <AuthVerify logOut={logOut} />
     </div>
