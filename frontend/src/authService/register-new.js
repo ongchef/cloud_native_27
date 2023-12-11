@@ -19,6 +19,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthInputField from './authInputField';
+
 const required = (value) => {
 	if (!value) {
 		return (
@@ -72,36 +74,6 @@ const Register = () => {
 	const [successful, setSuccessful] = useState(false);
 	const [message, setMessage] = useState('');
 
-	const onChangeUsername = (e) => {
-		const username = e.target.value;
-		setUsername(username);
-	};
-
-	const onChangePassword = (e) => {
-		const password = e.target.value;
-		setPassword(password);
-	};
-
-	const onChangeName = (e) => {
-		const name = e.target.value;
-		setName(name);
-	};
-
-	const onChangeEmail = (e) => {
-		const email = e.target.value;
-		setEmail(email);
-	};
-
-	const onChangePhoneNumber = (e) => {
-		const phoneNumber = e.target.value;
-		setPhoneNumber(phoneNumber);
-	};
-
-	const onChangeLineId = (e) => {
-		const lineId = e.target.value;
-		setPhoneNumber(lineId);
-	};
-
 	const handleRegister = (e) => {
 		e.preventDefault();
 
@@ -152,71 +124,51 @@ const Register = () => {
 					sx={{ mt: 3 }}>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								name="username"
+							<AuthInputField
 								label="Username"
 								type="username"
-								id="username"
-								autoComplete="new-username"
-								onChange={onChangeUsername}
+								name="username"
+								setValue={setUsername}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								name="password"
+							<AuthInputField
 								label="Password"
 								type="password"
-								id="password"
-								autoComplete="new-password"
-								onChange={onChangePassword}
+								name="password"
+								setValue={setPassword}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								id="name"
+							<AuthInputField
 								label="Name"
+								type="name"
 								name="name"
-								autoComplete="name"
-								onChange={onChangeName}
+								setValue={setName}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								id="email"
+							<AuthInputField
 								label="Email Address"
+								type="email"
 								name="email"
-								autoComplete="email"
-								onChange={onChangeEmail}
+								setValue={setEmail}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								id="phone"
+							<AuthInputField
 								label="Phone Number"
+								type="phone"
 								name="phone"
-								autoComplete="phone"
-								onChange={onChangePhoneNumber}
+								setValue={setPhoneNumber}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								id="lineId"
-								label="Line Id"
+							<AuthInputField
+								label="LineId"
+								type="lineId"
 								name="lineId"
-								autoComplete="lineId"
-								onChange={onChangeLineId}
+								setValue={setLineId}
 							/>
 						</Grid>
 					</Grid>

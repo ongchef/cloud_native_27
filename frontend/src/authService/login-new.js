@@ -27,6 +27,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
+import AuthInputField from './authInputField';
 
 const required = (value) => {
 	if (!value) {
@@ -39,7 +40,7 @@ const required = (value) => {
 };
 
 export default function Login() {
-	const [userName, setUserName] = useState('');
+	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState('');
@@ -52,7 +53,7 @@ export default function Login() {
 		setMessage('');
 		setLoading(true);
 		// form.current.validateAll();
-		AuthService.login(userName, password).then(
+		AuthService.login(username, password).then(
 			() => {
 				// this.props.history.push("/profile");
 				window.location.href = '/';
@@ -87,27 +88,17 @@ export default function Login() {
 					Log in
 				</Typography>
 				<Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
-					<TextField
-						margin="normal"
-						required
-						fullWidth
-						id="username"
+					<AuthInputField
 						label="Username"
+						type="username"
 						name="username"
-						autoComplete="username"
-						autoFocus
-						onChange={(e) => setUserName(e.target.value)}
+						setValue={setUsername}
 					/>
-					<TextField
-						margin="normal"
-						required
-						fullWidth
-						name="password"
+					<AuthInputField
 						label="Password"
 						type="password"
-						id="password"
-						autoComplete="password"
-						onChange={(e) => setPassword(e.target.value)}
+						name="password"
+						setValue={setPassword}
 					/>
 					<FormControlLabel
 						control={<Checkbox value="remember" color="primary" />}
