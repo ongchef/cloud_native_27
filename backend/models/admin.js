@@ -3,51 +3,45 @@ import db from './connection_db.js';
 // get courts appointment query
 export const getCourtsAppointmentQuery = (params) => {
     const name = params.name !== 'ALL' ? params.name : null;
-    const ball = params.ball !== 'ALL' ? params.ball : null;
-    const ballarray = JSON.parse(ball);
-    let placeholders = [];
-    if (ball !== 'ALL' && ballarray.length >= 1) {
-        placeholders = ballarray.map(() => '?').join(', ');
-    }
-    console.log(ballarray);
-    console.log(placeholders);
-    const address = params.address !== 'ALL' ? params.address : null;
     const date = params.date !== 'ALL' ? params.date : null;
-    const page = params.page || 1;
-    const limit = 10;
-    const offset = (page - 1) * limit;
+    const ball = params.ball !== 'ALL' ? params.ball : null;
+    const address = params.address !== 'ALL' ? params.address : null;
+
+    let searchQuery = "";
+    if (address !== null) {
+        searchQuery += `WHERE address like '%${address}%'`;
+    }
+    if (name !== null) {
+        searchQuery += ` AND name = '${name}'`;
+    }
+    if (date !== null) {
+        searchQuery += ` AND date = '${date}'`;
+    }
 
     return new Promise((resolve, reject) => {
-        db.query(`SELECT COUNT(*) AS total_count FROM (
-            SELECT COURT.* FROM STADIUM.COURT 
-            INNER JOIN STADIUM.APPOINTMENT ON COURT.court_id = APPOINTMENT.court_id
-            INNER JOIN STADIUM.APPOINTMENT_TIME ON APPOINTMENT.appointment_id = APPOINTMENT_TIME.appointment_id
-            INNER JOIN USER ON COURT.admin_id = USER.user_id
-            WHERE 
-                (USER.name = ? OR ? IS NULL) 
-                AND (COURT.ball_type_id IN (${placeholders}) OR ? IS NULL)
-                AND (address = ? OR ? IS NULL)
-                AND (date = ? OR ? IS NULL)
-        ) AS result;
-        
-        SELECT COURT.* FROM STADIUM.COURT 
-            INNER JOIN STADIUM.APPOINTMENT ON COURT.court_id = APPOINTMENT.court_id
-            INNER JOIN STADIUM.APPOINTMENT_TIME ON APPOINTMENT.appointment_id = APPOINTMENT_TIME.appointment_id
-            INNER JOIN USER ON COURT.admin_id = USER.user_id
-            WHERE 
-                (USER.name = ? OR ? IS NULL) 
-                AND (COURT.ball_type_id IN (${placeholders}) OR ? IS NULL) 
-                AND (address = ? OR ? IS NULL)
-                AND (date = ? OR ? IS NULL)
-            LIMIT ? OFFSET ?;
-        `, [name, name, ...ballarray, ball, address, address, date, date, name, name, ...ballarray, ball, address, address, date, date, limit, offset],(error, results) => {
+
+        db.query(`SELECT * from STADIUM.COURT ${searchQuery}`, (error, results) => {
             if (error) {
                 reject(error);
             } else {
-                let returns = {}
-                returns['total_page'] = Math.ceil(results[0][0]['total_count']/10)
-                returns['courts'] = results[1]
-                resolve(returns);
+                if (ball === null) {
+                    resolve(results);
+                }
+                else {
+                    const search_results = results.reduce((result, court) => {
+                        const ball_type_id_list = court['ball_type_id'].split(',')
+                        const ball_query = []
+                        for (let i = 0; i < ball.length; i++) {
+                            ball_query.push(ball[i])
+                        }
+                        const found = ball_query.some(r => ball_type_id_list.includes(r))
+                        if (found) {
+                            result.push(court)
+                        }
+                        return result
+                    }, [])
+                    resolve(search_results);
+                }
             }
         });
     });

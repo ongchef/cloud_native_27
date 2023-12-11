@@ -89,14 +89,23 @@ export const getCourtsAppointments = async(req,res) => {
 
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
-    let data = {};
     const admin_id = req.token;
 
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
-        
+        let limit = 10;
+        let page = req.query['page'];
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
         const result = await getCourtsAppointmentQuery(req.query)
-        return res.status(200).json(result)
+        const paginatedResults = result.slice(startIndex, endIndex);
+        const total_page = Math.ceil(result.length/limit);
+        const returns = {
+            "total_page": total_page,
+            "courts": paginatedResults
+        }
+        return res.status(200).json(returns)
 
     } else {
 
