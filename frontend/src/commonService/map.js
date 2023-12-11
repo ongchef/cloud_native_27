@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 
 export default function Map(latitude, longitude, name) {
   const [open, setOpen] = useState(false);
-
+  const mapName = name;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -46,9 +46,8 @@ export default function Map(latitude, longitude, name) {
     const marker = L.marker([25.014057657671447, 121.53812819619687], {
       icon: greenIcon,
     }).addTo(mymap);
-
-    marker.bindPopup("管理學院").openPopup();
-
+    console.log(mapName);
+    marker.bindPopup(name).openPopup();
     L.circle([25.03418, 121.564517], {
       color: "red",
       fillColor: "#f03",

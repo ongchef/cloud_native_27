@@ -20,7 +20,7 @@ import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
 import axios from "axios";
 import authHeader from "../authService/authHeader";
 export default function OrderStadium() {
-  const [sport, setSport] = useState("羽球");
+  const [sport, setSport] = useState("1");
   const [location, setLocation] = useState("大安區");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
@@ -57,7 +57,7 @@ export default function OrderStadium() {
       headers: authHeader(),
       params: {
         querytime: date + time.format("HH:mm:ss"),
-        // ball: sport,
+        ball: sport,
         // address: location,
       },
     });
@@ -124,9 +124,10 @@ export default function OrderStadium() {
               onChange={handleSportChange}
               label="球類"
             >
-              <MenuItem value={"籃球"}>籃球</MenuItem>
-              <MenuItem value={"羽球"}>羽球</MenuItem>
-              <MenuItem value={"排球"}>排球</MenuItem>
+              <MenuItem value={"2"}>籃球</MenuItem>
+              <MenuItem value={"1"}>羽球</MenuItem>
+              <MenuItem value={"3"}>排球</MenuItem>
+              <MenuItem value={"4"}>桌球</MenuItem>
             </Select>
           </FormControl>
         </Box>
