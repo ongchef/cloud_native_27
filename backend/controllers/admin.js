@@ -1,6 +1,7 @@
 import {
     getCourtsAppointmentDetailsQuery,
     getCourtsAppointmentQuery,
+    getCourtAllAppointment,
     postCourtsProviderQuery,
     getUserHistoriesQuery,
     putUsersByIdQuery,
@@ -18,6 +19,8 @@ import {
 } from '../models/appointment.js';
 import {
     hashPassword,
+    availableCourtChecker,
+    parseISODate
 } from '../utils/helper.js';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -94,17 +97,32 @@ export const getCourtsAppointments = async(req,res) => {
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
         const result = await getCourtsAppointmentQuery(req.query)
-
         //date filter
+        let courts = []
+        for(let i = 0; i < result.length; i++) {
+            let court = await getCourtAllAppointment(result[i]['court_id'])
+            let found = 0;
+            for(let j = 0; j < court.length; j++) {
+                court[j]['date'] = court[j]['date'].toISOString().split('T')[0]
+                if(availableCourtChecker(court[j], req.query['query_time'])) {
+                    found = 1
+                    break;
+                }
+            }
+            if (found === 1) {
+                courts.push(result[i])
+            }
+        }
+        
         
         //pagination and count the total page
         let limit = 10;
         let page = req.query['page'];
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        
-        const paginatedResults = result.slice(startIndex, endIndex);
-        const total_page = Math.ceil(result.length/limit);
+
+        const paginatedResults = courts.slice(startIndex, endIndex);
+        const total_page = Math.ceil(courts.length/limit);
         const returns = {
             "total_page": total_page,
             "courts": paginatedResults

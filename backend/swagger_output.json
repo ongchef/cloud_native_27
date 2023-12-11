@@ -576,7 +576,7 @@
           },
           {
             "in": "query",
-            "name": "date",
+            "name": "query_time",
             "schema": {
               "type": "string",
               "example": "2023-11-12 00:00:00"

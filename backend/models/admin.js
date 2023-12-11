@@ -51,6 +51,19 @@ export const getCourtsAppointmentQuery = (params) => {
     });
 }
 
+//get court all appointments
+export const getCourtAllAppointment = (court_id) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT A.appointment_id, AT.date, AT.start_time, AT.end_time FROM STADIUM.APPOINTMENT A JOIN STADIUM.APPOINTMENT_TIME AT ON A.appointment_id = AT.appointment_id`, [court_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
 // get courts appointment details query
 export const getCourtsAppointmentDetailsQuery = (data) => {
 
