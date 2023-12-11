@@ -93,12 +93,16 @@ export const getCourtsAppointments = async(req,res) => {
 
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
+        const result = await getCourtsAppointmentQuery(req.query)
+
+        //date filter
+        
+        //pagination and count the total page
         let limit = 10;
         let page = req.query['page'];
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-
-        const result = await getCourtsAppointmentQuery(req.query)
+        
         const paginatedResults = result.slice(startIndex, endIndex);
         const total_page = Math.ceil(result.length/limit);
         const returns = {

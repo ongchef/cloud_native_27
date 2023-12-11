@@ -8,19 +8,23 @@ export const getCourtsAppointmentQuery = (params) => {
     const address = params.address !== 'ALL' ? params.address : null;
 
     let searchQuery = "";
+    let inti = 0;
     if (address !== null) {
         searchQuery += `WHERE address like '%${address}%'`;
+        inti = 1;
     }
     if (name !== null) {
-        searchQuery += ` AND name = '${name}'`;
-    }
-    if (date !== null) {
-        searchQuery += ` AND date = '${date}'`;
+        if (inti === 0) {
+            searchQuery += `WHERE U.name = '${name}'`
+        } else {
+            searchQuery += ` AND U.name = '${name}'`;
+        }
     }
 
     return new Promise((resolve, reject) => {
 
-        db.query(`SELECT * from STADIUM.COURT ${searchQuery}`, (error, results) => {
+        db.query(`SELECT * from STADIUM.COURT C JOIN STADIUM.USER U ON C.admin_id = U.user_id
+            ${searchQuery}`, (error, results) => {
             if (error) {
                 reject(error);
             } else {
@@ -54,9 +58,10 @@ export const getCourtsAppointmentDetailsQuery = (data) => {
 
     return new Promise((resolve, reject) => {
 
-        db.query(`SELECT start_time, end_time, COUNT(P.appointment_id) AS participant_count, name, address 
+        db.query(`SELECT start_time, end_time, COUNT(P.appointment_id) AS participant_count, U.name, address 
         FROM STADIUM.APPOINTMENT_TIME AS AT INNER JOIN STADIUM.APPOINTMENT AS A ON AT.appointment_id = A.appointment_id 
         LEFT JOIN STADIUM.PARTICIPANT AS P ON A.appointment_id = P.appointment_id
+        LEFT JOIN STADIUM.COURT as C ON A.court_id = C.court_id
         LEFT JOIN STADIUM.USER AS U ON A.creator_id = U.user_id
         WHERE A.court_id = ? GROUP BY AT.start_time, AT.end_time`, [court_id], (error, results) => {
             if (error) {
