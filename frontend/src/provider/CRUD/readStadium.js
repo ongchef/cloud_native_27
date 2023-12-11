@@ -22,14 +22,22 @@ import pic2 from "../../pic/羽球3.png";
 import fakeStadium from "../../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination";
 import AddIcon from "@mui/icons-material/Add";
-
+import FetchData from "../../authService/fetchData";
+async function SearchCourt(){
+  return FetchData.getData("http://localhost:3000/api/courts/admin",10)
+  // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
+}
 export default function ReadStadium() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
+  const [courtList, setCourtList] = useState([])
   useEffect(() => {
     fakeStadium();
+    SearchCourt().then((res)=>
+      setCourtList(res)
+    )
   });
   const handleSportChange = (event) => {
     setSport(event.target.value);
@@ -143,39 +151,23 @@ export default function ReadStadium() {
         </Grid>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-        <StadiumCard
-          id={1}
-          image={pic2}
-          title={"球場名稱1"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週五",
-            "16:00~22:00",
-            6,
-          ]}
-        />
-        <StadiumCard
-          id={2}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週五",
-            "16:00~22:00",
-            7,
-          ]}
-        />
-        <StadiumCard
-          id={3}
-          image={pic2}
-          title={"球場名稱3"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週五",
-            "16:00~22:00",
-            8,
-          ]}
-        />
+      {
+          courtList.map((court)=>
+             <StadiumCard
+            id={court.court_id}
+            image={pic}
+            title={court.name}
+
+            description={[
+              court.location,
+              "週一至週五",
+              "16:00~22:00",
+              court.available,
+            ]}
+          />
+          )
+        }
+        
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}

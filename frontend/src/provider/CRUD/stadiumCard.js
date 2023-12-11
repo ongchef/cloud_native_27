@@ -46,7 +46,7 @@ export default function OrderStadiumCard({ id, image, title, description }) {
               </Typography>
               <Button
                 variant="contained"
-                onClick={() => navigate(`/stadiumBookingDetail?id=${id}`)} // Include the id in the string
+                onClick={() => navigate(`/updateStadium?id=${id}`)} // Include the id in the string
               >
                 修改球場資訊
               </Button>
