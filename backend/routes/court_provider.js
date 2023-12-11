@@ -7,6 +7,7 @@ import {
     postCourts,
     deleteCourtsById
 } from '../controllers/court_provider.js';
+import { upload } from '../middleware/multer.js';
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ const router = express.Router();
 router.get("/", getCourts);
 
 // POST /api/courts
-router.post("/", postCourts)
+router.post("/", upload, postCourts)
 
 // PUT /api/courts
 router.put("/", putCourtsById);

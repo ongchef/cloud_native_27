@@ -2,6 +2,11 @@ import Moment from 'moment';
 import MomentRange from 'moment-range';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
+import { imgurClient } from '../config/imgur.js';
+import dotenv from 'dotenv'
+
+// load variables stored in .env
+dotenv.config();
 
 // check available courts according to query time
 // query_time format: 'YYYY-MM-DD hh:mm:ss'
@@ -53,4 +58,12 @@ export const parseISODate = (date) => {
 export const add_one_day = (date) => {
     const cur_date = new Date(date);
     return `${cur_date.getFullYear()}-${cur_date.getMonth()+1}-${cur_date.getDate()+1}`
+}
+
+export const imageClient = (image_file) => {
+    return imgurClient.upload({
+            image: image_file.toString('base64'),
+            type: 'base64',
+            album: process.env.IMGUR_ALBUM_ID
+        });
 }

@@ -20,7 +20,8 @@ import {
 } from '../models/users.js'
 
 import {
-    add_one_day
+    add_one_day,
+    imageClient,
 } from "../utils/helper.js";
 
 export const getCourts = async(req,res) => {
@@ -159,9 +160,22 @@ export const postCourts = async(req,res) => {
     };
     const iscourtsprovider = await isCourtsProvider(verify_data);
     if (iscourtsprovider) {
-        const result = await postCourtsQuery(req.body);
+        // get the image and court data
+        const image_file = req.files[0].buffer;
+        let court_data = JSON.parse(req.files[1].buffer.toString());
 
-        return res.status(200).json(result);
+        try{
+            const upload_img = await imageClient(image_file);
+            court_data['admin_id'] = req.token;
+            court_data['image_url'] = upload_img['data']['link']
+            court_data['ball_type_id'] = court_data['ball_type_id'].toString();
+            const result = await postCourtsQuery(court_data);
+            return res.status(200).json(result);
+        } catch(error) {
+            console.log(error)
+            return res.status(400).json("Fail to create a court!");
+        }
+
     } else {
         return res.status(401).json("You are not the court provider!")
     }

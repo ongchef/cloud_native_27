@@ -64,7 +64,7 @@ export const searchCourtsQuery = (ball, address) => {
 
 export const getCourtsInfoByAppointmentIdQuery = (data) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT c.name as court_name, c.location, c.address, app_t.date, app_t.start_time, app_t.end_time, 
+        db.query(`SELECT c.name as court_name, c.location, c.address, c.image_url, app_t.date, app_t.start_time, app_t.end_time, 
         app.ball, app.level, app.rule, s.name as creator_name, app.attendence, c.available 
         FROM STADIUM.APPOINTMENT app 
         INNER JOIN STADIUM.COURT c on app.court_id = c.court_id 
@@ -106,7 +106,7 @@ export const getCourtsNotInIdListQuery = (data) => {
 
 export const getCourtsOrderInfoInIdListQuery = (data) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT c.name, c.location, c.address, c.available, c.court_id FROM STADIUM.COURT c where court_id in (?)`, [data], (error, results) => {
+        db.query(`SELECT c.name, c.location, c.address, c.available, c.court_id, c.image_url FROM STADIUM.COURT c where court_id in (?)`, [data], (error, results) => {
             if (error) {
                 reject(error);
             } else {
