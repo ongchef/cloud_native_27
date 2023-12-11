@@ -34,26 +34,25 @@ const week = {
   "sat":"六",
   "sun":"日"
 }
-function checkTimeSeries(startTimeList, endTimeList) {
-  for (const [id, time] of Object.entries(startTimeList)) {
-    const startTime = time;
-    const endTime = endTimeList[id];
-    if (endTime.isBefore(startTime)) {
-      alert("起始時間與結束時間未按照順序");
-      return false;
+function checkTimeSeries(availableTime) {
+  for (const daytime of Object.values(availableTime)) {
+    for (const time of Object.values(daytime)){
+      if (time[1].isBefore(time[0])) {
+        alert("起始時間與結束時間未按照順序");
+        return false;
+      }
     }
   }
 }
-function checkTimeOverlap(startTimeList, endTimeList) {
-  console.log(startTimeList);
-  console.log(endTimeList);
-  var timeList = [];
-  for (const [id, time] of Object.entries(startTimeList)) {
+function checkTimeOverlap(availableTime) {
+
+  for (const [day, daytime] of Object.entries(availableTime)) {
+    var timeList = [];
+    for (const time of Object.values(daytime)){
+      timeList.push(time)
+    }
     console.log(timeList);
-    timeList.push([time, endTimeList[id]]);
-  }
-  console.log(timeList);
-  timeList.sort(function (a, b) {
+    timeList.sort(function (a, b) {
     if (a[0].isAfter(b[0])) {
       return 1;
     } else {
@@ -62,10 +61,12 @@ function checkTimeOverlap(startTimeList, endTimeList) {
   });
   for (var i = 0; i < timeList.length - 1; i++) {
     if (timeList[i][1].isAfter(timeList[i + 1][0])) {
-      alert("時段重疊");
+      alert("星期"+week[day]+"時段重疊");
     }
   }
   console.log(timeList);
+  }
+  
 }
 const EditDialog=(props)=>{
   const [open, setOpen] = useState(false);
@@ -80,6 +81,7 @@ const EditDialog=(props)=>{
   const handleSubmit = () =>{
     console.log(newTime)
     setAvailableTime({...availableTime,[selectedDay]:{...availableTime[selectedDay],[id]:newTime}})
+    checkTimeSeries(availableTime)
     handleClose()
   }
   
@@ -123,9 +125,8 @@ const AddDialog=(props)=>{
     )
     console.log(newAvailableTime)
     setAvailableTime(newAvailableTime)
-
+    checkTimeSeries(availableTime)
     handleClose()
-    // checkTimeSeries(startTimeList,endTimeList)
     // checkTimeOverlap(startTimeList, endTimeList)
     // console.log(startTimeList)
   }
@@ -215,7 +216,7 @@ const  FormDialog=(props)=>{
   );
 }
 
-export default function EditStadium() {
+export default function UpdateStadium() {
   const navigate = useNavigate();
   const [image, setImage] = useState();
   const [ availableTime, setAvailableTime] = useState({
@@ -279,7 +280,7 @@ export default function EditStadium() {
             <Card sx={{ width: "70vw", margin: "auto" }}>
               <Grid container>
                 <Grid item xs={6}>
-                  <CardMedia component="img" src={image} alt="Stadium" />
+                  {image&&<CardMedia component="img" src={image} alt="Stadium" />}
                   <TextField
                     type="file"
                     onChange={(e) => {
@@ -317,6 +318,9 @@ export default function EditStadium() {
                       )
                     })}
                     <AddDialog availableTime={availableTime} setAvailableTime={setAvailableTime}/>
+                    <Button onClick={()=>checkTimeOverlap(availableTime)}>
+                      送出
+                    </Button>
                   </CardContent>
                 </Grid>
               </Grid>

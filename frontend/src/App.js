@@ -37,6 +37,7 @@ import AdminAddProvider from "./adminService/adminAddProvider";
 import AdminUserHistory from "./adminService/adminUserHistory";
 import UserProfile from "./userService/userProfile";
 import Map from "./commonService/map";
+import UpdateStadium from "./provider/CRUD/updateStadium";
 
 const drawerWidth = 240;
 
@@ -275,7 +276,7 @@ export default function App() {
       <Routes>
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
-        <Route exact path="*" element={<Navigate to="/"/>}/>
+        {/* <Route exact path="*" element={<Navigate to="/"/>}/> */}
         {user && (
         <>
           <Route exact path="/orderStadium" element={<OrderStadium />} />
@@ -304,6 +305,7 @@ export default function App() {
         />
         <Route exact path="/readStadium" element={<ReadStadium />} />
         <Route exact path="/createStadium" element={<CreateStadium />} />
+        <Route exact path="/updateStadium" element={<UpdateStadium/>} />
         <Route exact path="/map" element={<Map />} />
         {/* admin */}
         <Route
