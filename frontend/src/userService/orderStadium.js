@@ -58,7 +58,7 @@ export default function OrderStadium() {
       params: {
         querytime: date + time.format("HH:mm:ss"),
         ball: sport,
-        // address: location,
+        address: location,
       },
     });
   }
