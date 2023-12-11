@@ -56,7 +56,7 @@ export default function OrderStadium() {
   }
   const [stadiumList, setStadiumList] = useState([]);
   useEffect(() => {
-    SearchStadium().then((res) => setStadiumList(res.data));
+    SearchStadium().then((res) => setStadiumList(res.data.courts));
   }, []);
 
   return (
