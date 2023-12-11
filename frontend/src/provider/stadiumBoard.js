@@ -34,9 +34,27 @@ export default function StadiumBoard() {
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
   const [courtList, setCourtList] = useState([])
+  const [weekday, setWeekday] = useState(moment(date).day());
+  const weekdayMapping = [
+    "日",
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六",
+    "日",
+  ];
   useEffect(() => {
     SearchCourt().then((res)=>
-      setCourtList(res)
+      {
+        setCourtList(res)
+        let day = moment(date).day()
+        if (day === 0) {
+          setWeekday(7);
+        } else {
+          setWeekday(day);
+        }}
     )
   },[]);
   const handleSportChange = (event) => {
@@ -150,20 +168,34 @@ export default function StadiumBoard() {
         </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         {
-          courtList.map((court)=>
-             <StadiumCard
-            id={court.court_id}
-            image={pic}
-            title={court.name}
+          
+          courtList.map((court)=>{
+            const weekdayInChinese = weekdayMapping[weekday];
 
-            description={[
-              court.location,
-              "週一至週五",
-              "16:00~22:00",
-              court.available,
-            ]}
-          />
-          )
+          const availableTime = court.available_time.find(
+            (time) => time.weekday === weekday
+          );
+          const startTime = availableTime
+            ? availableTime.start_time.substring(0, 5)
+            : "";
+          const endTime = availableTime
+            ? availableTime.end_time.substring(0, 5)
+            : "";
+            return (
+            <StadiumCard
+              id={court.court_id}
+              image={pic}
+              title={court.name}
+
+              description={[
+                court.location,
+                "週一至週五",
+                "16:00~22:00",
+                court.available,
+              ]}
+            />)
+          })
+          
         }
         {/* // <StadiumCard
         //   id={1}
