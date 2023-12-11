@@ -131,14 +131,41 @@ export const putCourtsById = async(req,res) => {
     };
     const iscourtsprovider = await isCourtsProvider(verify_data);
     if (iscourtsprovider) {
-        req.body['court_id'] = req.query['court_id'];
-        req.body['admin_id'] = req.token;
-        const iscourtadmin = await isCourtsAdmin(req.body)
+        const auth_data = {}
+        auth_data['court_id'] = req.query['court_id'];
+        auth_data['admin_id'] = req.token;
+        const iscourtadmin = await isCourtsAdmin(auth_data);
+
         if (iscourtadmin) {
-            if (typeof req.body['ball_type_id'] !== "undefined") {
-                req.body['ball_type_id'] = req.body['ball_type_id'].toString();
+
+            // get the image or update data
+            let image_file, update_data;
+            let court_data = {}
+            court_data = { ...auth_data };
+
+            if (req.files.length != 0) {
+                for (let i=0; i<req.files.length; i++) {
+                    if (req.files[i]['fieldname'] == 'img') {
+                        image_file = req.files[i].buffer;
+                        const upload_img = await imageClient(image_file);
+                        court_data['image_url'] = upload_img['data']['link']
+                    } else if (req.files[i]['fieldname'] == 'data') {
+                        update_data = JSON.parse(req.files[i].buffer.toString());
+                        court_data = {
+                            ...court_data,
+                            ...update_data
+                        }
+                        if (typeof court_data['ball_type_id'] !== "undefined") {
+                            court_data['ball_type_id'] = court_data['ball_type_id'].toString();
+                        }
+                    }
+                }
+
+            } else {
+                return res.status(400).json("Some of data is missing!");
             }
-            const result = await putCourtsByIdQuery(req.body);
+            
+            const result = await putCourtsByIdQuery(court_data);
             return res.status(200).json(result);
     
         } else {
@@ -161,19 +188,29 @@ export const postCourts = async(req,res) => {
     const iscourtsprovider = await isCourtsProvider(verify_data);
     if (iscourtsprovider) {
         // get the image and court data
-        const image_file = req.files[0].buffer;
-        let court_data = JSON.parse(req.files[1].buffer.toString());
+        let image_file, court_data;
+        if (req.files.length == 2) {
+            for (let i=0; i<req.files.length; i++) {
+                if (req.files[i]['fieldname'] == 'img') {
+                    image_file = req.files[i].buffer;
+                } else if (req.file[i]['fieldname'] == 'data') {
+                    court_data = JSON.parse(req.files[i].buffer.toString());
+                }
+            }
 
-        try{
-            const upload_img = await imageClient(image_file);
-            court_data['admin_id'] = req.token;
-            court_data['image_url'] = upload_img['data']['link']
-            court_data['ball_type_id'] = court_data['ball_type_id'].toString();
-            const result = await postCourtsQuery(court_data);
-            return res.status(200).json(result);
-        } catch(error) {
-            console.log(error)
-            return res.status(400).json("Fail to create a court!");
+            try{
+                const upload_img = await imageClient(image_file);
+                court_data['admin_id'] = req.token;
+                court_data['image_url'] = upload_img['data']['link']
+                court_data['ball_type_id'] = court_data['ball_type_id'].toString();
+                const result = await postCourtsQuery(court_data);
+                return res.status(200).json(result);
+            } catch(error) {
+                // console.log(error)
+                return res.status(400).json("Fail to create a court!");
+            }
+        } else {
+            return res.status(400).json("Some of data is missing!");
         }
 
     } else {

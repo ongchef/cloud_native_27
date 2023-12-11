@@ -18,7 +18,7 @@ router.get("/", getCourts);
 router.post("/", upload, postCourts)
 
 // PUT /api/courts
-router.put("/", putCourtsById);
+router.put("/", upload, putCourtsById);
 
 // DELETE /api/courts
 router.delete("/", deleteCourtsById)
