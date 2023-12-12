@@ -250,6 +250,51 @@
         }
       }
     },
+    "/api/users/appointmentDetail": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bearer + authentication token"
+          },
+          {
+            "name": "court_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "properties": {
+                "address": {
+                  "example": "1"
+                }
+              }
+            }
+          },
+          {
+            "name": "query_time",
+            "in": "query",
+            "schema": {
+              "type": "Date",
+              "properties": {
+                "address": {
+                  "example": "2023-11-21 14:00:00"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/users/appointment/join": {
       "get": {
         "description": "",
