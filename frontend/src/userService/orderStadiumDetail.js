@@ -133,7 +133,8 @@ export default function OrderStadiumDetail() {
     return [true, `${sortedTimes[0]}~${sortedTimes[sortedTimes.length - 1]}`];
   };
 
-  function TimeBtn(availableTime, bookingList) {
+  function TimeBtn(props) {
+    const {availableTime, bookingList} = props
     console.log(availableTime[1] - availableTime[0]);
     const availableTimeList = Array.from(
       new Array(availableTime[1] - availableTime[0]),
@@ -279,6 +280,8 @@ export default function OrderStadiumDetail() {
 
                     <Box mx={1}>
                       <Grid container spacing={1}>
+                        {console.log(availableTime)}
+                        {console.log(bookingList)}
                        {bookingList&&availableTime&&
                         (<TimeBtn
                               bookingList={bookingList}
