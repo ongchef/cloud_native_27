@@ -14,6 +14,7 @@ import ButtonM from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaceIcon from "@mui/icons-material/Place";
+import CircularProgress from '@mui/material/CircularProgress';
 // Ant Design components
 import { Input } from "antd";
 import { Button } from "antd";
@@ -50,6 +51,7 @@ export default function OrderStadiumDetail() {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [availableTime, setAvailableTime] = useState();
   const [bookingList, setBookingList] = useState([]);
+  const [loading, setLoading] = useState(true)
   async function StadiumDetail() {
     return await axios.get(
       "http://localhost:3000/api/users/appointmentDetail",
@@ -64,9 +66,11 @@ export default function OrderStadiumDetail() {
   }
 
   useEffect(() => {
+    setLoading(true)
     StadiumDetail().then((res) => {
       console.log(res.data);
       SetDetails(res.data);
+      setLoading(false)
     });
   }, []);
 
@@ -278,11 +282,15 @@ export default function OrderStadiumDetail() {
                       <Grid container spacing={1}>
                         {console.log(availableTime)}
                         {console.log(bookingList)}
-                        {bookingList && availableTime && (
+                        {true?
+                        <Box sx={{display:'flex', justifyContent:'center'}}>
+                          <CircularProgress />
+                        </Box>
+                        :(bookingList && availableTime && (
                           <TimeBtn
                             bookingList={bookingList}
                             availableTime={availableTime}
-                          />
+                          />)
                         )}
                       </Grid>
                     </Box>

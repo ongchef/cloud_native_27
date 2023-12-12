@@ -163,6 +163,7 @@ export default function ReadStadium() {
               variant="outlined"
               startIcon={<AddIcon />}
               sx={{ lineHeight: 0 }}
+              onClick={()=>window.location.href="/createStadium"}
             >
               新增球場
             </Button>
