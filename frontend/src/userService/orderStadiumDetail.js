@@ -62,18 +62,16 @@ export default function OrderStadiumDetail() {
       }
     );
   }
-  const [stadiumDetail, setStadiumDetail] = useState([]);
 
   useEffect(() => {
     StadiumDetail().then((res) => {
       console.log(res.data);
-      setStadiumDetail(res.data);
       SetDetails(res.data);
     });
   }, []);
 
   function SetDetails(data) {
-    const date = new Date(data[0].appointment_time[0].date);
+    const date = new Date(datetime.split(" ")[0]);
     const weekday = date.getDay() || 7; // Convert Sunday from 0 to 7
     const availableTimeObj = data[0].available_time.find(
       (time) => time.weekday === weekday
@@ -88,8 +86,6 @@ export default function OrderStadiumDetail() {
         parseInt(time.end_time.split(":")[0]) * 2,
       ],
     }));
-    // console.log(availableTime1); // Logs: [16, 24]
-    // console.log(bookingList1);
     setAvailableTime(availableTime1);
     setBookingList(bookingList1);
     setDataLoaded(true);
@@ -134,7 +130,7 @@ export default function OrderStadiumDetail() {
   };
 
   function TimeBtn(props) {
-    const {availableTime, bookingList} = props
+    const { availableTime, bookingList } = props;
     console.log(availableTime[1] - availableTime[0]);
     const availableTimeList = Array.from(
       new Array(availableTime[1] - availableTime[0]),
@@ -282,11 +278,12 @@ export default function OrderStadiumDetail() {
                       <Grid container spacing={1}>
                         {console.log(availableTime)}
                         {console.log(bookingList)}
-                       {bookingList&&availableTime&&
-                        (<TimeBtn
-                              bookingList={bookingList}
-                              availableTime={availableTime}
-                            />)}
+                        {bookingList && availableTime && (
+                          <TimeBtn
+                            bookingList={bookingList}
+                            availableTime={availableTime}
+                          />
+                        )}
                       </Grid>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">

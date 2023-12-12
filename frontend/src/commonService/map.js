@@ -12,7 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import PlaceIcon from "@mui/icons-material/Place";
 import IconButton from "@mui/material/IconButton";
 
-export default function Map(latitude, longitude, name) {
+export default function Map({ latitude, longtitude, name }) {
   const [open, setOpen] = useState(false);
   const mapName = name;
   const handleClickOpen = () => {
@@ -23,10 +23,7 @@ export default function Map(latitude, longitude, name) {
     setOpen(false);
   };
   useEffect(() => {
-    const mymap = L.map("mapid").setView(
-      [25.014057657671447, 121.53812819619687],
-      17
-    );
+    const mymap = L.map("mapid").setView([latitude, longtitude], 17);
     const OSMUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
     L.tileLayer(OSMUrl).addTo(mymap);
@@ -43,12 +40,12 @@ export default function Map(latitude, longitude, name) {
       shadowSize: [41, 41],
     });
 
-    const marker = L.marker([25.014057657671447, 121.53812819619687], {
+    const marker = L.marker([latitude, longtitude], {
       icon: greenIcon,
     }).addTo(mymap);
     console.log(mapName);
     marker.bindPopup(name).openPopup();
-    L.circle([25.03418, 121.564517], {
+    L.circle([latitude, longtitude], {
       color: "red",
       fillColor: "#f03",
       fillOpacity: 0.5,
