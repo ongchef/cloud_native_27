@@ -172,25 +172,25 @@ export default function StadiumBoard() {
           courtList.map((court)=>{
             const weekdayInChinese = weekdayMapping[weekday];
 
-          const availableTime = court.available_time.find(
-            (time) => time.weekday === weekday
-          );
-          const startTime = availableTime
-            ? availableTime.start_time.substring(0, 5)
-            : "";
-          const endTime = availableTime
-            ? availableTime.end_time.substring(0, 5)
-            : "";
+            const availableTime = court.available_time.find(
+              (time) => time.weekday === weekday
+            );
+            const startTime = availableTime
+              ? availableTime.start_time.substring(0, 5)
+              : "";
+            const endTime = availableTime
+              ? availableTime.end_time.substring(0, 5)
+              : "";
             return (
             <StadiumCard
               id={court.court_id}
               image={pic}
-              title={court.name}
+              title={court.name + " - " + court.location}
 
               description={[
-                court.location,
-                "週一至週五",
-                "16:00~22:00",
+                court.address,
+                "週" + weekdayInChinese,
+                startTime + "~" + endTime,
                 court.available,
               ]}
             />)

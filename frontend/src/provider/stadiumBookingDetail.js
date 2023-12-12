@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"; // 引入useNavigate
 import Button from "@mui/material/Button"; // 引入Button元件
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
 import pic2 from "../pic/羽球3.png";
@@ -11,8 +11,11 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
+import FetchData from "../authService/fetchData";
+import dayjs from "dayjs";
+import moment from "moment";
 
-const availableTime = [26, 40];
+const availableTime = [moment("13:00","HH:mm"),moment("15:00","HH:mm")];
 const bookingList = [
   {
     num: 4,
@@ -25,51 +28,80 @@ const bookingList = [
 ];
 
 function TimeBtn() {
-  const availableTimeList = Array.from(
-    new Array(availableTime[1] - 1 - availableTime[0] + 1),
-    (x, i) => (i + availableTime[0]) / 2
-  );
+  var availableTimeList = [availableTime[0]]
+  console.log(availableTime[0])
+  do{
+    var time = availableTimeList[availableTimeList.length-1]
+    console.log(time)
+    time = moment(time.add(30,'minutes').format("HH:mm"),"HH:mm")
+    // console.log(time.add(30,"minutes").format("hh:mm"))
+    availableTimeList.push(time)
+    console.log(time)
+    console.log(availableTime[1])
+    console.log(time.isBefore(availableTime[1]))
+  }while(false)
+  // const availableTimeList = Array.from(
+  //   new Array(availableTime[1] - 1 - availableTime[0] + 1),
+  //   (x, i) => (i + availableTime[0]) / 2
+  // );
   const btnList = availableTimeList.map((time) => {
-    return (
-      <Grid item>
-        {bookingList.some(
-          (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
-        ) ? (
-          <Tooltip
-            title={
-              bookingList.find(
-                (item) =>
-                  item.period[0] / 2 <= time && item.period[1] / 2 > time
-              ).num
-            }
-            placement="top"
-          >
-            <Button variant="outlined">
-              {Math.floor(time)}:{time % 1 ? "30" : "00"}
-            </Button>
-          </Tooltip>
-        ) : (
-          <Button
-            variant="outlined"
-            sx={{ color: "black", borderColor: "black" }}
-          >
-            {Math.floor(time)}:{time % 1 ? "30" : "00"}
-          </Button>
-        )}
-      </Grid>
-    );
+    console.log(time)
+    // return (
+    //   <Grid item>
+    //     {bookingList.some(
+    //       (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
+    //     ) ? (
+    //       <Tooltip
+    //         title={
+    //           bookingList.find(
+    //             (item) =>
+    //               item.period[0] / 2 <= time && item.period[1] / 2 > time
+    //           ).num
+    //         }
+    //         placement="top"
+    //       >
+    //         <Button 
+    //           variant="outlined"
+    //         >
+    //           {Math.floor(time)}:{time % 1 ? "30" : "00"}
+    //         </Button>
+    //       </Tooltip>
+    //     ) : (
+    //       <Button
+    //         variant="outlined"
+    //         color="inherit"
+    //         sx={{ color: "black", borderColor: "black" }}
+    //       >
+    //         {Math.floor(time)}:{time % 1 ? "30" : "00"}
+    //       </Button>
+    //     )}
+    //   </Grid>
+    // );
   });
   return btnList;
 }
+async function SearchReserved(courtId){
+  
+  var date = moment("2023-12-01").format("YYYY-MM-DD")
+  return FetchData.getData("http://localhost:3000/api/courts/reserved",1,{date:date,court_id:courtId})
+}
 export default function StadiumBookingDetail() {
+  const[reservedTime, setReservedTime] = useState()
   const navigate = useNavigate();
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
+    var courtId
     for (let pair of params.entries()) {
       console.log(`key: ${pair[0]}, value: ${pair[1]}`);
+      courtId=pair[1]
     }
-  });
+    SearchReserved(courtId).then((res)=>{
+        console.log(res)
+        setReservedTime(res)
+        console.log(moment(res[0].start_time,"HH:mm:ss").hours())
+    })
+  },[]);
   return (
     <div>
       <h1>場地詳細狀況</h1>
