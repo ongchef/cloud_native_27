@@ -1,7 +1,8 @@
 import {
     getCourtsQuery,
     getCourtsByAdminIdQuery,
-    getCourtsReservedByCourtIdQuery,
+    searchCourtsAppointmentsByAdminIdQuery,
+    searchCourtsByAdminIdQuery,
     putCourtsByIdQuery,
     postCourtsQuery,
     deleteCourtsByIdQuery,
@@ -44,30 +45,56 @@ export const getCourtsByAdminId = async(req,res) => {
 
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
-    req.body['admin_id'] = req.token;
     const verify_data = {
         "user_id": req.token
     };
     const iscourtsprovider = await isCourtsProvider(verify_data);
 
     if (iscourtsprovider) {
-        const all_courts = await getCourtsByAdminIdQuery(req.body)
+
+        const { ball, address } = req.query;
+        const data = {
+            "admin_id": req.token,
+            "ball_type_id": ball, 
+            "address": address
+        }
+        const all_courts = await searchCourtsByAdminIdQuery(data)
 
         // if the court provider do not have any courts registerd
+        // or no search results
         // return empty array
         if (all_courts.length == 0) {
             return res.status(200).json([]);
         }
 
+        // paging
+        const page = req.query['page'] || 1;
+        const limit = 10;
+        let offset = (page - 1) * limit;
+
         const all_courts_id_list = all_courts.map((item) => item.court_id);
-        const all_courts_info = await getCourtsOrderInfoInIdListQuery(all_courts_id_list);
+
+        if (offset > all_courts_id_list.length) {
+            offset = offset%limit
+        }
+        const all_courts_id_list_page = all_courts_id_list.slice(offset, offset+limit)
+
+        // return json
+        const total_page = Math.ceil(all_courts_id_list.length/limit);
+
+        const all_courts_info = await getCourtsOrderInfoInIdListQuery(all_courts_id_list_page);
         const all_courts_info_with_time = await Promise.all(
             all_courts_info.map(async({...item}) => ({
                 ...item,
                 available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
             }))
         )
-        return res.status(200).json(all_courts_info_with_time);
+
+        const retrun_json = {
+            "total_page": total_page,
+            "courts": all_courts_info_with_time
+        }
+        return res.status(200).json(retrun_json);
 
     } else {
         return res.status(401).json("You are not the court provider!")
@@ -117,6 +144,61 @@ export const getCourtsReservedByCourtId = async(req,res) => {
             const message = "You are not the owner of the court!"
             return res.status(401).json(message)
         }
+    } else {
+        return res.status(401).json("You are not the court provider!")
+    }
+}
+
+export const searchCourtsAppointmentsByAdminId = async(req,res) => {
+    let verify_data = {
+        "user_id": req.token
+    };
+    const iscourtsprovider = await isCourtsProvider(verify_data);
+    if (iscourtsprovider) {
+
+        const { ball, address, date } = req.query;
+        const data = {};
+        data['date'] = date;
+        data['date_add_one_day'] = add_one_day(date);
+        data['ball_type_id'] = ball;
+        data['address'] = address;
+        data['admin_id'] = req.token;
+        const courts_appointment = await searchCourtsAppointmentsByAdminIdQuery(data)
+
+        // no search results
+        // return empty array
+        if (courts_appointment.length == 0) {
+            return res.status(200).json([]);
+        } else {
+            // paging
+            const page = req.query['page'] || 1;
+            const limit = 10;
+            let offset = (page - 1) * limit;
+
+            const all_courts_id_list = courts_appointment.map((item) => item.court_id);
+
+            if (offset > all_courts_id_list.length) {
+                offset = offset%limit
+            }
+            const all_courts_id_list_page = all_courts_id_list.slice(offset, offset+limit)
+            
+            // return json
+            const total_page = Math.ceil(all_courts_id_list.length/limit);
+            const all_courts_info = await getCourtsOrderInfoInIdListQuery(all_courts_id_list_page);
+            const all_courts_info_with_time = await Promise.all(
+                all_courts_info.map(async({...item}) => ({
+                    ...item,
+                    available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
+                }))
+            )
+            const retrun_json = {
+                "total_page": total_page,
+                "courts": all_courts_info_with_time
+            }
+
+            return res.status(200).json(retrun_json);
+        }
+
     } else {
         return res.status(401).json("You are not the court provider!")
     }

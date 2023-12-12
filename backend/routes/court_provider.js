@@ -2,6 +2,7 @@ import express from 'express'
 import {
     getCourts,
     getCourtsByAdminId,
+    searchCourtsAppointmentsByAdminId,
     getCourtsReservedByCourtId,
     putCourtsById,
     postCourts,
@@ -25,6 +26,9 @@ router.delete("/", deleteCourtsById)
 
 // GET /api/courts/admin
 router.get("/admin", getCourtsByAdminId)
+
+// GET /api/courts/admin/appointment
+router.get("/admin/appointment", searchCourtsAppointmentsByAdminId)
 
 // GET /api/courts/reserved
 router.get("/reserved", getCourtsReservedByCourtId);

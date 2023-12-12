@@ -376,7 +376,7 @@ export const getUsersAppointmentJoin = async(req,res) => {
             "total_page": total_page,
             "courts": joinable_courts_info
         }
-        return res.status(200).json(retrun_json);    
+        return res.status(200).json(retrun_json);  
     // there are not joinable courts according to the query time period
     } else {
 

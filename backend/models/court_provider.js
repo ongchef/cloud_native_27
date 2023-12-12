@@ -37,6 +37,85 @@ export const getCourtsByAdminIdQuery = (data) => {
     });
 }
 
+export const searchCourtsByAdminIdQuery = (data) => {
+
+    const { admin_id, ball_type_id, address } = data;
+
+    let searchQuery;
+
+    if (typeof address !== "undefined") {
+        searchQuery = `WHERE c.address like '%${address}%' AND c.admin_id = ?`;
+    } else {
+        searchQuery = `WHERE c.admin_id = ?`;
+    }
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT c.name, c.location, c.address, c.available, c.court_id, c.image_url, c.ball_type_id
+        FROM STADIUM.COURT c 
+        ${searchQuery}`, [admin_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                // no need to search ball type id
+                if (typeof ball_type_id === "undefined") {
+                    resolve(results);
+                // need to search ball type id
+                } else {
+                    const search_results = results.reduce((result, court) => {
+                        const ball_type_id_list = court['ball_type_id'].split(',')
+                        const ball_query = ball_type_id.toString().split(',')
+                        const found = ball_query.some(r=> ball_type_id_list.includes(r))
+                        if (found) {
+                            result.push(court)
+                        }
+                        return result
+                    }, [])
+                    resolve(search_results);
+                }
+            }
+        });
+    });
+}
+
+export const searchCourtsAppointmentsByAdminIdQuery = (data) => {
+
+    const { admin_id, ball_type_id, address, date, date_add_one_day } = data;
+
+    let searchQuery = `WHERE app_t.date >= '${date}' AND app_t.date < '${date_add_one_day}'`
+
+    if (typeof address !== "undefined") {
+        searchQuery += `AND c.address like '%${address}%'`;
+    }
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT c.name, c.location, c.address, c.available, c.court_id, c.image_url, c.ball_type_id
+        FROM STADIUM.APPOINTMENT_TIME app_t
+        INNER JOIN STADIUM.APPOINTMENT app ON app_t.appointment_id = app.appointment_id
+        INNER JOIN STADIUM.COURT c ON app.court_id = c.court_id
+        ${searchQuery} AND c.admin_id = ?
+        GROUP BY c.court_id`, [admin_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                // no need to search ball type id
+                if (typeof ball_type_id === "undefined") {
+                    resolve(results);
+                // need to search ball type id
+                } else {
+                    const search_results = results.reduce((result, court) => {
+                        const ball_type_id_list = court['ball_type_id'].split(',')
+                        const ball_query = ball_type_id.toString().split(',')
+                        const found = ball_query.some(r=> ball_type_id_list.includes(r))
+                        if (found) {
+                            result.push(court)
+                        }
+                        return result
+                    }, [])
+                    resolve(search_results);
+                }
+            }
+        });
+    });
+}
+
 // check admin_id of the court
 export const isCourtsAdmin = (data) => {
     return new Promise((resolve, reject) => {
