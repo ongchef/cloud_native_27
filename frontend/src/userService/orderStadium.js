@@ -20,8 +20,8 @@ import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
 import axios from "axios";
 import authHeader from "../authService/authHeader";
 export default function OrderStadium() {
-  const [sport, setSport] = useState("1");
-  const [location, setLocation] = useState("大安區");
+  const [sport, setSport] = useState("");
+  const [location, setLocation] = useState("");
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [weekday, setWeekday] = useState(moment(date).day());
@@ -57,7 +57,7 @@ export default function OrderStadium() {
       headers: authHeader(),
       params: {
         querytime: date + time.format("HH:mm:ss"),
-        ball: sport,
+        // ball: sport,
         // address: location,
       },
     });
@@ -123,9 +123,10 @@ export default function OrderStadium() {
               value={sport}
               onChange={handleSportChange}
               label="球類"
+              style={{ width: "80px" }}
             >
-              <MenuItem value={"2"}>籃球</MenuItem>
               <MenuItem value={"1"}>羽球</MenuItem>
+              <MenuItem value={"2"}>籃球</MenuItem>
               <MenuItem value={"3"}>排球</MenuItem>
               <MenuItem value={"4"}>桌球</MenuItem>
             </Select>
@@ -133,13 +134,14 @@ export default function OrderStadium() {
         </Box>
         <Box m={1}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label-2">Location</InputLabel>
+            <InputLabel id="demo-simple-select-label-2">地點</InputLabel>
             <Select
               labelId="demo-simple-select-label-2"
               id="demo-simple-select-2"
               value={location}
               onChange={handleLocationChange}
-              label="Location"
+              label="地點"
+              style={{ width: "100px" }}
             >
               <MenuItem value={"大安區"}>大安區</MenuItem>
               <MenuItem value={"文山區"}>文山區</MenuItem>
@@ -199,6 +201,7 @@ export default function OrderStadium() {
                 startTime + "~" + endTime,
                 court.available,
               ]}
+              datetime={date + " " + time.format("HH:mm:ss")}
             />
           );
         })}

@@ -7,9 +7,15 @@ import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
 import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 
-
-export default function OrderStadiumCard({ id, image, title, description }) {
+export default function OrderStadiumCard({
+  id,
+  image,
+  title,
+  description,
+  datetime,
+}) {
   const navigate = useNavigate();
+  console.log({ datetime });
   return (
     <Box my={2}>
       <Card
@@ -69,7 +75,6 @@ export default function OrderStadiumCard({ id, image, title, description }) {
                   >
                     {description[1]} {description[2]} 開放預約
                   </span>
-                  
                 </Typography>
 
                 <Typography variant="body2" color="000000">
@@ -79,7 +84,9 @@ export default function OrderStadiumCard({ id, image, title, description }) {
                 <Box display="flex" justifyContent="flex-end">
                   <Button
                     variant="contained"
-                    onClick={() => navigate(`/orderStadiumDetail?id=${id}`)} // Include the id in the string
+                    onClick={() =>
+                      navigate(`/orderStadiumDetail?id=${id}&time=${datetime}`)
+                    } // Include the id in the string
                   >
                     預約場地
                   </Button>
