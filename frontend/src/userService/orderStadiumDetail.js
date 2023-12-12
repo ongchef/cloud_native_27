@@ -48,7 +48,7 @@ export default function OrderStadiumDetail() {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [availableTime, setAvailableTime] = useState([]);
+  const [availableTime, setAvailableTime] = useState();
   const [bookingList, setBookingList] = useState([]);
   async function StadiumDetail() {
     return await axios.get(
@@ -66,6 +66,7 @@ export default function OrderStadiumDetail() {
 
   useEffect(() => {
     StadiumDetail().then((res) => {
+      console.log(res.data);
       setStadiumDetail(res.data);
       SetDetails(res.data);
     });
