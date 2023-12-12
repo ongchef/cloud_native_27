@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"; // 引入useNavigate
+import { useLocation, useNavigate } from "react-router-dom"; // 引入useNavigate
 import Button from "@mui/material/Button"; // 引入Button元件
 import { useEffect, useState } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
@@ -14,6 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import FetchData from "../authService/fetchData";
 import dayjs from "dayjs";
 import moment from "moment";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const availableTime = [moment("13:00","HH:mm"),moment("15:00","HH:mm")];
 const bookingList = [
@@ -27,81 +28,107 @@ const bookingList = [
   },
 ];
 
-function TimeBtn() {
-  var availableTimeList = [availableTime[0]]
-  console.log(availableTime[0])
-  do{
-    var time = availableTimeList[availableTimeList.length-1]
-    console.log(time)
-    time = moment(time.add(30,'minutes').format("HH:mm"),"HH:mm")
-    // console.log(time.add(30,"minutes").format("hh:mm"))
-    availableTimeList.push(time)
-    console.log(time)
-    console.log(availableTime[1])
-    console.log(time.isBefore(availableTime[1]))
-  }while(false)
-  // const availableTimeList = Array.from(
-  //   new Array(availableTime[1] - 1 - availableTime[0] + 1),
-  //   (x, i) => (i + availableTime[0]) / 2
-  // );
-  const btnList = availableTimeList.map((time) => {
-    console.log(time)
-    // return (
-    //   <Grid item>
-    //     {bookingList.some(
-    //       (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
-    //     ) ? (
-    //       <Tooltip
-    //         title={
-    //           bookingList.find(
-    //             (item) =>
-    //               item.period[0] / 2 <= time && item.period[1] / 2 > time
-    //           ).num
-    //         }
-    //         placement="top"
-    //       >
-    //         <Button 
-    //           variant="outlined"
-    //         >
-    //           {Math.floor(time)}:{time % 1 ? "30" : "00"}
-    //         </Button>
-    //       </Tooltip>
-    //     ) : (
-    //       <Button
-    //         variant="outlined"
-    //         color="inherit"
-    //         sx={{ color: "black", borderColor: "black" }}
-    //       >
-    //         {Math.floor(time)}:{time % 1 ? "30" : "00"}
-    //       </Button>
-    //     )}
-    //   </Grid>
-    // );
-  });
-  return btnList;
-}
-async function SearchReserved(courtId){
+
+async function SearchReserved(courtId,datetime){
   
-  var date = moment("2023-12-01").format("YYYY-MM-DD")
-  return FetchData.getData("http://localhost:3000/api/courts/reserved",1,{date:date,court_id:courtId})
+  return FetchData.getData("http://localhost:3000/api/courts/reserved",1,{date:datetime,court_id:courtId})
 }
 export default function StadiumBookingDetail() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+  const datetime = searchParams.get("time");
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const[reservedTime, setReservedTime] = useState()
+  const [availableTime, setAvailableTime] = useState([10,20]);
+  const [bookingList, setBookingList] = useState([]);
+  
   const navigate = useNavigate();
   useEffect(() => {
-    let url = new URL(window.location.href);
-    let params = url.searchParams;
-    var courtId
-    for (let pair of params.entries()) {
-      console.log(`key: ${pair[0]}, value: ${pair[1]}`);
-      courtId=pair[1]
-    }
-    SearchReserved(courtId).then((res)=>{
+    SearchReserved(id,datetime).then((res)=>{
         console.log(res)
         setReservedTime(res)
-        console.log(moment(res[0].start_time,"HH:mm:ss").hours())
+        SetDetails(res);
     })
   },[]);
+
+  function SetDetails(data) {
+    const date = new Date(datetime.split(" ")[0]);
+    const weekday = date.getDay() || 7; // Convert Sunday from 0 to 7
+    console.log(data)
+    // 要等API改
+    const availableTimeObj = data[0].availableTime.find(
+      (time) => time.weekday === weekday
+    );
+    console.log(availableTimeObj)
+    const availableTime1 = [
+      parseInt(availableTimeObj.start_time.split(":")[0]) * 2,
+      parseInt(availableTimeObj.end_time.split(":")[0]) * 2,
+    ];
+    const bookingList1 = data[0].appointment_time.map((time) => ({
+      period: [
+        parseInt(time.start_time.split(":")[0]) * 2,
+        parseInt(time.end_time.split(":")[0]) * 2,
+      ],
+    }));
+    setAvailableTime(availableTime1);
+    setBookingList(bookingList1);
+    setDataLoaded(true);
+    console.log(availableTime);
+    console.log(bookingList);
+  }
+  
+  function TimeBtn(props) {
+    const { availableTime, bookingList } = props;
+    console.log(availableTime[1] - availableTime[0]);
+    const availableTimeList = Array.from(
+      new Array(availableTime[1] - availableTime[0]),
+      (x, i) => (i + availableTime[0]) / 2
+    );
+    const btnList = availableTimeList.map((time) => {
+      const value = `${Math.floor(time)}:${time % 1 ? "30" : "00"}`;
+      return (
+        <Grid item>
+          {bookingList.some(
+            (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
+          ) ? (
+            <Button
+              variant="outlined"
+              color="inherit"
+              disabled
+              key={value}
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+            >
+              {value}
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="inherit"
+              key={value}
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+            >
+              {value}
+            </Button>
+          )}
+        </Grid>
+      );
+    });
+    return btnList;
+  }
+  const handleButtonClick = (value) => {
+    if (selectedOptions.includes(value)) {
+      setSelectedOptions(selectedOptions.filter((option) => option !== value));
+    } else {
+      setSelectedOptions([...selectedOptions, value]);
+    }
+  };
   return (
     <div>
       <h1>場地詳細狀況</h1>
@@ -189,7 +216,17 @@ export default function StadiumBookingDetail() {
 
                     <Box mx={1}>
                       <Grid container spacing={1}>
-                        <TimeBtn />
+                        {console.log(availableTime)}
+                      {false?
+                        <Box sx={{display:'flex', justifyContent:'center'}}>
+                          <CircularProgress />
+                        </Box>
+                        :(bookingList && availableTime && (
+                          <TimeBtn
+                            bookingList={bookingList}
+                            availableTime={availableTime}
+                          />)
+                        )}
                       </Grid>
                     </Box>
                     <Box display="flex" justifyContent="flex-end">

@@ -19,13 +19,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
-import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; 
-import axios from 'axios';
-import authHeader from "../authService/authHeader";
+
 import FetchData from "../authService/fetchData";
 async function SearchCourt(){
-  return FetchData.getData("http://localhost:3000/api/courts/admin",10)
+  return FetchData.getData("http://localhost:3000/api/courts/admin",1)
   // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
 }
 export default function StadiumBoard() {
@@ -34,6 +32,8 @@ export default function StadiumBoard() {
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
   const [courtList, setCourtList] = useState([])
+  const [page, setPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(0)
   const [weekday, setWeekday] = useState(moment(date).day());
   const weekdayMapping = [
     "日",
@@ -48,7 +48,8 @@ export default function StadiumBoard() {
   useEffect(() => {
     SearchCourt().then((res)=>
       {
-        setCourtList(res)
+        setCourtList(res.courts)
+        setTotalPage(res.total_page)
         let day = moment(date).day()
         if (day === 0) {
           setWeekday(7);
@@ -233,7 +234,13 @@ export default function StadiumBoard() {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
-        <Pagination count={10} color="primary" /> {/* 添加這一行 */}
+        <Pagination 
+          count={totalPage}
+          onChange={(event,num)=>setPage(num)} 
+          page={page}
+          color="primary" 
+          
+          /> {/* 添加這一行 */}
       </Box>
     </div>
   );

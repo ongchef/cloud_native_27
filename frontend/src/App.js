@@ -277,7 +277,7 @@ export default function App() {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
         
-        {user && (
+        {/* {user && ( */}
         <>
           <Route exact path="/orderStadium" element={<OrderStadium />} />
             
@@ -295,7 +295,7 @@ export default function App() {
             element={<OrderStadiumDetail />}
           />
         </>
-          )}
+          {/* )} */}
         <Route exact path="/userProfile" element={<UserProfile />} />
         <Route exact path="/userHistory" element={<UserHistory />} />
         {/* provider */}

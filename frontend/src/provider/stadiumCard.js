@@ -6,8 +6,11 @@ import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
 import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
+import moment from "moment";
+import { useState } from "react";
 
 export default function StadiumCard({ id, image, title, description }) {
+  const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const navigate = useNavigate();
   return (
     <Box my={2}>
@@ -79,7 +82,7 @@ export default function StadiumCard({ id, image, title, description }) {
                   <Button
                     size="small"
                     variant="contained"
-                    onClick={() => navigate(`/stadiumBookingDetail?id=${id}`)} // Include the id in the string
+                    onClick={() => navigate(`/stadiumBookingDetail?id=${id}&time=${date}`)} // Include the id in the string
                   >
                     查看詳細場地狀況
                   </Button>
