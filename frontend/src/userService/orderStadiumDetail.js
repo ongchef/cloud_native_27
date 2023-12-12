@@ -278,10 +278,11 @@ export default function OrderStadiumDetail() {
 
                     <Box mx={1}>
                       <Grid container spacing={1}>
-                        {/* <TimeBtn
+                       {bookingList&&availableTime&&
+                        (<TimeBtn
                               bookingList={bookingList}
                               availableTime={availableTime}
-                            /> */}
+                            />)}
                       </Grid>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
