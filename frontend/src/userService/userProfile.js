@@ -11,8 +11,19 @@ import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TextField } from "@mui/material";
+import axios from "axios";
+import authHeader from "../authService/authHeader";
 
 export default function UserProfile() {
+  const [userProfile, setUserProfile] = useState([]);
+  async function getUserProfile() {
+    return await axios.get("http://localhost:3000/api/users/id", {
+      headers: authHeader(),
+    });
+  }
+  useEffect(() => {
+    getUserProfile().then((res) => setUserProfile(res.data));
+  }, []);
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -36,120 +47,119 @@ export default function UserProfile() {
       <h1>user Profile</h1>
       <Box display="flex" flexDirection="column" alignItems="center" gap={5}>
         <Container maxWidth="sm"></Container>
-        <Container maxWidth="sm">
-          <Box>
-            <Card sx={{ width: "50vw", margin: "auto" }}>
-              <form>
+
+        <Box>
+          <Card sx={{ width: "50vw", margin: "auto" }}>
+            <form>
+              <Box
+                my={4}
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                gap={2}
+              >
+                <Typography variant="h4">User Profile</Typography>
                 <Box
-                  my={4}
                   display="flex"
-                  flexDirection="column"
-                  justifyContent="center"
+                  flexDirection="row"
+                  justifyContent="space-between"
                   alignItems="center"
-                  gap={2}
+                  width="70%"
                 >
-                  <Typography variant="h4">User Profile</Typography>
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    width="70%"
-                  >
-                    <Typography variant="h5" style={{}}>
-                      Name :
-                    </Typography>
-                    <TextField
-                      label="Name"
-                      onChange={handleChange}
-                      style={{ width: "70%" }}
-                    />
-                  </Box>
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    width="70%"
-                  >
-                    <Typography variant="h5" style={{}}>
-                      Email :
-                    </Typography>
-                    <TextField
-                      label="Email"
-                      onChange={handleChange}
-                      style={{ width: "70%" }}
-                    />
-                  </Box>
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    width="70%"
-                  >
-                    <Typography variant="h5" style={{}}>
-                      Line ID :
-                    </Typography>
-                    <TextField
-                      label="Line ID"
-                      onChange={handleChange}
-                      style={{ width: "70%" }}
-                    />
-                  </Box>
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    width="70%"
-                  >
-                    <Typography variant="h5" style={{}}>
-                      Phone :
-                    </Typography>
-                    <TextField
-                      label="Phone"
-                      onChange={handleChange}
-                      style={{ width: "70%" }}
-                    />
-                  </Box>
-
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    width="70%"
-                  >
-                    <Typography variant="h5" style={{}}>
-                      Password :
-                    </Typography>
-                    <TextField
-                      label="Password"
-                      type="password"
-                      onChange={handleChange}
-                      style={{ width: "70%" }}
-                    />
-                  </Box>
-                  <Box display="flex" justifyContent="center" gap={2}>
-                    <Button variant="contained" style={{ width: "100px" }}>
-                      Cancel
-                    </Button>
-
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ width: "100px" }}
-                    >
-                      Save
-                    </Button>
-                  </Box>
-                  {/* 其他輸入字段 */}
+                  <Typography variant="h5" style={{}}>
+                    Name :
+                  </Typography>
+                  <TextField
+                    label="Name"
+                    onChange={handleChange}
+                    style={{ width: "70%" }}
+                  />
                 </Box>
-              </form>
-            </Card>
-          </Box>
-        </Container>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width="70%"
+                >
+                  <Typography variant="h5" style={{}}>
+                    Email :
+                  </Typography>
+                  <TextField
+                    label="Email"
+                    onChange={handleChange}
+                    style={{ width: "70%" }}
+                  />
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width="70%"
+                >
+                  <Typography variant="h5" style={{}}>
+                    Line ID :
+                  </Typography>
+                  <TextField
+                    label="Line ID"
+                    onChange={handleChange}
+                    style={{ width: "70%" }}
+                  />
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width="70%"
+                >
+                  <Typography variant="h5" style={{}}>
+                    Phone :
+                  </Typography>
+                  <TextField
+                    label="Phone"
+                    onChange={handleChange}
+                    style={{ width: "70%" }}
+                  />
+                </Box>
+
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width="70%"
+                >
+                  <Typography variant="h5" style={{}}>
+                    Password :
+                  </Typography>
+                  <TextField
+                    label="Password"
+                    type="password"
+                    onChange={handleChange}
+                    style={{ width: "70%" }}
+                  />
+                </Box>
+                <Box display="flex" justifyContent="center" gap={2}>
+                  <Button variant="contained" style={{ width: "100px" }}>
+                    Cancel
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ width: "100px" }}
+                  >
+                    Save
+                  </Button>
+                </Box>
+                {/* 其他輸入字段 */}
+              </Box>
+            </form>
+          </Card>
+        </Box>
       </Box>
       {/* 添加這一行 */}
     </div>

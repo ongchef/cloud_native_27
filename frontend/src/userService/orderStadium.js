@@ -156,17 +156,6 @@ export default function OrderStadium() {
         </Box>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-        <StadiumCard
-          id={1}
-          image={pic2}
-          title={"台大綜合體育館 - 一樓多功能球場"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週五",
-            "16:00~22:00",
-            6,
-          ]}
-        />
         {stadiumList.map((court) => {
           const weekdayMapping = [
             "日",
