@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"; // 引入useNavigate
+import { useLocation, useNavigate } from "react-router-dom"; // 引入useNavigate
 import Button from "@mui/material/Button"; // 引入Button元件
 import { useEffect, useState } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
@@ -25,6 +25,7 @@ import JToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import dayjs from "dayjs";
+import FetchData from "../../authService/fetchData";
 const week = {
   "mon":"一",
   "tue":"二",
@@ -33,6 +34,9 @@ const week = {
   "fri":"五",
   "sat":"六",
   "sun":"日"
+}
+async function SearchCourt(court_id){
+  return FetchData.getData("http://localhost:3000/api/admin/courtDetail",0,{court_id:court_id})
 }
 function checkTimeSeries(availableTime) {
   for (const daytime of Object.values(availableTime)) {
@@ -218,6 +222,9 @@ const  FormDialog=(props)=>{
 
 export default function UpdateStadium() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
   const [image, setImage] = useState();
   const [ availableTime, setAvailableTime] = useState({
     mon:{0:[dayjs("9:00",'HH:mm'),dayjs("11:00",'HH:mm')],
@@ -257,6 +264,9 @@ export default function UpdateStadium() {
   }
   useEffect(()=>{
     console.log(availableTime)
+    SearchCourt(id).then((res)=>{
+      console.log(res)
+    })
   },[availableTime])
 
   return (
