@@ -6,35 +6,28 @@ import fakeUser from '../testData/fakeUser';
 const API_URL = 'http://localhost:3000/api/users/';
 
 // const register = ({ username, password, name, email, phone, lineId }) => {
-const register = async ({ username, password, name, email, phone, lineId }) => {
+const register = async ({
+	username,
+	password,
+	name,
+	email,
+	phone,
+	lineId,
+	roleId,
+}) => {
 	try {
-		// console.log(
-		// 	JSON.stringify(
-		// 		{
-		// 			line_id: lineId,
-		// 			role_id: 3,
-		// 			password: password,
-		// 			name: username,
-		// 			email: email,
-		// 		},
-		// 		{
-		// 			headers: { 'Content-Type': 'application/json' },
-		// 			withCredentials: true,
-		// 		}
-		// 	)
-		// );
 		const response = await axios.post(
 			API_URL,
 			JSON.stringify({
 				line_id: lineId,
-				role_id: 3,
+				role_id: roleId,
 				password: password,
 				name: username,
 				email: email,
+				phone: phone,
 			}),
 			{
 				headers: { 'Content-Type': 'application/json' },
-				withCredentials: true,
 			}
 		);
 

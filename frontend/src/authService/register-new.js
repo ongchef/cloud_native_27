@@ -83,13 +83,14 @@ const Register = () => {
 		// form.current.validateAll();
 
 		try {
+			const roleId = 2;
 			AuthService.register({
 				username,
 				email,
-				name,
 				phoneNumber,
 				password,
 				lineId,
+				roleId,
 			});
 		} catch (error) {
 			console.log(error);

@@ -14,28 +14,22 @@ const AdminAddProvider = () => {
 	const [contactPhone, setContactPhone] = useState('');
 	const [contactEmail, setContactEmail] = useState('');
 	const [loginPassword, setLoginPassword] = useState('');
-	const [providerType, setProviderType] = useState('');
 
 	const [loading, setLoading] = useState(false);
 
 	const handleAddProvider = (e) => {
 		e.preventDefault();
 		setLoading(true);
-		if (
-			unitName &&
-			contactPhone &&
-			contactEmail &&
-			loginPassword &&
-			providerType
-		) {
+		if (unitName && contactPhone && contactEmail && loginPassword) {
 			console.log({
 				unitName,
 				contactPhone,
 				contactEmail,
 				loginPassword,
-				providerType,
 			});
 		}
+		const roleId = 3;
+
 		setLoading(false);
 	};
 
@@ -97,23 +91,12 @@ const AdminAddProvider = () => {
 				</FormControl>
 
 				<FormControl fullWidth margin="normal">
-					<Typography variant="subtitle1">球場提供商類型</Typography>
-					<Select
-						value={providerType}
-						onChange={(e) => setProviderType(e.target.value)}
-						required>
-						<MenuItem value="indoor">室內</MenuItem>
-						<MenuItem value="outdoor">室外</MenuItem>
-					</Select>
-				</FormControl>
-
-				<FormControl fullWidth margin="normal">
 					<Button
 						type="submit"
 						variant="contained"
 						color="primary"
 						disabled={loading}>
-						提交
+						註冊
 					</Button>
 				</FormControl>
 			</form>
