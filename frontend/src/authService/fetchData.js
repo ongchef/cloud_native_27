@@ -34,6 +34,19 @@ async function postData(url, body) {
       return [];
     });
 }
+async function putData(url, body) {
+    return await axios
+      .put(url, body, { headers: authHeader() })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("not authorized");
+        window.location.href = "/";
+        return [];
+      });
+  }
 async function postDateWithImg(url, data, img) {
   var bodyFormData = new FormData();
 
@@ -48,8 +61,9 @@ async function postDateWithImg(url, data, img) {
 }
 const FetchData = {
   getData,
-  postDateWithImg,
   postData,
+  postDateWithImg,
+  putData
 };
 
 export default FetchData;

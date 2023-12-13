@@ -105,25 +105,6 @@ export default function StadiumBoard() {
             />
             </LocalizationProvider>
           </Box>
-          <Box m={1}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              timeSteps={{ minutes: 30 }}
-              label="時段"
-              ampm={false}
-              minTime={moment("9:00", "HH:mm")}
-              maxTime={moment("21:00", "HH:mm")}
-              // views={["hours","minutes"]}
-              format="hh:mm"
-              // defaultValue={dayjs("0000-00-00T9:00")}
-              onChange={(newTime) => {
-                console.log(newTime);
-                console.log(newTime.get("hour"));
-                setTime(newTime.get("hour"));
-              }}
-            />
-          </LocalizationProvider>
-        </Box>
         <Box m={1}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">球類</InputLabel>
@@ -133,6 +114,7 @@ export default function StadiumBoard() {
               value={sport}
               onChange={handleSportChange}
               label="球類"
+              style={{ width: "80px" }}
             >
               <MenuItem value={undefined}>所有球類</MenuItem>
               <MenuItem value={"1"}>羽球</MenuItem>
@@ -151,6 +133,7 @@ export default function StadiumBoard() {
               value={address}
               onChange={handleAddressChange}
               label="Address"
+              style={{ width: "100px" }}
             >
               <MenuItem value={undefined}>所有地區</MenuItem>
               <MenuItem value={"大安區"}>大安區</MenuItem>

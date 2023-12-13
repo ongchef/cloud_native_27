@@ -116,6 +116,7 @@ export default function StadiumBookingDetail() {
               value={time % 1 ? "30" : "00"}
               type={selectedOptions.includes(value) ? "primary" : "default"}
               onClick={() => handleButtonClick(value)}
+              style={{ width: "80px" }}
             >
               {value}
             </Button>
@@ -129,6 +130,7 @@ export default function StadiumBookingDetail() {
               value={time % 1 ? "30" : "00"}
               type={selectedOptions.includes(value) ? "primary" : "default"}
               onClick={() => handleButtonClick(value)}
+              style={{ width: "80px" }}
             >
               {value}
             </Button>
