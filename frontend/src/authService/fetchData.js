@@ -38,7 +38,7 @@ async function putData(url, body) {
     return await axios
       .put(url, body, { headers: authHeader() })
       .then((res) => {
-        return res.data;
+        return res.status;
       })
       .catch((error) => {
         console.log(error);
