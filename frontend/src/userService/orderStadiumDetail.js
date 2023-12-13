@@ -14,7 +14,8 @@ import ButtonM from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaceIcon from "@mui/icons-material/Place";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
+
 // Ant Design components
 import { Input } from "antd";
 import { Button } from "antd";
@@ -25,33 +26,22 @@ import axios from "axios";
 import Map from "../commonService/map";
 import authHeader from "../authService/authHeader";
 import pic2 from "../pic/羽球3.png";
-
-// const availableTime = [32, 42];
-// const bookingList = [
-//   {
-//     num: 4,
-//     period: [32, 36],
-//   },
-//   {
-//     num: 2,
-//     period: [38, 41],
-//   },
-// ];
-
 export default function OrderStadiumDetail() {
   // Inside your component
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("id");
   const datetime = searchParams.get("time");
-  console.log(id, datetime);
   const navigate = useNavigate();
-  const [dataLoaded, setDataLoaded] = useState(false);
-
+  const [courtInfo, setCourtInfo] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [availableTime, setAvailableTime] = useState();
   const [bookingList, setBookingList] = useState([]);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+  const [switchState, setSwitchState] = useState(false);
+  const handleSwitchChange = () => {
+    setSwitchState(!switchState);
+  };
   async function StadiumDetail() {
     return await axios.get(
       "http://localhost:3000/api/users/appointmentDetail",
@@ -66,11 +56,18 @@ export default function OrderStadiumDetail() {
   }
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     StadiumDetail().then((res) => {
-      console.log(res.data);
+      //console.log(res.data);
+      if (res.data.length > 0) {
+        let courtData = { ...res.data[0] };
+        delete courtData.available_time;
+        delete courtData.appointment_time;
+        setCourtInfo(courtData);
+      }
+
       SetDetails(res.data);
-      setLoading(false)
+      setLoading(false);
     });
   }, []);
 
@@ -80,21 +77,32 @@ export default function OrderStadiumDetail() {
     const availableTimeObj = data[0].available_time.find(
       (time) => time.weekday === weekday
     );
-    const availableTime1 = [
+    const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
+    const weekdayInChinese = weekdayMapping[weekday];
+
+    const availableTime = [
       parseInt(availableTimeObj.start_time.split(":")[0]) * 2,
       parseInt(availableTimeObj.end_time.split(":")[0]) * 2,
     ];
-    const bookingList1 = data[0].appointment_time.map((time) => ({
+    const courtData = { ...data[0] };
+    delete courtData.available_time;
+    delete courtData.appointment_time;
+    courtData.weekday = weekdayInChinese;
+    courtData.availableTimeinday =
+      availableTimeObj.start_time.substring(0, 5) +
+      "~" +
+      availableTimeObj.end_time.substring(0, 5);
+    console.log(courtData);
+    const bookingList = data[0].appointment_time.map((time) => ({
       period: [
         parseInt(time.start_time.split(":")[0]) * 2,
         parseInt(time.end_time.split(":")[0]) * 2,
       ],
     }));
-    setAvailableTime(availableTime1);
-    setBookingList(bookingList1);
-    setDataLoaded(true);
-    console.log(availableTime);
-    console.log(bookingList);
+
+    setCourtInfo(courtData);
+    setAvailableTime(availableTime);
+    setBookingList(bookingList);
   }
 
   useEffect(() => {
@@ -135,7 +143,6 @@ export default function OrderStadiumDetail() {
 
   function TimeBtn(props) {
     const { availableTime, bookingList } = props;
-    console.log(availableTime[1] - availableTime[0]);
     const availableTimeList = Array.from(
       new Array(availableTime[1] - availableTime[0]),
       (x, i) => (i + availableTime[0]) / 2
@@ -155,6 +162,7 @@ export default function OrderStadiumDetail() {
               value={time % 1 ? "30" : "00"}
               type={selectedOptions.includes(value) ? "primary" : "default"}
               onClick={() => handleButtonClick(value)}
+              style={{ width: "80px" }}
             >
               {value}
             </Button>
@@ -166,6 +174,7 @@ export default function OrderStadiumDetail() {
               value={time % 1 ? "30" : "00"}
               type={selectedOptions.includes(value) ? "primary" : "default"}
               onClick={() => handleButtonClick(value)}
+              style={{ width: "80px" }}
             >
               {value}
             </Button>
@@ -233,7 +242,8 @@ export default function OrderStadiumDetail() {
                       component="div"
                       sx={{ fontWeight: "bold" }}
                     >
-                      台大綜合體育館 - 一樓多功能球場 2023/11/02
+                      {courtInfo.name} - {courtInfo.location}{" "}
+                      {datetime.split(" ")[0]}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -241,7 +251,7 @@ export default function OrderStadiumDetail() {
                       paddingX={1}
                       paddingY={0.6}
                     >
-                      106台北市大安區羅斯福路四段1號
+                      {courtInfo.address}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -257,7 +267,8 @@ export default function OrderStadiumDetail() {
                           paddingRight: "10px",
                         }}
                       >
-                        週一至週五 16:00~21:00 開放預約
+                        週{courtInfo.weekday} {courtInfo.availableTimeinday}{" "}
+                        開放預約
                       </span>
                     </Typography>
                     <Typography
@@ -266,7 +277,7 @@ export default function OrderStadiumDetail() {
                       paddingX={1}
                       paddingY={0.6}
                     >
-                      建議最大使用人數 : {8}
+                      建議最大使用人數 : {courtInfo.available}
                     </Typography>
                     <Typography
                       variant="body1"
@@ -279,20 +290,31 @@ export default function OrderStadiumDetail() {
                     </Typography>
 
                     <Box mx={1}>
-                      <Grid container spacing={1}>
-                        {console.log(availableTime)}
-                        {console.log(bookingList)}
-                        {true?
-                        <Box sx={{display:'flex', justifyContent:'center'}}>
-                          <CircularProgress />
-                        </Box>
-                        :(bookingList && availableTime && (
-                          <TimeBtn
-                            bookingList={bookingList}
-                            availableTime={availableTime}
-                          />)
-                        )}
-                      </Grid>
+                      {loading ? (
+                        <Grid
+                          container
+                          spacing={1}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box>
+                            <CircularProgress />
+                          </Box>
+                        </Grid>
+                      ) : (
+                        bookingList &&
+                        availableTime && (
+                          <Grid container spacing={1} sx={{}}>
+                            <TimeBtn
+                              bookingList={bookingList}
+                              availableTime={availableTime}
+                            />
+                          </Grid>
+                        )
+                      )}
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
                       <Typography
@@ -350,8 +372,26 @@ export default function OrderStadiumDetail() {
                       >
                         將此預約設定為私人房間：
                       </Typography>
-                      <Switch />
+                      <Switch
+                        checked={switchState}
+                        onChange={handleSwitchChange}
+                      />
                     </Box>
+                    {switchState && (
+                      <Box my={1} display="flex" alignItems="center">
+                        <Typography
+                          variant="body1"
+                          color="000000"
+                          paddingX={1}
+                          paddingY={0.2}
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          密碼：
+                        </Typography>
+
+                        <Input type="password" style={{ width: 200 }} />
+                      </Box>
+                    )}
                     <Box display="flex" justifyContent="flex-end">
                       <ButtonM
                         width="300px"
