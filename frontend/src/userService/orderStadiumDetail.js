@@ -143,6 +143,21 @@ export default function OrderStadiumDetail() {
       }
     }
     console.log("Selected times are continuous");
+    function roundUpToNearestHalfHour(time) {
+      let [hours, minutes] = time.split(":").map(Number);
+      if (minutes < 30) {
+        minutes = 30;
+      } else {
+        minutes = 0;
+        hours++;
+      }
+      return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}`;
+    }
+
+    let a = "19:30";
+    a = roundUpToNearestHalfHour(a);
     let appointment = {
       court_id: id,
       public: switchState ? 0 : 1,
@@ -153,7 +168,7 @@ export default function OrderStadiumDetail() {
       note: note,
       date: datetime.split(" ")[0],
       start_time: sortedTimes[0],
-      end_time: sortedTimes[sortedTimes.length - 1],
+      end_time: roundUpToNearestHalfHour(sortedTimes[sortedTimes.length - 1]),
     };
     console.log(appointment);
     FetchData.postData(
