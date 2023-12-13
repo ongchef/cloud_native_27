@@ -39,13 +39,20 @@ export const getCourtsByAdminIdQuery = (data) => {
 
 export const searchCourtsByAdminIdQuery = (data) => {
 
-    const { admin_id, ball_type_id, address } = data;
+    const { admin_id, ball_type_id, address, name } = data;
 
     let searchQuery;
 
     if (typeof address !== "undefined") {
         searchQuery = `WHERE c.address like '%${address}%' AND c.admin_id = ?`;
-    } else {
+    }
+    if (typeof name !== "undefined") {
+        searchQuery = `WHERE c.name like '%${name}%' AND c.admin_id = ?`;
+    }
+    if (typeof address !== "undefined" && typeof name !== "undefined") {
+        searchQuery = `WHERE c.address like '%${address}%' AND c.name like '%${name}%' AND c.admin_id = ?`;
+    }
+    if (typeof searchQuery === "undefined") {
         searchQuery = `WHERE c.admin_id = ?`;
     }
     return new Promise((resolve, reject) => {

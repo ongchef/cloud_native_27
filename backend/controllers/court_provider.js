@@ -52,11 +52,12 @@ export const getCourtsByAdminId = async(req,res) => {
 
     if (iscourtsprovider) {
 
-        const { ball, address } = req.query;
+        const { ball, address, court_name } = req.query;
         const data = {
             "admin_id": req.token,
             "ball_type_id": ball, 
-            "address": address
+            "address": address,
+            "name": court_name
         }
         const all_courts = await searchCourtsByAdminIdQuery(data)
 
