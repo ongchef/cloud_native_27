@@ -22,13 +22,10 @@ import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination"; 
 
 import FetchData from "../authService/fetchData";
-async function SearchCourt(){
-  return FetchData.getData("http://localhost:3000/api/courts/admin",1)
-  // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
-}
+
 export default function StadiumBoard() {
-  const [sport, setSport] = useState(10);
-  const [location, setLocation] = useState(20);
+  const [sport, setSport] = useState();
+  const [address, setAddress] = useState();
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
   const [courtList, setCourtList] = useState([])
@@ -45,6 +42,16 @@ export default function StadiumBoard() {
     "六",
     "日",
   ];
+  async function SearchCourt(){
+    return FetchData.getData("http://localhost:3000/api/courts/admin/appointment",1,
+    {
+      date:date,
+      ...(sport&& sport && {ball_type_id:sport}),
+      ...(address&& address && {address:address}),
+    }
+    )
+    // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
+  }
   useEffect(() => {
     SearchCourt().then((res)=>
       {
@@ -66,8 +73,8 @@ export default function StadiumBoard() {
     setSport(event.target.value);
   };
 
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
+  const handleAddressChange = (event) => {
+    setAddress(event.target.value);
   };
   return (
     <div>
@@ -127,25 +134,28 @@ export default function StadiumBoard() {
               onChange={handleSportChange}
               label="球類"
             >
-              <MenuItem value={10}>籃球</MenuItem>
-              <MenuItem value={20}>羽球</MenuItem>
-              <MenuItem value={30}>排球</MenuItem>
+              <MenuItem value={undefined}>所有球類</MenuItem>
+              <MenuItem value={"1"}>羽球</MenuItem>
+              <MenuItem value={"2"}>籃球</MenuItem>
+              <MenuItem value={"3"}>排球</MenuItem>
+              <MenuItem value={"4"}>桌球</MenuItem>
             </Select>
           </FormControl>
         </Box>
         <Box m={1}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label-2">Location</InputLabel>
+            <InputLabel id="demo-simple-select-label-2">Address</InputLabel>
             <Select
               labelId="demo-simple-select-label-2"
               id="demo-simple-select-2"
-              value={location}
-              onChange={handleLocationChange}
-              label="Location"
+              value={address}
+              onChange={handleAddressChange}
+              label="Address"
             >
-              <MenuItem value={10}>大安區</MenuItem>
-              <MenuItem value={20}>中正區</MenuItem>
-              <MenuItem value={30}>信義區</MenuItem>
+              <MenuItem value={undefined}>所有地區</MenuItem>
+              <MenuItem value={"大安區"}>大安區</MenuItem>
+              <MenuItem value={"文山區"}>文山區</MenuItem>
+              <MenuItem value={"信義區"}>信義區</MenuItem>3
             </Select>
           </FormControl>
         </Box>
