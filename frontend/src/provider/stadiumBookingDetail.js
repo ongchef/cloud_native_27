@@ -16,18 +16,6 @@ import dayjs from "dayjs";
 import moment from "moment";
 import CircularProgress from '@mui/material/CircularProgress';
 
-const availableTime = [moment("13:00","HH:mm"),moment("15:00","HH:mm")];
-const bookingList = [
-  {
-    num: 4,
-    period: [26, 30],
-  },
-  {
-    num: 2,
-    period: [34, 38],
-  },
-];
-
 
 async function SearchReserved(courtId,datetime){
   
@@ -41,14 +29,17 @@ export default function StadiumBookingDetail() {
   
   const [courtInfo, setCourtInfo] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [availableTime, setAvailableTime] = useState([10,20]);
+  const [availableTime, setAvailableTime] = useState();
   const [bookingList, setBookingList] = useState([]);
+  const [loading, setLoading] = useState(true)
   
   const navigate = useNavigate();
   useEffect(() => {
+    setLoading(true)
     SearchReserved(id,datetime).then((res)=>{
         console.log(res)
         SetDetails(res);
+        setLoading(false)
     })
   },[]);
 
@@ -173,6 +164,13 @@ export default function StadiumBookingDetail() {
                 alignItems="center"
                 justifyContent="center"
               >
+                {true?
+                  <CardContent >
+                    <Box>
+                    <CircularProgress/>
+                    </Box>
+                    </CardContent>  :
+                <>
                 <Grid item xs={12} sm={6}>
                   <CardMedia
                     component="img"
@@ -181,7 +179,7 @@ export default function StadiumBookingDetail() {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <CardContent>
+                  <CardContent >
                     <Typography
                       variant="h5"
                       component="div"
@@ -236,11 +234,7 @@ export default function StadiumBookingDetail() {
                     <Box mx={1}>
                       <Grid container spacing={1}>
                         {console.log(availableTime)}
-                      {false?
-                        <Box sx={{display:'flex', justifyContent:'center'}}>
-                          <CircularProgress />
-                        </Box>
-                        :(bookingList && availableTime && (
+                      {(bookingList && availableTime && (
                           <TimeBtn
                             bookingList={bookingList}
                             availableTime={availableTime}
@@ -258,6 +252,7 @@ export default function StadiumBookingDetail() {
                     </Box>
                   </CardContent>
                 </Grid>
+                </>}
               </Grid>
             </Card>
           </Box>

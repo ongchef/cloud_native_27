@@ -174,7 +174,7 @@ export default function OrderStadiumDetail() {
     FetchData.postData(
       "http://localhost:3000/api/users/appointment",
       appointment
-    );
+    ).then((res)=>console.log(res));
   };
 
   function TimeBtn(props) {
