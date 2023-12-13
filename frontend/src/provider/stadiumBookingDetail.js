@@ -164,10 +164,10 @@ export default function StadiumBookingDetail() {
                 alignItems="center"
                 justifyContent="center"
               >
-                {true?
+                {loading?
                   <CardContent >
-                    <Box>
-                    <CircularProgress/>
+                    <Box sx={{paddingTop:5}}>
+                    <CircularProgress size={100}/>
                     </Box>
                     </CardContent>  :
                 <>

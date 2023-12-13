@@ -26,6 +26,7 @@ import Map from "../commonService/map";
 import authHeader from "../authService/authHeader";
 import pic2 from "../pic/羽球3.png";
 import FetchData from "../authService/fetchData";
+import LinearProgress from '@mui/material/LinearProgress';
 export default function OrderStadiumDetail() {
   // Inside your component
   const location = useLocation();
@@ -326,20 +327,23 @@ export default function OrderStadiumDetail() {
                     </Typography>
 
                     <Box mx={1}>
+                      
                       {loading ? (
-                        <Grid
-                          container
-                          spacing={1}
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Box>
-                            <CircularProgress />
-                          </Box>
-                        </Grid>
+                        // <Grid
+                        //   container
+                        //   spacing={1}
+                        //   sx={{
+                        //     display: "flex",
+                        //     justifyContent: "center",
+                        //     alignItems: "center",
+                        //   }}
+                        // >
+                        //   <Box>
+                        //     <CircularProgress size={55}/>
+                        //   </Box>
+                        // </Grid>
+
+                        <LinearProgress/>
                       ) : (
                         bookingList &&
                         availableTime && (
