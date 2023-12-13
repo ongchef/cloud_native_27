@@ -6,7 +6,8 @@ import {
     getUserHistoriesQuery,
     putUsersByIdQuery,
     deleteUsersByIdQuery,
-    isAdmin
+    isAdmin,
+    getProviders
 } from "../models/admin.js";
 import {
     getUsersAppointmentIdQuery,
@@ -256,6 +257,23 @@ export const deleteUsersById = async(req,res) => {
             const result = await deleteUsersByIdQuery(user_id)
             return res.status(200).json(result)
         }
+    } else {
+
+        const message = "You are not the admin!"
+        return res.status(401).send(message)
+    }
+}
+
+export const getAllProviders = async(req,res) => {
+
+    // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
+    // This api has been tested by postman
+    const admin_id = req.token;
+    const isadmin = await isAdmin(admin_id)
+    if (isadmin) {
+        const  result= await getProviders()
+        return res.status(200).json(result)
+
     } else {
 
         const message = "You are not the admin!"

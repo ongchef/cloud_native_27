@@ -7,6 +7,7 @@ import {
     putUsersById,
     deleteUsersById,
     courtsProvider,
+    getAllProviders
 } from '../controllers/admin.js';
 
 const router = express.Router();
@@ -31,5 +32,8 @@ router.put("/user", putUsersById);
 
 // DELETE /api/admin/user?user_id
 router.delete("/user", deleteUsersById);
+
+// GET /api/admin/getProviders
+router.get("/getProviders", getAllProviders);
 
 export default router

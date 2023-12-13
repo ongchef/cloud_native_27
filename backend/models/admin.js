@@ -163,3 +163,16 @@ export const isAdmin = (data) => {
         });
     });
 }
+
+// get all providers
+export const getProviders = () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT user_id, name FROM USER WHERE role_id = 3', (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
