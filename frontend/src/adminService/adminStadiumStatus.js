@@ -30,6 +30,9 @@ export default function AdminStadiumStatus() {
   async function getProviders() {
     return FetchData.getData("http://localhost:3000/api/admin/getProviders");
   }
+  async function getStadium() {
+    return FetchData.getData("http://localhost:3000/api/admin/getProviders");
+  }
   useEffect(() => {
     getProviders().then((res) => {
       const providerNames = res.map((item) => item.name);
@@ -145,6 +148,44 @@ export default function AdminStadiumStatus() {
         </Box>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
+        {/* {stadiumList.map((court) => {
+          const weekdayMapping = [
+            "日",
+            "一",
+            "二",
+            "三",
+            "四",
+            "五",
+            "六",
+            "日",
+          ];
+          const weekdayInChinese = weekdayMapping[weekday];
+
+          const availableTime = court.available_time.find(
+            (time) => time.weekday === weekday
+          );
+          const startTime = availableTime
+            ? availableTime.start_time.substring(0, 5)
+            : "";
+          const endTime = availableTime
+            ? availableTime.end_time.substring(0, 5)
+            : "";
+
+          return (
+            <StadiumCard
+              id={court.court_id}
+              image={pic}
+              title={court.name + " - " + court.location}
+              description={[
+                court.address,
+                "週" + weekdayInChinese,
+                startTime + "~" + endTime,
+                court.available,
+              ]}
+              datetime={date + " " + time.format("HH:mm:ss")}
+            />
+          );
+        })} */}
         <StadiumCard
           id={1}
           image={pic}
