@@ -143,7 +143,7 @@ export default function OrderStadiumDetail() {
       }
     }
     console.log("Selected times are continuous");
-    FetchData.postData("http://localhost:3000/api/users/appointment", {
+    let appointment = {
       court_id: id,
       public: switchState ? 0 : 1,
       ball: 3,
@@ -154,7 +154,12 @@ export default function OrderStadiumDetail() {
       date: datetime.split(" ")[0],
       start_time: sortedTimes[0],
       end_time: sortedTimes[sortedTimes.length - 1],
-    });
+    };
+    console.log(appointment);
+    FetchData.postData(
+      "http://localhost:3000/api/users/appointment",
+      appointment
+    );
   };
 
   function TimeBtn(props) {
