@@ -25,6 +25,7 @@ import JToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import dayjs from "dayjs";
+import FetchData from "../../authService/fetchData";
 const week = {
   "mon":"一",
   "tue":"二",
@@ -224,6 +225,7 @@ const  FormDialog=(props)=>{
 export default function CreateStadium() {
   const navigate = useNavigate();
   const [image, setImage] = useState();
+  const [ court, setCourt] = useState({});
   const [ availableTime, setAvailableTime] = useState({
     mon:{0:[dayjs("9:00",'HH:mm'),dayjs("11:00",'HH:mm')],
     1:[dayjs("13:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
@@ -234,6 +236,19 @@ export default function CreateStadium() {
     sat:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
     sun:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]}
   })
+  function handleSubmit(){
+    checkTimeOverlap(availableTime)
+    const stadium={
+
+    }
+    console.log(court)
+    console.log(availableTime)
+    console.log(image)
+    FetchData.postDateWithImg("http://localhost:3000/api/courts",court,image)
+  }
+  const handleChange = (e) => {
+    setCourt({...court,[e.target.id]:e.target.value})
+  }
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       let img = URL.createObjectURL(e.target.files[0]);
@@ -300,13 +315,29 @@ export default function CreateStadium() {
                 <Grid item xs={6}>
                   <CardContent>
                     <Typography>球場名稱</Typography>
-                    <TextField fullWidth size="small" />
-                    <Typography>球場名稱</Typography>
-                    <TextField fullWidth size="small" />
+                    <TextField 
+                      id="name"
+                      fullWidth
+                      size="small"
+                      onChange={handleChange} />
+                    <Typography>球場地點</Typography>
+                    <TextField 
+                      id='location'
+                      fullWidth
+                      size="small"
+                      onChange={handleChange} />
                     <Typography>球場地址</Typography>
-                    <TextField fullWidth size="small" />
+                    <TextField
+                      id='address'
+                      fullWidth
+                      size="small"
+                      onChange={handleChange} />
                     <Typography>最大使用人數</Typography>
-                    <TextField fullWidth size="small" />
+                    <TextField 
+                      id='available'
+                      fullWidth
+                      size="small"
+                      onChange={handleChange} />
                     {Object.keys(availableTime).map((day)=>{
                       return(
                       Object.keys(availableTime[day]).map((id)=>{
@@ -323,7 +354,7 @@ export default function CreateStadium() {
                       )
                     })}
                     <AddDialog availableTime={availableTime} setAvailableTime={setAvailableTime}/>
-                    <Button onClick={()=>checkTimeOverlap(availableTime)}>
+                    <Button onClick={handleSubmit}>
                       送出
                     </Button>
                   </CardContent>

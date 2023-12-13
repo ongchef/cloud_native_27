@@ -24,13 +24,10 @@ import Pagination from "@mui/material/Pagination";
 import AddIcon from "@mui/icons-material/Add";
 import FetchData from "../../authService/fetchData";
 import { FormLabel } from "@mui/material";
-async function SearchCourt(){
-  return FetchData.getData("http://localhost:3000/api/courts/admin",10,{})
-  // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
-}
+
 export default function ReadStadium() {
   const [sport, setSport] = useState(10);
-  const [location, setLocation] = useState(20);
+  const [address, setAddress] = useState(20);
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [courtList, setCourtList] = useState([])
   const [weekday, setWeekday] = useState(moment(date).day());
@@ -45,21 +42,31 @@ export default function ReadStadium() {
     "六",
     "日",
   ];
-  useEffect(() => {
-    fakeStadium();
-    SearchCourt().then((res)=>
+  async function SearchCourt(courtName,sport,address){
+    return FetchData.getData("http://localhost:3000/api/courts/admin",1,
+    {
+      ...(courtName&& courtName && {name:courtName}),
+      ...(sport&& sport && {ball_type_id:sport}),
+      ...(address&& address && {address:address}),
+    })
+    .then((res)=>
       {
         setCourtList(res.courts)
       
       }
     )
+    // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
+  }
+  useEffect(() => {
+    fakeStadium();
+    SearchCourt()
   },[]);
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
 
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
+  const handleAddressChange = (event) => {
+    setAddress(event.target.value);
   };
   return (
     <div>
@@ -94,10 +101,13 @@ export default function ReadStadium() {
               value={sport}
               onChange={handleSportChange}
               label="球類"
+              style={{ width: "80px" }}
             >
-              <MenuItem value={10}>籃球</MenuItem>
-              <MenuItem value={20}>羽球</MenuItem>
-              <MenuItem value={30}>排球</MenuItem>
+              <MenuItem value={undefined}>所有球類</MenuItem>
+              <MenuItem value={"1"}>羽球</MenuItem>
+              <MenuItem value={"2"}>籃球</MenuItem>
+              <MenuItem value={"3"}>排球</MenuItem>
+              <MenuItem value={"4"}>桌球</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -107,18 +117,20 @@ export default function ReadStadium() {
             <Select
               labelId="demo-simple-select-label-2"
               id="demo-simple-select-2"
-              value={location}
-              onChange={handleLocationChange}
-              label="Location"
+              value={address}
+              onChange={handleAddressChange}
+              label="Address"
+              style={{ width: "100px" }}
             >
-              <MenuItem value={10}>大安區</MenuItem>
-              <MenuItem value={20}>中正區</MenuItem>
-              <MenuItem value={30}>信義區</MenuItem>
+              <MenuItem value={undefined}>所有地區</MenuItem>
+              <MenuItem value={"大安區"}>大安區</MenuItem>
+              <MenuItem value={"文山區"}>文山區</MenuItem>
+              <MenuItem value={"信義區"}>信義區</MenuItem>
             </Select>
           </FormControl>
         </Box>
         <Box m={1}>
-          <Button variant="contained">Search</Button>
+          <Button variant="contained" onClick={()=>SearchCourt(courtName,sport,address)}>Search</Button>
         </Box>
       </Box>
       <Box>
@@ -144,7 +156,7 @@ export default function ReadStadium() {
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
       {
-        
+        courtList&&
           courtList.map((court)=>{
             const weekdayInChinese = weekdayMapping[weekday];
 

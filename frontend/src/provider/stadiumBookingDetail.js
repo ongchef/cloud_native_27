@@ -31,17 +31,16 @@ const bookingList = [
 
 async function SearchReserved(courtId,datetime){
   
-  return FetchData.getData("http://localhost:3000/api/courts/reserved",1,{date:datetime,court_id:courtId})
+  return FetchData.getData("http://localhost:3000/api/courts/admin/appointmentDetail",1,{date:datetime,court_id:courtId})
 }
 export default function StadiumBookingDetail() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("id");
   const datetime = searchParams.get("time");
-  const [dataLoaded, setDataLoaded] = useState(false);
-
+  
+  const [courtInfo, setCourtInfo] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const[reservedTime, setReservedTime] = useState()
   const [availableTime, setAvailableTime] = useState([10,20]);
   const [bookingList, setBookingList] = useState([]);
   
@@ -49,7 +48,6 @@ export default function StadiumBookingDetail() {
   useEffect(() => {
     SearchReserved(id,datetime).then((res)=>{
         console.log(res)
-        setReservedTime(res)
         SetDetails(res);
     })
   },[]);
@@ -59,29 +57,41 @@ export default function StadiumBookingDetail() {
     const weekday = date.getDay() || 7; // Convert Sunday from 0 to 7
     console.log(data)
     // 要等API改
-    const availableTimeObj = data[0].availableTime.find(
+    const availableTimeObj = data.available_time.find(
       (time) => time.weekday === weekday
     );
+    const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
+    const weekdayInChinese = weekdayMapping[weekday];
     console.log(availableTimeObj)
     const availableTime1 = [
       parseInt(availableTimeObj.start_time.split(":")[0]) * 2,
       parseInt(availableTimeObj.end_time.split(":")[0]) * 2,
     ];
-    const bookingList1 = data[0].appointment_time.map((time) => ({
+    const bookingList1 = data.appointments.map((time) => ({
       period: [
         parseInt(time.start_time.split(":")[0]) * 2,
         parseInt(time.end_time.split(":")[0]) * 2,
+        time.attendence
       ],
     }));
+    const courtData = { ...data };
+    delete courtData.available_time;
+    delete courtData.appointment_time;
+    courtData.weekday = weekdayInChinese;
+    courtData.availableTimeinday =
+      availableTimeObj.start_time.substring(0, 5) +
+      "~" +
+      availableTimeObj.end_time.substring(0, 5);
     setAvailableTime(availableTime1);
     setBookingList(bookingList1);
-    setDataLoaded(true);
+    setCourtInfo(courtData);
     console.log(availableTime);
     console.log(bookingList);
   }
   
   function TimeBtn(props) {
     const { availableTime, bookingList } = props;
+    var num
     console.log(availableTime[1] - availableTime[0]);
     const availableTimeList = Array.from(
       new Array(availableTime[1] - availableTime[0]),
@@ -92,8 +102,12 @@ export default function StadiumBookingDetail() {
       return (
         <Grid item>
           {bookingList.some(
-            (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
+            (item) => {
+              num=item.period[2]
+              return item.period[0] / 2 <= time && item.period[1] / 2 > time}
           ) ? (
+            <Tooltip title={num+"/"+courtInfo.available} placement="top"> 
+            <div>
             <Button
               variant="outlined"
               color="inherit"
@@ -105,6 +119,8 @@ export default function StadiumBookingDetail() {
             >
               {value}
             </Button>
+            </div>
+            </Tooltip>
           ) : (
             <Button
               variant="outlined"
@@ -169,7 +185,7 @@ export default function StadiumBookingDetail() {
                       component="div"
                       sx={{ fontWeight: "bold" }}
                     >
-                      台大綜合體育館 - 一樓多功能球場 2023/11/02
+                      {courtInfo.name} - {courtInfo.location}{" "}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -177,7 +193,7 @@ export default function StadiumBookingDetail() {
                       paddingX={1}
                       paddingY={0.6}
                     >
-                      106台北市大安區羅斯福路四段1號
+                      {courtInfo.address}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -193,7 +209,8 @@ export default function StadiumBookingDetail() {
                           paddingRight: "10px",
                         }}
                       >
-                        週一至週五 13:00~20:00 開放預約
+                       週{courtInfo.weekday} {courtInfo.availableTimeinday}{" "}
+                        開放預約
                       </span>
                     </Typography>
                     <Typography
@@ -202,7 +219,7 @@ export default function StadiumBookingDetail() {
                       paddingX={1}
                       paddingY={0.6}
                     >
-                      建議最大使用人數 : {8}
+                      建議最大使用人數 :{courtInfo.available}
                     </Typography>
                     <Typography
                       variant="body1"

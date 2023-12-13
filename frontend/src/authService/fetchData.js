@@ -28,9 +28,21 @@ async function postData(url,body){
         return []
     })
 }
-
+async function postDateWithImg(url,data,img){
+    var bodyFormData = new FormData();
+    
+    bodyFormData.append("name",data.name);
+    bodyFormData.append("court.jpg",img)
+    axios({
+        method: "post",
+        url: url,
+        data: bodyFormData,
+        headers: {"Content-Type": "multipart/form-data" ,...authHeader()},
+      })
+}
 const FetchData={
-    getData
+    getData,
+    postDateWithImg
 }
 
 
