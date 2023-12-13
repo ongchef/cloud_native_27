@@ -6,8 +6,10 @@ import pic2 from "../pic/羽球3.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import authHeader from "../authService/authHeader";
+import moment from "moment/moment";
 
 export default function UserHistory() {
+  const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [userHistoryList, setUserHistoryList] = useState([]);
   async function getUserHistory() {
     return await axios.get(
@@ -38,17 +40,22 @@ export default function UserHistory() {
         </Box>
         <Box m={0.5} sx={{ height: "70vh", overflowY: "auto", width: "70%" }}>
           {[...userHistoryList].reverse().map((history) => {
+            const historyDate = new Date(history.date);
+            const currentDate = new Date();
+            const status = currentDate <= historyDate;
             return (
               <HistoryCard
                 image={pic}
                 title={history.court_name + " - " + history.location}
                 description={[
                   history.address,
-                  history.date,
-                  "19:00~21:00",
+                  history.date.substring(0, 10),
+                  history.start_time.substring(0, 5) +
+                    " ~ " +
+                    history.end_time.substring(0, 5),
                   [history.ball, history.level, history.rule],
                 ]}
-                status={true}
+                status={status}
               />
             );
           })}
