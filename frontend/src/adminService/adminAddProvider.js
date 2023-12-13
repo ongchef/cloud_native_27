@@ -8,6 +8,7 @@ import {
 	MenuItem,
 	Typography,
 } from '@mui/material';
+import axios from 'axios';
 
 const AdminAddProvider = () => {
 	const [unitName, setUnitName] = useState('');
@@ -16,6 +17,32 @@ const AdminAddProvider = () => {
 	const [loginPassword, setLoginPassword] = useState('');
 
 	const [loading, setLoading] = useState(false);
+
+	const API_URL = 'http://localhost:3000/api/users/';
+
+	const registerProvider = async () => {
+		try {
+			const response = await axios.post(
+				API_URL,
+				JSON.stringify({
+					role_id: 3,
+					name: unitName,
+					password: loginPassword,
+					email: contactEmail,
+					phone: contactPhone,
+				}),
+				{
+					headers: { 'Content-Type': 'application/json' },
+				}
+			);
+
+			console.log('Registration successful:', response.data);
+			return response.data;
+		} catch (error) {
+			console.error('Registration failed:', error.message);
+			throw error; // Re-throw the error for further analysis
+		}
+	};
 
 	const handleAddProvider = (e) => {
 		e.preventDefault();
@@ -28,7 +55,18 @@ const AdminAddProvider = () => {
 				loginPassword,
 			});
 		}
-		const roleId = 3;
+		try {
+			const roleId = 2;
+			registerProvider({
+				unitName,
+				contactEmail,
+				contactPhone,
+				loginPassword,
+				roleId,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 
 		setLoading(false);
 	};
