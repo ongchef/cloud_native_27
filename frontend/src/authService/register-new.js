@@ -82,23 +82,45 @@ const Register = () => {
 
 		// form.current.validateAll();
 
-		AuthService.register(username, email, name, phoneNumber, password).then(
-			(response) => {
-				setMessage(response.data.message);
-				setSuccessful(true);
-			},
-			(error) => {
-				const resMessage =
-					(error.response &&
-						error.response.data &&
-						error.response.data.message) ||
-					error.message ||
-					error.toString();
+		try {
+			AuthService.register({
+				username,
+				email,
+				name,
+				phoneNumber,
+				password,
+				lineId,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 
-				setMessage(resMessage);
-				setSuccessful(false);
-			}
-		);
+		setMessage('');
+		setSuccessful(true);
+		// AuthService.register({
+		// 	username,
+		// 	email,
+		// 	name,
+		// 	phoneNumber,
+		// 	password,
+		// 	lineId,
+		// }).then(
+		// 	(response) => {
+		// 		setMessage(response.data.message);
+		// 		setSuccessful(true);
+		// 	},
+		// 	(error) => {
+		// 		const resMessage =
+		// 			(error.response &&
+		// 				error.response.data &&
+		// 				error.response.data.message) ||
+		// 			error.message ||
+		// 			error.toString();
+
+		// 		setMessage(resMessage);
+		// 		setSuccessful(false);
+		// 	}
+		// );
 	};
 
 	return (
