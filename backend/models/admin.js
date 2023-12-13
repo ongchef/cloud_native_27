@@ -3,7 +3,6 @@ import db from './connection_db.js';
 // get courts appointment query
 export const getCourtsAppointmentQuery = (params) => {
     const name = params.name !== 'ALL' ? params.name : null;
-    const date = params.date !== 'ALL' ? params.date : null;
     const ball = params.ball !== 'ALL' ? params.ball : null;
     const address = params.address !== 'ALL' ? params.address : null;
 

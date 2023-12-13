@@ -25,6 +25,7 @@ import {
 } from '../utils/helper.js';
 
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment-timezone';
 
 
 export const getCourtsAppointmentDetails = async(req,res) => {
@@ -104,7 +105,8 @@ export const getCourtsAppointments = async(req,res) => {
             let court = await getCourtAllAppointment(result[i]['court_id'])
             let found = 0;
             for(let j = 0; j < court.length; j++) {
-                court[j]['date'] = court[j]['date'].toISOString().split('T')[0]
+                court[j]['date'] = parseISODate(court[j]['date'])
+
                 if(availableCourtChecker(court[j], req.query['query_time'])) {
                     found = 1
                     break;
@@ -114,7 +116,6 @@ export const getCourtsAppointments = async(req,res) => {
                 courts.push(result[i])
             }
         }
-        
         
         //pagination and count the total page
         let limit = 10;

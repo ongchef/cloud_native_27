@@ -52,28 +52,12 @@ export const generate_uuid = () => {
 
 export const parseISODate = (date) => {
     const cur_date = new Date(date);
-
-    const yyyy = cur_date.getFullYear();
-    let mm = cur_date.getMonth() + 1; // Months start at 0
-    let dd = cur_date.getDate();
-
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
-
-    return `${yyyy}-${mm}-${dd}`
+    return `${cur_date.getFullYear()}-${cur_date.getMonth()+1}-${cur_date.getDate()}`
 }
 
 export const add_one_day = (date) => {
     const cur_date = new Date(date);
-
-    const yyyy = cur_date.getFullYear();
-    let mm = cur_date.getMonth() + 1; // Months start at 0
-    let dd = cur_date.getDate() + 1;
-
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
-    
-    return `${yyyy}-${mm}-${dd}`
+    return `${cur_date.getFullYear()}-${cur_date.getMonth()+1}-${cur_date.getDate()+1}`
 }
 
 export const imageClient = (image_file) => {
