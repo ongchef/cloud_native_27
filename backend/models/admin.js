@@ -2,9 +2,9 @@ import db from './connection_db.js';
 
 // get courts appointment query
 export const getCourtsAppointmentQuery = (params) => {
-    const name = params.name !== 'ALL' ? params.name : null;
-    const ball = params.ball !== 'ALL' ? params.ball : null;
-    const address = params.address !== 'ALL' ? params.address : null;
+    const name = params.name !== undefined ? params.name : null;
+    const ball = params.ball !== undefined ? params.ball : null;
+    const address = params.address !== undefined ? params.address : null;
 
     let searchQuery = "";
     let inti = 0;
@@ -19,6 +19,7 @@ export const getCourtsAppointmentQuery = (params) => {
             searchQuery += ` AND U.name = '${name}'`;
         }
     }
+    console.log(searchQuery);
 
     return new Promise((resolve, reject) => {
 
@@ -41,6 +42,7 @@ export const getCourtsAppointmentQuery = (params) => {
                         if (found) {
                             result.push(court)
                         }
+                        console.log(result);
                         return result
                     }, [])
                     resolve(search_results);

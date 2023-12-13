@@ -332,6 +332,15 @@
         "description": "",
         "parameters": [
           {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bearer + authentication token"
+          },
+          {
             "name": "query_time",
             "in": "query",
             "schema": {
