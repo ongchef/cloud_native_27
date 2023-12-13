@@ -9,6 +9,8 @@ import {
     isCourtsAdmin,
     isCourtsProvider,
     getCourtsAppointmentByDate,
+    insertCourtAvaTime,
+    putCourtAvaTimeByIdQuery
 } from "../models/court_provider.js";
 
 import {
@@ -233,6 +235,7 @@ export const putCourtsById = async(req,res) => {
             // get the image or update data
             let image_file, update_data;
             let court_data = {}
+            let court_ava_time;
             court_data = { ...auth_data };
 
             if (req.files.length != 0) {
@@ -250,6 +253,15 @@ export const putCourtsById = async(req,res) => {
                         if (typeof court_data['ball_type_id'] !== "undefined") {
                             court_data['ball_type_id'] = court_data['ball_type_id'].toString();
                         }
+                        if (typeof court_data['available_time'] !== "undefined") {
+                            court_ava_time = JSON.parse(JSON.stringify(court_data['available_time']))
+                            delete court_data['available_time'];
+                            const put_court_avatime_result = await Promise.all(
+                                court_ava_time.map(async(item) => {
+                                    return await putCourtAvaTimeByIdQuery(auth_data['court_id'], item)
+                                })
+                            )
+                        }
                     }
                 }
 
@@ -258,6 +270,7 @@ export const putCourtsById = async(req,res) => {
             }
             
             const result = await putCourtsByIdQuery(court_data);
+            
             return res.status(200).json(result);
     
         } else {
@@ -285,20 +298,29 @@ export const postCourts = async(req,res) => {
             for (let i=0; i<req.files.length; i++) {
                 if (req.files[i]['fieldname'] == 'img') {
                     image_file = req.files[i].buffer;
-                } else if (req.file[i]['fieldname'] == 'data') {
+                } else if (req.files[i]['fieldname'] == 'data') {
                     court_data = JSON.parse(req.files[i].buffer.toString());
                 }
             }
 
             try{
+                // upload image and insert court table
                 const upload_img = await imageClient(image_file);
                 court_data['admin_id'] = req.token;
                 court_data['image_url'] = upload_img['data']['link']
                 court_data['ball_type_id'] = court_data['ball_type_id'].toString();
-                const result = await postCourtsQuery(court_data);
-                return res.status(200).json(result);
+                const available_time = JSON.parse(JSON.stringify(court_data['available_time']))
+                delete court_data['available_time'];
+                const insert_court_result = await postCourtsQuery(court_data);
+
+                // get the inserted court_id and insert court available time table
+                const court_id = insert_court_result['insertId'];
+                const insert_courttime_results = await insertCourtAvaTime(court_id, available_time)
+
+                return res.status(200).json("新增完成");
+
             } catch(error) {
-                // console.log(error)
+                console.log(error)
                 return res.status(400).json("Fail to create a court!");
             }
         } else {

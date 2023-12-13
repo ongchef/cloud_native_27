@@ -229,7 +229,7 @@ export const postCourtsQuery = (data) => {
             if (error) {
                 reject(error);
             } else {
-                resolve("新增完成!");
+                resolve(results);
             }
         });
     });
@@ -246,6 +246,34 @@ export const deleteCourtsByIdQuery = (data) => {
                 reject(error);
             } else {
                 resolve("刪除完成!");
+            }
+        });
+    });
+}
+
+export const insertCourtAvaTime = (court_id, data) => {
+    return new Promise((resolve, reject) => {
+        db.query('INSERT INTO STADIUM.COURT_AVAILABLE_TIME (court_id, weekday, start_time, end_time) VALUES ?',
+        [ data.map(item => [court_id, item.weekday, item.start_time, item.end_time]) ], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+export const putCourtAvaTimeByIdQuery = (court_id, data) => {
+    const { weekday, start_time, end_time } = data
+    return new Promise((resolve, reject) => {
+        db.query(`UPDATE STADIUM.COURT_AVAILABLE_TIME SET start_time = ?, end_time = ?
+        WHERE court_id = ? AND weekday = ?`,
+        [start_time, end_time, court_id, weekday], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
             }
         });
     });
