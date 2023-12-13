@@ -101,7 +101,7 @@ export const getCourtsByAdminId = async(req,res) => {
     }
 }
 
-export const getCourtsReservedByCourtId = async(req,res) => {
+export const getCourtsAppointmentDetailByCourtId = async(req,res) => {
 
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
@@ -130,9 +130,18 @@ export const getCourtsReservedByCourtId = async(req,res) => {
                 const appointment_date = get_appointment_date.map((item)=>({
                     "date": req.query['date'],
                     "start_time": item.start_time,
-                    "end_time": item.end_time
+                    "end_time": item.end_time,
+                    "attendence": item.attendence
                 }))
-                return res.status(200).json(appointment_date);
+                const court_info = await getCourtsOrderInfoInIdListQuery(data['court_id']);
+                const court_available_time =  await getCourtsAvaTimeByIdQuery(data['court_id'])
+
+                const return_json = {
+                    ...court_info[0],
+                    "appointments": appointment_date,
+                    "available_time": court_available_time,
+                }
+                return res.status(200).json(return_json);
 
             // the court does not have appointment on the query date
             // just return a empty array

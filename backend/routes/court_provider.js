@@ -3,7 +3,7 @@ import {
     getCourts,
     getCourtsByAdminId,
     searchCourtsAppointmentsByAdminId,
-    getCourtsReservedByCourtId,
+    getCourtsAppointmentDetailByCourtId,
     putCourtsById,
     postCourts,
     deleteCourtsById
@@ -30,8 +30,8 @@ router.get("/admin", getCourtsByAdminId)
 // GET /api/courts/admin/appointment
 router.get("/admin/appointment", searchCourtsAppointmentsByAdminId)
 
-// GET /api/courts/reserved
-router.get("/reserved", getCourtsReservedByCourtId);
+// GET /api/courts/admin/appointmentDetail
+router.get("/admin/appointmentDetail", getCourtsAppointmentDetailByCourtId);
 
 
 export default router
