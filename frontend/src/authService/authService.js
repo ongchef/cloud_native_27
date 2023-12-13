@@ -3,18 +3,40 @@ import { UserContext } from '../UserContext';
 import { useContext } from 'react';
 import fakeUser from '../testData/fakeUser';
 
-const API_URL = 'http://localhost:8080/api/auth/';
+const API_URL = 'http://localhost:3000/api/users/';
 
 // const register = ({ username, password, name, email, phone, lineId }) => {
-const register = ({ username, password, name, email, phone, lineId }) => {
-	return axios.post(API_URL + 'signup', {
-		username,
-		password,
-		name,
-		phone,
-		email,
-		lineId,
-	});
+const register = async ({
+	username,
+	password,
+	name,
+	email,
+	phone,
+	lineId,
+	roleId,
+}) => {
+	try {
+		const response = await axios.post(
+			API_URL,
+			JSON.stringify({
+				line_id: lineId,
+				role_id: roleId,
+				password: password,
+				name: username,
+				email: email,
+				phone: phone,
+			}),
+			{
+				headers: { 'Content-Type': 'application/json' },
+			}
+		);
+
+		console.log('Registration successful:', response.data);
+		return response.data;
+	} catch (error) {
+		console.error('Registration failed:', error.message);
+		throw error; // Re-throw the error for further analysis
+	}
 };
 
 const login = (userName, password) => {
@@ -33,14 +55,7 @@ const login = (userName, password) => {
 			}, 1000);
 		});
 	}
-	// return delay()
-	//   .then((response) => {
-	//   if (response.data.accessToken) {
-	//     localStorage.setItem("user", JSON.stringify(response.data));
-	//   }
-	//   console.log(response.data)
-	//   return response.data;
-	// });
+
 	return axios
 		.post('http://localhost:3000/api/users/login', {
 			name: userName,

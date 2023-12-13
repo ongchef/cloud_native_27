@@ -3,8 +3,23 @@ import Typography from "@mui/material/Typography"; // 引入Typography元件
 import HistoryCard from "./userHistoryCard"; // 引入StadiumCard元件
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import authHeader from "../authService/authHeader";
 
 export default function UserHistory() {
+  const [userHistoryList, setUserHistoryList] = useState([]);
+  async function getUserHistory() {
+    return await axios.get(
+      "http://localhost:3000/api/users/appointment/histories",
+      {
+        headers: authHeader(),
+      }
+    );
+  }
+  useEffect(() => {
+    getUserHistory().then((res) => setUserHistoryList(res.data));
+  }, []);
   return (
     <div>
       <h1>user History</h1>
@@ -21,8 +36,23 @@ export default function UserHistory() {
         <Box width="80vw">
           <Typography variant="h3">球場歷史紀錄</Typography>
         </Box>
-        <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-          <HistoryCard
+        <Box m={0.5} sx={{ height: "70vh", overflowY: "auto", width: "70%" }}>
+          {[...userHistoryList].reverse().map((history) => {
+            return (
+              <HistoryCard
+                image={pic}
+                title={history.court_name + " - " + history.location}
+                description={[
+                  history.address,
+                  history.date,
+                  "19:00~21:00",
+                  [history.ball, history.level, history.rule],
+                ]}
+                status={true}
+              />
+            );
+          })}
+          {/* <HistoryCard
             image={pic}
             title={"球場名稱1"}
             description={[
@@ -54,7 +84,7 @@ export default function UserHistory() {
               ["Basketball", "新手友善", "雙打"],
             ]}
             status={false}
-          />
+          /> */}
         </Box>
       </Box>
     </div>

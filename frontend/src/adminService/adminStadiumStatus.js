@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import StadiumCard from "./adminStadiumCard";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -18,13 +18,28 @@ import FormControlLabel from "@mui/material/FormControlLabel"; // 引入FormCont
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination";
+import FetchData from "../authService/fetchData";
 export default function AdminStadiumStatus() {
   const [sport, setSport] = useState("basketball");
   const [location, setLocation] = useState("Da an");
-  const [provider, setProvider] = useState("NTU");
+  const [providers, setProviders] = useState([]);
+  const [provider, setProvider] = useState("ALL");
+
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
-
+  async function getProviders() {
+    return FetchData.getData("http://localhost:3000/api/admin/getProviders");
+  }
+  async function getStadium() {
+    return FetchData.getData("http://localhost:3000/api/admin/getProviders");
+  }
+  useEffect(() => {
+    getProviders().then((res) => {
+      const providerNames = res.map((item) => item.name);
+      console.log(providerNames);
+      setProviders(providerNames);
+    });
+  }, []);
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
@@ -55,9 +70,10 @@ export default function AdminStadiumStatus() {
               onChange={handleProviderChange}
               label="球場提供商"
             >
-              <MenuItem value={"NTU"}>臺灣大學</MenuItem>
-              <MenuItem value={"Daan"}>大安運動中心</MenuItem>
-              <MenuItem value={"NTUST"}>臺灣科技大學</MenuItem>
+              <MenuItem value={"ALL"}>ALL</MenuItem>
+              {providers.map((provider) => {
+                return <MenuItem value={provider}>{provider}</MenuItem>;
+              })}
             </Select>
           </FormControl>
         </Box>
@@ -132,6 +148,44 @@ export default function AdminStadiumStatus() {
         </Box>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
+        {/* {stadiumList.map((court) => {
+          const weekdayMapping = [
+            "日",
+            "一",
+            "二",
+            "三",
+            "四",
+            "五",
+            "六",
+            "日",
+          ];
+          const weekdayInChinese = weekdayMapping[weekday];
+
+          const availableTime = court.available_time.find(
+            (time) => time.weekday === weekday
+          );
+          const startTime = availableTime
+            ? availableTime.start_time.substring(0, 5)
+            : "";
+          const endTime = availableTime
+            ? availableTime.end_time.substring(0, 5)
+            : "";
+
+          return (
+            <StadiumCard
+              id={court.court_id}
+              image={pic}
+              title={court.name + " - " + court.location}
+              description={[
+                court.address,
+                "週" + weekdayInChinese,
+                startTime + "~" + endTime,
+                court.available,
+              ]}
+              datetime={date + " " + time.format("HH:mm:ss")}
+            />
+          );
+        })} */}
         <StadiumCard
           id={1}
           image={pic}

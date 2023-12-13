@@ -18,7 +18,7 @@ export default function UserHistoryCard({
       <Card
         sx={{
           height: "38vh",
-          width: "70%",
+          width: "100%",
           margin: "auto",
           "@media (max-width:800px)": {
             height: "auto",
@@ -98,9 +98,6 @@ export default function UserHistoryCard({
                       {index < description[3].length - 1 && <>&nbsp;</>}
                     </React.Fragment>
                   ))}
-                </Typography>
-                <Typography variant="body2" color="000000">
-                  當前場地預約人數： <strong>4/8</strong>
                 </Typography>
 
                 <Box display="flex" justifyContent="flex-end">
