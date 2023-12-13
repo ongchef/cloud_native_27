@@ -294,6 +294,38 @@
           }
         }
       }
+    },"/api/users/appointmentDetail/join": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bearer + authentication token"
+          },
+          {
+            "name": "appointment_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "properties": {
+                "address": {
+                  "example": "1"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     },
     "/api/users/appointment/join": {
       "get": {
@@ -564,7 +596,64 @@
         }
       }
     },
-    "/api/courts/reserved": {
+    "/api/courts/admin/appointment": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bearer + authentication token"
+          },
+          {
+            "in": "query",
+            "name": "ball",
+            "schema": {
+              "type": "json",
+              "example": "[3]"
+            },
+            "description": "Filter by ball"
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "schema": {
+              "type": "string",
+              "example": "文山區"
+            },
+            "description": "Filter by address"
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "time",
+              "example": "2023-11-12"
+            },
+            "description": "Filter by date"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "int",
+              "example": "1"
+            },
+            "description": "pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courts/admin/appointmentDetail": {
       "get": {
         "description": "",
         "parameters": [
