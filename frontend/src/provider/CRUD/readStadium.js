@@ -23,17 +23,18 @@ import fakeStadium from "../../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination";
 import AddIcon from "@mui/icons-material/Add";
 import FetchData from "../../authService/fetchData";
+import { FormLabel } from "@mui/material";
 async function SearchCourt(){
-  return FetchData.getData("http://localhost:3000/api/courts/admin",10)
+  return FetchData.getData("http://localhost:3000/api/courts/admin",10,{})
   // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
 }
 export default function ReadStadium() {
   const [sport, setSport] = useState(10);
   const [location, setLocation] = useState(20);
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
-  const [time, setTime] = useState(0);
   const [courtList, setCourtList] = useState([])
   const [weekday, setWeekday] = useState(moment(date).day());
+  const [courtName, setCourtName] = useState()
   const weekdayMapping = [
     "日",
     "一",
@@ -48,13 +49,8 @@ export default function ReadStadium() {
     fakeStadium();
     SearchCourt().then((res)=>
       {
-        setCourtList(res)
-        let day = moment(date).day()
-        if (day === 0) {
-          setWeekday(7);
-        } else {
-          setWeekday(day);
-        }
+        setCourtList(res.courts)
+      
       }
     )
   },[]);
@@ -77,41 +73,17 @@ export default function ReadStadium() {
         margin="auto"
       >
         <Box m={1}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              disablePast={true}
-              value={dayjs(date + 1)}
-              shouldDisableDate={(date) => {
-                return date.date() > new Date().getDate() + 7;
-              }}
-              formatDate={(date) => moment(date).format("DD-MM-YYYY")}
-              onChange={(newDate) => {
-                newDate = moment(
-                  new Date(newDate.year(), newDate.month(), newDate.date())
-                ).format("YYYY-MM-DD");
-                setDate(newDate);
-              }}
-            />
-          </LocalizationProvider>
-        </Box>
-        <Box m={1}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              timeSteps={{ minutes: 30 }}
-              label="時段"
-              ampm={false}
-              minTime={moment("9:00", "HH:mm")}
-              maxTime={moment("21:00", "HH:mm")}
-              // views={["hours","minutes"]}
-              format="hh:mm"
-              // defaultValue={dayjs("0000-00-00T9:00")}
-              onChange={(newTime) => {
-                console.log(newTime);
-                console.log(newTime.get("hour"));
-                setTime(newTime.get("hour"));
-              }}
-            />
-          </LocalizationProvider>
+          <FormControl>
+          {/* <InputLabel>球場名稱</InputLabel> */}
+          <TextField
+            placeholder="球場名稱"
+            label="球場名稱"
+            value={courtName}
+            onClick={(event, value)=>setCourtName(value)}
+          >
+
+          </TextField>
+          </FormControl>
         </Box>
         <Box m={1}>
           <FormControl fullWidth>
@@ -188,7 +160,7 @@ export default function ReadStadium() {
             return(
             <StadiumCard
               id={court.court_id}
-              image={pic}
+              image={court.image_url.split(".jpg")[0]+".jpg"}
               title={court.name + " - " + court.location}
 
               description={[

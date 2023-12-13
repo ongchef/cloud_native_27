@@ -48,14 +48,18 @@ export default function StadiumBoard() {
   useEffect(() => {
     SearchCourt().then((res)=>
       {
-        setCourtList(res.courts)
-        setTotalPage(res.total_page)
-        let day = moment(date).day()
-        if (day === 0) {
-          setWeekday(7);
-        } else {
-          setWeekday(day);
-        }}
+        if (res){
+          setCourtList(res.courts)
+          setTotalPage(res.total_page)
+          let day = moment(date).day()
+          if (day === 0) {
+            setWeekday(7);
+          } else {
+            setWeekday(day);
+          }
+        }
+        
+      }
     )
   },[]);
   const handleSportChange = (event) => {
@@ -168,8 +172,8 @@ export default function StadiumBoard() {
         </Grid>    
         </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
+        {console.log(courtList)}
         {
-          
           courtList.map((court)=>{
             const weekdayInChinese = weekdayMapping[weekday];
 
