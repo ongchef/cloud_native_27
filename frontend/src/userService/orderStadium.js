@@ -20,8 +20,8 @@ import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
 import axios from "axios";
 import authHeader from "../authService/authHeader";
 export default function OrderStadium() {
-  const [sport, setSport] = useState("");
-  const [location, setLocation] = useState("");
+  const [sport, setSport] = useState();
+  const [location, setLocation] = useState();
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [weekday, setWeekday] = useState(moment(date).day());
@@ -57,8 +57,8 @@ export default function OrderStadium() {
       headers: authHeader(),
       params: {
         querytime: date + time.format("HH:mm:ss"),
-        // ball: sport,
-        // address: location,
+        ball: sport,
+        address: location,
       },
     });
   }
@@ -103,7 +103,7 @@ export default function OrderStadium() {
               label="時段"
               ampm={false}
               minTime={moment("9:00", "HH:mm")}
-              maxTime={moment("21:00", "HH:mm")}
+              maxTime={moment("22:00", "HH:mm")}
               // views={["hours","minutes"]}
               format="hh:mm"
               // defaultValue={dayjs("0000-00-00T9:00")}

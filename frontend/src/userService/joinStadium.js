@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import StadiumCard from "./joinStadiumCard";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -18,22 +18,60 @@ import FormControlLabel from "@mui/material/FormControlLabel"; // 引入FormCont
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination";
+import axios from "axios";
+import authHeader from "../authService/authHeader";
 export default function JoinStadium() {
-  const [sport, setSport] = useState("basketball");
-  const [location, setLocation] = useState("Da an");
+  const [sport, setSport] = useState();
+  const [location, setLocation] = useState();
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
-  const [time, setTime] = useState(0);
-
+  const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
+  const [minute, setMinute] = useState(0);
+  const [publicIndex, setPublicIndex] = useState();
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
-
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
+  const handlePublicIndexChange = (event) => {
+    setPublicIndex(event.target.value);
+  };
+  const handleSearch = async () => {
+    try {
+      console.log("click");
+      const result = await SearchAppointment();
+      // handle the result
+      setAppointmentList(result.data.courts);
+    } catch (error) {
+      // handle the error
+      console.log("Error:" + error);
+    }
+  };
+  async function SearchAppointment() {
+    let d = date;
+    console.log(date);
+    console.log(time.$d.toString().substring(15, 24));
+    d = date + time.$d.toString().substring(15, 24);
+    return await axios.get("http://localhost:3000/api/users/appointment/join", {
+      headers: authHeader(),
+      params: {
+        querytime: date + time.$d.toString().substring(15, 24),
+        ball: sport,
+        address: location,
+        public_index: publicIndex,
+      },
+    });
+  }
+  const [appointmentList, setAppointmentList] = useState([]);
+  useEffect(() => {
+    SearchAppointment().then((res) => setAppointmentList(res.data.courts));
+  }, []);
+  useEffect(() => {
+    console.log(appointmentList);
+  }, [appointmentList]);
   return (
     <div>
-      <h1>Order Stadium</h1>
+      <h1>Join Stadium</h1>
       <Box
         display="flex"
         flexDirection="row"
@@ -63,14 +101,13 @@ export default function JoinStadium() {
               label="時段"
               ampm={false}
               minTime={moment("9:00", "HH:mm")}
-              maxTime={moment("21:00", "HH:mm")}
+              maxTime={moment("22:00", "HH:mm")}
               // views={["hours","minutes"]}
               format="hh:mm"
               // defaultValue={dayjs("0000-00-00T9:00")}
               onChange={(newTime) => {
-                console.log(newTime);
-                console.log(newTime.get("hour"));
-                setTime(newTime.get("hour"));
+                setTime(newTime);
+                console.log(time);
               }}
             />
           </LocalizationProvider>
@@ -84,10 +121,12 @@ export default function JoinStadium() {
               value={sport}
               onChange={handleSportChange}
               label="球類"
+              style={{ width: "80px" }}
             >
-              <MenuItem value={"basketball"}>籃球</MenuItem>
-              <MenuItem value={"badminton"}>羽球</MenuItem>
-              <MenuItem value={"volleyball"}>排球</MenuItem>
+              <MenuItem value={"1"}>羽球</MenuItem>
+              <MenuItem value={"2"}>籃球</MenuItem>
+              <MenuItem value={"3"}>排球</MenuItem>
+              <MenuItem value={"4"}>桌球</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -100,10 +139,11 @@ export default function JoinStadium() {
               value={location}
               onChange={handleLocationChange}
               label="Location"
+              style={{ width: "100px" }}
             >
-              <MenuItem value={"Da an"}>大安區</MenuItem>
-              <MenuItem value={"CC"}>中正區</MenuItem>
-              <MenuItem value={"Xinyi"}>信義區</MenuItem>
+              <MenuItem value={"大安區"}>大安區</MenuItem>
+              <MenuItem value={"文山區"}>文山區</MenuItem>
+              <MenuItem value={"信義區"}>信義區</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -113,22 +153,25 @@ export default function JoinStadium() {
           aria-label="position"
           name="position"
           defaultValue="top"
+          onChange={handlePublicIndexChange}
         >
           <FormControlLabel
-            value="public"
+            value="1"
             control={<Radio color="primary" />}
             label="公開"
             labelPlacement="end"
           />
           <FormControlLabel
-            value="private"
+            value="0"
             control={<Radio color="primary" />}
             label="私人"
             labelPlacement="end"
           />
         </RadioGroup>
         <Box m={1}>
-          <Button variant="contained">Search</Button>
+          <Button variant="contained" onClick={handleSearch}>
+            Search
+          </Button>
         </Box>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
