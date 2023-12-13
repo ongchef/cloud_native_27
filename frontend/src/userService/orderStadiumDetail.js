@@ -13,7 +13,6 @@ import Grid from "@mui/material/Grid";
 import ButtonM from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import PlaceIcon from "@mui/icons-material/Place";
 import CircularProgress from "@mui/material/CircularProgress";
 
 // Ant Design components
@@ -26,6 +25,7 @@ import axios from "axios";
 import Map from "../commonService/map";
 import authHeader from "../authService/authHeader";
 import pic2 from "../pic/羽球3.png";
+import FetchData from "../authService/fetchData";
 export default function OrderStadiumDetail() {
   // Inside your component
   const location = useLocation();
@@ -39,6 +39,11 @@ export default function OrderStadiumDetail() {
   const [bookingList, setBookingList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [switchState, setSwitchState] = useState(false);
+  const [rule, setRule] = useState("單打");
+  const [level, setLevel] = useState("新手友善");
+  const [note, setNote] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSwitchChange = () => {
     setSwitchState(!switchState);
   };
@@ -111,7 +116,7 @@ export default function OrderStadiumDetail() {
     for (let pair of params.entries()) {
       console.log(`key: ${pair[0]}, value: ${pair[1]}`);
     }
-  });
+  }, []);
   const validateTime = () => {
     if (selectedOptions === null || selectedOptions.length === 0) {
       console.log("No time selected");
@@ -138,7 +143,18 @@ export default function OrderStadiumDetail() {
       }
     }
     console.log("Selected times are continuous");
-    return [true, `${sortedTimes[0]}~${sortedTimes[sortedTimes.length - 1]}`];
+    FetchData.postData("http://localhost:3000/api/users/appointment", {
+      court_id: id,
+      public: switchState ? 0 : 1,
+      ball: 3,
+      level: level,
+      rule: rule,
+      password: password,
+      note: note,
+      date: datetime.split(" ")[0],
+      start_time: sortedTimes[0],
+      end_time: sortedTimes[sortedTimes.length - 1],
+    });
   };
 
   function TimeBtn(props) {
@@ -326,10 +342,14 @@ export default function OrderStadiumDetail() {
                       >
                         強度：
                       </Typography>
-                      <Radio.Group defaultValue="newbie" buttonStyle="solid">
-                        <Radio.Button value="newbie">新手友善</Radio.Button>
-                        <Radio.Button value="advanced">Advanced</Radio.Button>
-                        <Radio.Button value="prestige">頂尖對決</Radio.Button>
+                      <Radio.Group
+                        defaultValue="新手友善"
+                        buttonStyle="solid"
+                        onChange={(e) => setLevel(e.target.value)}
+                      >
+                        <Radio.Button value="新手友善">新手友善</Radio.Button>
+                        <Radio.Button value="Advanced">Advanced</Radio.Button>
+                        <Radio.Button value="頂尖對決">頂尖對決</Radio.Button>
                       </Radio.Group>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
@@ -342,9 +362,13 @@ export default function OrderStadiumDetail() {
                       >
                         規則：
                       </Typography>
-                      <Radio.Group defaultValue="single" buttonStyle="solid">
-                        <Radio.Button value="single">單打</Radio.Button>
-                        <Radio.Button value="double">雙打</Radio.Button>
+                      <Radio.Group
+                        defaultValue="單打"
+                        buttonStyle="solid"
+                        onChange={(e) => setRule(e.target.value)}
+                      >
+                        <Radio.Button value="單打">單打</Radio.Button>
+                        <Radio.Button value="雙打">雙打</Radio.Button>
                       </Radio.Group>
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
@@ -360,6 +384,7 @@ export default function OrderStadiumDetail() {
                       <Input
                         placeholder="e.g. 激烈碰撞"
                         style={{ width: 300 }}
+                        onChange={(e) => setNote(e.target.value)}
                       />
                     </Box>
                     <Box my={1} display="flex" alignItems="center">
@@ -389,7 +414,11 @@ export default function OrderStadiumDetail() {
                           密碼：
                         </Typography>
 
-                        <Input type="password" style={{ width: 200 }} />
+                        <Input
+                          type="password"
+                          style={{ width: 200 }}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
                       </Box>
                     )}
                     <Box display="flex" justifyContent="flex-end">

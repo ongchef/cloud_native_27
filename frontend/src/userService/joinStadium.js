@@ -26,7 +26,7 @@ export default function JoinStadium() {
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [minute, setMinute] = useState(0);
-  const [publicIndex, setPublicIndex] = useState();
+  const [publicIndex, setPublicIndex] = useState(1);
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };

@@ -25,6 +25,7 @@ export default function OrderStadium() {
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [weekday, setWeekday] = useState(moment(date).day());
+  const [ball, setBall] = useState();
   useEffect(() => {
     fakeStadium();
   });
