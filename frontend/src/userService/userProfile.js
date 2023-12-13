@@ -22,8 +22,17 @@ export default function UserProfile() {
     });
   }
   useEffect(() => {
-    getUserProfile().then((res) => setUserProfile(res.data));
+    getUserProfile().then((res) => {
+      setUserProfile(res.data[0]);
+      setProfile({
+        name: res.data[0].name,
+        email: res.data[0].email,
+        phone: res.data[0].phone,
+        line_ID: res.data[0].line_id,
+      });
+    });
   }, []);
+
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -31,8 +40,14 @@ export default function UserProfile() {
     line_ID: "",
     password: "",
   });
+  useEffect(() => {
+    console.log(userProfile);
+  }, [userProfile]);
+  useEffect(() => {
+    console.log(profile);
+  }, [profile]);
   const handleChange = (e) => {
-    setProfile({ ...profile, [e.target.name]: e.target.value });
+    setProfile({ ...profile, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = (e) => {
@@ -71,9 +86,11 @@ export default function UserProfile() {
                     Name :
                   </Typography>
                   <TextField
+                    id="name"
                     label="Name"
                     onChange={handleChange}
                     style={{ width: "70%" }}
+                    value={profile.name}
                   />
                 </Box>
                 <Box
@@ -87,9 +104,11 @@ export default function UserProfile() {
                     Email :
                   </Typography>
                   <TextField
+                    id="email"
                     label="Email"
                     onChange={handleChange}
                     style={{ width: "70%" }}
+                    value={profile.email}
                   />
                 </Box>
                 <Box
@@ -103,9 +122,11 @@ export default function UserProfile() {
                     Line ID :
                   </Typography>
                   <TextField
+                    id="line_ID"
                     label="Line ID"
                     onChange={handleChange}
                     style={{ width: "70%" }}
+                    value={profile.line_ID}
                   />
                 </Box>
                 <Box
@@ -119,9 +140,11 @@ export default function UserProfile() {
                     Phone :
                   </Typography>
                   <TextField
+                    id="phone"
                     label="Phone"
                     onChange={handleChange}
                     style={{ width: "70%" }}
+                    value={profile.phone}
                   />
                 </Box>
 
