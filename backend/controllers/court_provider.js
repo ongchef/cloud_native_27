@@ -54,7 +54,20 @@ export const getCourtsByAdminId = async(req,res) => {
 
     if (iscourtsprovider) {
 
-        const { ball, address, court_name } = req.query;
+        const { ball, address, court_name, court_id } = req.query;
+
+        // get court info by court_id
+        if (typeof court_id !== "undefined") {
+            const courts_info = await getCourtsOrderInfoInIdListQuery(court_id);
+            const courts_info_with_time = await Promise.all(
+                courts_info.map(async({...item}) => ({
+                    ...item,
+                    available_time: await getCourtsAvaTimeByIdQuery(item.court_id)
+                }))
+            )
+            return res.status(200).json(courts_info_with_time);
+        }
+
         const data = {
             "admin_id": req.token,
             "ball_type_id": ball, 
