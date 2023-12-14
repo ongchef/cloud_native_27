@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box'; // 引入Box元件
 import Typography from '@mui/material/Typography'; // 引入Typography元件
-import HistoryCard from './userHistoryCard'; // 引入StadiumCard元件
+import HistoryCard from '../userService/userHistoryCard.js'; // 引入StadiumCard元件
 import pic from '../pic/羽球1.png';
 import pic2 from '../pic/羽球3.png';
 import { useEffect, useState } from 'react';
@@ -14,19 +14,24 @@ export default function UserHistory() {
 	const [date, setDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
 	const [userHistoryList, setUserHistoryList] = useState([]);
 	const API_URL = 'http://localhost:3000/api/admin/userHistoryDetails';
-
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const id = searchParams.get('id');
 
-	async function getUserHistory() {
-		return FetchData.getData(API_URL, 1, {
-			user_id: id,
+	async function getUserHistory({ id }) {
+		return await axios.get(API_URL, {
+			headers: authHeader(),
+			params: {
+				user_id: id,
+			},
 		});
 	}
+
 	useEffect(() => {
-		getUserHistory().then((res) => setUserHistoryList(res.data));
+		console.log(id);
+		getUserHistory({ id }).then((res) => setUserHistoryList(res.data));
 	}, []);
+
 	return (
 		<div>
 			<h1>user History</h1>
