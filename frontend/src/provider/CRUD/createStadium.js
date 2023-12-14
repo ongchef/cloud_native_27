@@ -23,17 +23,20 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import JButton from "@mui/joy/Button";
 import JToggleButtonGroup from "@mui/joy/ToggleButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import dayjs from "dayjs";
 import FetchData from "../../authService/fetchData";
 const week = {
-  mon: "一",
-  tue: "二",
-  wed: "三",
-  thu: "四",
-  fri: "五",
-  sat: "六",
-  sun: "日",
+  mon: {ch:"一",num:1},
+  tue: {ch:"二",num:2},
+  wed: {ch:"三",num:3},
+  thu: {ch:"四",num:4},
+  fri: {ch:"五",num:5},
+  sat: {ch:"六",num:6},
+  sun: {ch:"日",num:7},
 };
 function checkTimeSeries(newTime) {
   if (newTime[1].isBefore(newTime[0])) {
@@ -59,7 +62,7 @@ function checkTimeOverlap(availableTime) {
     });
     for (var i = 0; i < timeList.length - 1; i++) {
       if (timeList[i][1].isAfter(timeList[i + 1][0])) {
-        alert("星期" + week[day] + "時段重疊");
+        alert("星期" + week[day].ch + "時段重疊");
       }
     }
     console.log(timeList);
@@ -250,7 +253,8 @@ export default function CreateStadium() {
   const navigate = useNavigate();
   const [image, setImage] = useState();
   const [court, setCourt] = useState({});
-  // const [imgblob, setImgBlob] = useState();
+  const [imgblob, setImgBlob] = useState();
+  const [sport, setSport] = useState();
   const [availableTime, setAvailableTime] = useState({
     mon: {
       0: [dayjs("9:00", "HH:mm"), dayjs("11:00", "HH:mm")],
@@ -269,11 +273,24 @@ export default function CreateStadium() {
     console.log(court);
     console.log(availableTime);
     console.log(image);
-    FetchData.postDateWithImg("http://localhost:3000/api/courts", court, image);
+    var flatAvailableTime=[]
+    for (const [key, value] of Object.entries(availableTime)) {
+      const timeList = Object.values(value)
+      const newTime = timeList.map((time)=>{
+        return {start_time:time[0],end_time:time[1],weekday:week[key].num}
+      })
+      
+      flatAvailableTime=[...flatAvailableTime,...newTime]
+    }
+    FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob);
   }
   const handleChange = (e) => {
     setCourt({ ...court, [e.target.id]: e.target.value });
   };
+  const handleSportChange = (e) => {
+    setCourt({ ...court, [e.target.name]: e.target.value });
+  };
+
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       let img = URL.createObjectURL(e.target.files[0]);
@@ -282,7 +299,7 @@ export default function CreateStadium() {
         .then((response) => response.blob())
         .then((blob) => {
           // Now you can use blob
-          const imgblob = blob;
+          setImgBlob(blob);
         })
         .catch((error) => console.error(error));
     }
@@ -354,6 +371,24 @@ export default function CreateStadium() {
                       size="small"
                       onChange={handleChange}
                     />
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">球類</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={sport}
+                        onChange={handleSportChange}
+                        label="球類"
+                        name="ball_type_id"
+                        style={{ width: "80px" }}
+                      >
+                        <MenuItem value={undefined}>所有球類</MenuItem>
+                        <MenuItem  value={"1"}>羽球</MenuItem>
+                        <MenuItem value={"2"}>籃球</MenuItem>
+                        <MenuItem value={"3"}>排球</MenuItem>
+                        <MenuItem value={"4"}>桌球</MenuItem>
+                      </Select>
+                    </FormControl>
                     <Typography>球場地點</Typography>
                     <TextField
                       id="location"
@@ -379,7 +414,7 @@ export default function CreateStadium() {
                       return Object.keys(availableTime[day]).map((id) => {
                         return (
                           <Typography>
-                            星期{week[day]}
+                            星期{week[day].ch}
                             {availableTime[day][id][0].format("HH:mm")}-
                             {availableTime[day][id][1].format("HH:mm")}
                             <EditDialog
