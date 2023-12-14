@@ -27,6 +27,13 @@ import authHeader from "../authService/authHeader";
 import pic2 from "../pic/羽球3.png";
 import FetchData from "../authService/fetchData";
 import LinearProgress from "@mui/material/LinearProgress";
+const ballTypes = {
+  1: "羽球",
+  2: "籃球",
+  3: "桌球",
+  4: "排球",
+};
+
 export default function OrderStadiumDetail() {
   // Inside your component
   const location = useLocation();
@@ -45,6 +52,8 @@ export default function OrderStadiumDetail() {
   const [note, setNote] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(false);
+  const [balls, setBalls] = useState();
+  const [ball, setBall] = useState();
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -112,11 +121,17 @@ export default function OrderStadiumDetail() {
         parseInt(time.end_time.split(":")[0]) * 2 + 1,
       ],
     }));
+    const balls = data[0].ball_type_id
+      .split(",")
+      .map((ballType) => ballTypes[ballType]);
+
     console.log(bookingList);
     console.log(availableTime);
     setCourtInfo(courtData);
     setAvailableTime(availableTime);
     setBookingList(bookingList);
+    setBalls(["羽球", "籃球", "桌球", "排球"]);
+    setBall(balls[0]);
   }
 
   useEffect(() => {
@@ -367,6 +382,28 @@ export default function OrderStadiumDetail() {
                         )
                       )}
                     </Box>
+                    <Box
+                      m={1}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Radio.Group
+                        defaultValue={ball || ""}
+                        buttonStyle="solid"
+                        onChange={(e) => setLevel(e.target.value)}
+                        gap={1}
+                      >
+                        {(balls || []).map((ball) => (
+                          <Radio.Button
+                            style={{ margin: "0 10px" }}
+                            value={ball}
+                          >
+                            {ball}
+                          </Radio.Button>
+                        ))}
+                      </Radio.Group>
+                    </Box>
                     <Box my={1} display="flex" alignItems="center">
                       <Typography
                         variant="body1"
@@ -381,6 +418,7 @@ export default function OrderStadiumDetail() {
                         defaultValue="新手友善"
                         buttonStyle="solid"
                         onChange={(e) => setLevel(e.target.value)}
+                        gap={1}
                       >
                         <Radio.Button value="新手友善">新手友善</Radio.Button>
                         <Radio.Button value="Advanced">Advanced</Radio.Button>

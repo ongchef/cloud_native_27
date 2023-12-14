@@ -18,14 +18,17 @@ import FormControlLabel from "@mui/material/FormControlLabel"; // 引入FormCont
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination";
-import axios from "axios";
-import authHeader from "../authService/authHeader";
+
+import FetchData from "../authService/fetchData";
 export default function JoinStadium() {
   const [sport, setSport] = useState();
   const [location, setLocation] = useState();
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [minute, setMinute] = useState(0);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+
   const [publicIndex, setPublicIndex] = useState(1);
   const handleSportChange = (event) => {
     setSport(event.target.value);
@@ -41,7 +44,7 @@ export default function JoinStadium() {
       console.log("click");
       const result = await SearchAppointment();
       // handle the result
-      setAppointmentList(result.data.courts);
+      setAppointmentList(result.courts);
     } catch (error) {
       // handle the error
       console.log("Error:" + error);
@@ -49,23 +52,38 @@ export default function JoinStadium() {
   };
   async function SearchAppointment() {
     let d = date;
-    console.log(date);
-    console.log(time.$d.toString().substring(15, 24));
+    //console.log(date);
+    //console.log(time.$d.toString().substring(15, 24));
     d = date + time.$d.toString().substring(15, 24);
-    return await axios.get("http://localhost:3000/api/users/appointment/join", {
-      headers: authHeader(),
-      params: {
+    return FetchData.getData(
+      "http://localhost:3000/api/users/appointment/join",
+      1,
+      {
         query_time: date + time.$d.toString().substring(15, 24),
         ball: sport,
         address: location,
         public_index: publicIndex,
-        page: 1,
-      },
-    });
+      }
+    );
+    // return await axios.get("http://localhost:3000/api/users/appointment/join", {
+    //   headers: authHeader(),
+    //   params: {
+    //     query_time: date + time.$d.toString().substring(15, 24),
+    //     ball: sport,
+    //     address: location,
+    //     public_index: publicIndex,
+    //     page: 1,
+    //   },
+    // });
   }
   const [appointmentList, setAppointmentList] = useState([]);
   useEffect(() => {
-    SearchAppointment().then((res) => setAppointmentList(res.data.courts));
+    SearchAppointment().then((res) => {
+      if (res) {
+        setTotalPage(res.total_page);
+        setAppointmentList(res.courts);
+      }
+    });
   }, []);
   useEffect(() => {
     console.log(appointmentList);
@@ -101,7 +119,7 @@ export default function JoinStadium() {
               timeSteps={{ minutes: 30 }}
               label="時段"
               ampm={false}
-              minTime={moment("9:00", "HH:mm")}
+              minTime={moment("8:00", "HH:mm")}
               maxTime={moment("22:00", "HH:mm")}
               // views={["hours","minutes"]}
               format="hh:mm"
@@ -271,7 +289,13 @@ export default function JoinStadium() {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
-        <Pagination count={10} color="primary" /> {/* 添加這一行 */}
+        <Pagination
+          count={totalPage}
+          onChange={(event, num) => setPage(num)}
+          page={page}
+          color="primary"
+        />
+        {/* 添加這一行 */}
       </Box>
     </div>
   );

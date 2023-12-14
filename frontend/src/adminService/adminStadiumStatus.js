@@ -20,24 +20,53 @@ import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination";
 import FetchData from "../authService/fetchData";
 export default function AdminStadiumStatus() {
-  const [sport, setSport] = useState("basketball");
-  const [location, setLocation] = useState("Da an");
+  const [sport, setSport] = useState("ALL");
+  const [location, setLocation] = useState("ALL");
   const [providers, setProviders] = useState([]);
   const [provider, setProvider] = useState("ALL");
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
 
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
+  const [stadiumList, setStadiumList] = useState([]);
   async function getProviders() {
     return FetchData.getData("http://localhost:3000/api/admin/getProviders");
   }
   async function getStadium() {
-    return FetchData.getData("http://localhost:3000/api/admin/getProviders");
+    let s = sport !== "ALL" ? sport : "";
+    let l = location !== "ALL" ? location : "";
+    let p = provider !== "ALL" ? provider : "";
+    console.log(s, l, p);
+    return FetchData.getData("http://localhost:3000/api/admin/court", 1, {
+      query_time: date + time.$d.toString().substring(15, 24),
+      ...(s && s !== null && { ball: s }),
+      ...(l && l !== null && { address: l }),
+      provider: p,
+    });
   }
+  const handleSearch = async () => {
+    try {
+      console.log("click");
+      const result = await getStadium();
+      // handle the result
+      setStadiumList(result.courts);
+    } catch (error) {
+      // handle the error
+      console.log("Error:" + error);
+    }
+  };
   useEffect(() => {
     getProviders().then((res) => {
       const providerNames = res.map((item) => item.name);
-      console.log(providerNames);
       setProviders(providerNames);
+    });
+    getStadium().then((res) => {
+      if (res) {
+        setStadiumList(res.courts);
+        setTotalPage(res.total_page);
+        let day = moment(date).day();
+      }
     });
   }, []);
   const handleSportChange = (event) => {
@@ -103,9 +132,8 @@ export default function AdminStadiumStatus() {
               format="hh:mm"
               // defaultValue={dayjs("0000-00-00T9:00")}
               onChange={(newTime) => {
-                console.log(newTime);
-                console.log(newTime.get("hour"));
-                setTime(newTime.get("hour"));
+                setTime(newTime);
+                console.log(time);
               }}
             />
           </LocalizationProvider>
@@ -119,10 +147,13 @@ export default function AdminStadiumStatus() {
               value={sport}
               onChange={handleSportChange}
               label="球類"
+              style={{ width: "80px" }}
             >
-              <MenuItem value={"basketball"}>籃球</MenuItem>
-              <MenuItem value={"badminton"}>羽球</MenuItem>
-              <MenuItem value={"volleyball"}>排球</MenuItem>
+              <MenuItem value={"1"}>羽球</MenuItem>
+              <MenuItem value={"2"}>籃球</MenuItem>
+              <MenuItem value={"3"}>桌球</MenuItem>
+              <MenuItem value={"4"}>排球</MenuItem>
+              <MenuItem value={"ALL"}>ALL</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -135,42 +166,24 @@ export default function AdminStadiumStatus() {
               value={location}
               onChange={handleLocationChange}
               label="Location"
+              style={{ width: "100px" }}
             >
-              <MenuItem value={"Da an"}>大安區</MenuItem>
-              <MenuItem value={"CC"}>中正區</MenuItem>
-              <MenuItem value={"Xinyi"}>信義區</MenuItem>
+              <MenuItem value={"大安區"}>大安區</MenuItem>
+              <MenuItem value={"文山區"}>文山區</MenuItem>
+              <MenuItem value={"信義區"}>信義區</MenuItem>
+              <MenuItem value={"ALL"}>ALL</MenuItem>
             </Select>
           </FormControl>
         </Box>
 
         <Box m={1}>
-          <Button variant="contained">Search</Button>
+          <Button variant="contained" onClick={handleSearch}>
+            Search
+          </Button>
         </Box>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-        {/* {stadiumList.map((court) => {
-          const weekdayMapping = [
-            "日",
-            "一",
-            "二",
-            "三",
-            "四",
-            "五",
-            "六",
-            "日",
-          ];
-          const weekdayInChinese = weekdayMapping[weekday];
-
-          const availableTime = court.available_time.find(
-            (time) => time.weekday === weekday
-          );
-          const startTime = availableTime
-            ? availableTime.start_time.substring(0, 5)
-            : "";
-          const endTime = availableTime
-            ? availableTime.end_time.substring(0, 5)
-            : "";
-
+        {stadiumList.map((court) => {
           return (
             <StadiumCard
               id={court.court_id}
@@ -178,26 +191,16 @@ export default function AdminStadiumStatus() {
               title={court.name + " - " + court.location}
               description={[
                 court.address,
-                "週" + weekdayInChinese,
-                startTime + "~" + endTime,
+                court.contact,
+                court.ball_type_id,
                 court.available,
               ]}
-              datetime={date + " " + time.format("HH:mm:ss")}
+              datetime={date}
             />
           );
-        })} */}
-        <StadiumCard
-          id={1}
-          image={pic}
-          title={"台大舊體育館 - 籃球 A場"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "週一至週四",
-            "16:00~21:00",
-            4,
-          ]}
-        />
-        <StadiumCard
+        })}
+
+        {/* <StadiumCard
           id={2}
           image={pic2}
           title={"台大舊體育館 - 羽球 B場"}
@@ -218,7 +221,7 @@ export default function AdminStadiumStatus() {
             "17:00~21:00",
             10,
           ]}
-        />
+        /> */}
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}

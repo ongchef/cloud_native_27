@@ -7,8 +7,25 @@ import { Box } from "@mui/material";
 import Button from "@mui/material/Button"; // 引入Button元件
 import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 
-export default function AdminStadiumCard({ id, image, title, description }) {
+export default function AdminStadiumCard({
+  id,
+  image,
+  title,
+  description,
+  datetime,
+}) {
   const navigate = useNavigate();
+  const ballTypes = {
+    1: "羽球",
+    2: "籃球",
+    3: "桌球",
+    4: "排球",
+  };
+
+  let ballNames = description[2]
+    .split(",")
+    .map((ballType) => ballTypes[ballType])
+    .join(",");
   return (
     <Box my={2}>
       <Card sx={{ height: "38vh", width: "70vw", margin: "auto" }}>
@@ -42,6 +59,10 @@ export default function AdminStadiumCard({ id, image, title, description }) {
               >
                 {title}
               </Typography>
+              <Typography variant="h6" color="000000">
+                {datetime}
+              </Typography>
+
               <Box
                 mx={1}
                 my={1}
@@ -64,10 +85,12 @@ export default function AdminStadiumCard({ id, image, title, description }) {
                       fontSize: "14px",
                     }}
                   >
-                    {description[1]} {description[2]} 開放預約
+                    聯絡人：{description[1]}
                   </span>
                 </Typography>
-
+                <Typography variant="body2" color="000000">
+                  場地球類： <strong>{ballNames}</strong>
+                </Typography>
                 <Typography variant="body2" color="000000">
                   建議最大使用人數： <strong>{description[3]}</strong>
                 </Typography>

@@ -25,6 +25,7 @@ export default function JoinStadiumDetail() {
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("id");
   const [date, setDate] = useState();
+  const [password, setPassword] = useState();
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
@@ -32,6 +33,7 @@ export default function JoinStadiumDetail() {
       console.log(`key: ${pair[0]}, value: ${pair[1]}`);
     }
   });
+  const [appointmentTag, setAppointmentTag] = useState([]);
   const [appointmentDetail, setAppointmentDetail] = useState([]);
 
   async function getStadiumDetail() {
@@ -41,6 +43,7 @@ export default function JoinStadiumDetail() {
         headers: authHeader(),
         params: {
           appointment_id: id,
+          ...(password && password !== null && { password: password }),
         },
       }
     );
@@ -61,6 +64,11 @@ export default function JoinStadiumDetail() {
 
     let formattedDate = `${year}-${month}-${day}`;
     setDate(formattedDate);
+    setAppointmentTag([
+      appointmentDetail.ball,
+      appointmentDetail.level,
+      appointmentDetail.rule,
+    ]);
   }, [appointmentDetail]);
 
   const joinAppointment = () => {
@@ -149,7 +157,7 @@ export default function JoinStadiumDetail() {
                             fontSize: "14px",
                           }}
                         >
-                          {date}
+                          {date}{" "}
                           {appointmentDetail.start_time
                             ? appointmentDetail.start_time.substring(0, 5)
                             : " "}
@@ -160,7 +168,7 @@ export default function JoinStadiumDetail() {
                         </span>
                       </Typography>
                       <Typography variant="body2" color="000000">
-                        {tags.map((tag, index) => (
+                        {(appointmentTag || []).map((tag, index) => (
                           <React.Fragment key={index}>
                             <span
                               style={{
@@ -204,6 +212,25 @@ export default function JoinStadiumDetail() {
                         </Avatar>
                         主揪人：{appointmentDetail.creator_name}
                       </Box>
+                      {/* {appointmentDetail.public_index && (
+                      <Box my={1} display="flex" alignItems="center">
+                        <Typography
+                          variant="body1"
+                          color="000000"
+                          paddingX={1}
+                          paddingY={0.2}
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          密碼：
+                        </Typography>
+
+                        <Input
+                          type="password"
+                          style={{ width: 200 }}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                      </Box>
+                    )} */}
                       <Box display="flex" justifyContent="flex-end">
                         <Button
                           width="300px"
