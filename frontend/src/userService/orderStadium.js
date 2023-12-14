@@ -17,8 +17,7 @@ import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
-import axios from "axios";
-import authHeader from "../authService/authHeader";
+import FetchData from "../authService/fetchData";
 export default function OrderStadium() {
   const [sport, setSport] = useState();
   const [location, setLocation] = useState();
@@ -26,6 +25,8 @@ export default function OrderStadium() {
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [weekday, setWeekday] = useState(moment(date).day());
   const [ball, setBall] = useState();
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
   useEffect(() => {
     fakeStadium();
   });
@@ -40,7 +41,7 @@ export default function OrderStadium() {
     try {
       const result = await SearchStadium();
       // handle the result
-      setStadiumList(result.data.courts);
+      setStadiumList(result.courts);
     } catch (error) {
       // handle the error
       console.log("Error:" + error);
@@ -54,18 +55,19 @@ export default function OrderStadium() {
       setWeekday(day);
     }
 
-    return await axios.get("http://localhost:3000/api/users/appointment", {
-      headers: authHeader(),
-      params: {
-        query_time: date + " " + time.format("HH:mm:ss"),
-        ball: sport,
-        address: location,
-      },
+    return FetchData.getData("http://localhost:3000/api/users/appointment", 1, {
+      query_time: date + " " + time.format("HH:mm:ss"),
+      ball: sport,
+      address: location,
     });
   }
   const [stadiumList, setStadiumList] = useState([]);
   useEffect(() => {
-    SearchStadium().then((res) => setStadiumList(res.data.courts));
+    SearchStadium().then((res) => {
+      setTotalPage(res.total_page);
+
+      setStadiumList(res.courts);
+    });
   }, []);
 
   return (
@@ -222,7 +224,12 @@ export default function OrderStadium() {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
-        <Pagination count={10} color="primary" /> {/* 添加這一行 */}
+        <Pagination
+          count={totalPage}
+          onChange={(event, num) => setPage(num)}
+          page={page}
+          color="primary"
+        />{" "}
       </Box>
     </div>
   );
