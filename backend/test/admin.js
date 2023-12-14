@@ -74,8 +74,8 @@ describe('get courts API', () => {
             
         // 进行断言，验证返回的数据是否符合预期
         expect(res).to.have.status(200);
-        expect(res.body).to.have.property('total_page').that.is.a('number').equal(0);
-        expect(res.body).to.have.property('courts').that.is.a('array').that.is.empty;
+        expect(res.body).to.have.property('total_page').that.is.a('number');
+        expect(res.body).to.have.property('courts').that.is.a('array').that.is.not.empty;
       });
 
     it('should return unauthorized when user is not an admin', (done) => {

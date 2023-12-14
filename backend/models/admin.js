@@ -70,7 +70,7 @@ export const getCourtsAppointmentDetailsQuery = (data) => {
 
     return new Promise((resolve, reject) => {
 
-        db.query(`SELECT start_time, end_time, COUNT(P.appointment_id) AS participant_count, U.name, address 
+        db.query(`SELECT date, start_time, end_time, COUNT(P.appointment_id) AS participant_count, U.name, address 
         FROM STADIUM.APPOINTMENT_TIME AS AT INNER JOIN STADIUM.APPOINTMENT AS A ON AT.appointment_id = A.appointment_id 
         LEFT JOIN STADIUM.PARTICIPANT AS P ON A.appointment_id = P.appointment_id
         LEFT JOIN STADIUM.COURT as C ON A.court_id = C.court_id

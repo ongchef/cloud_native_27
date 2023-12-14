@@ -25,28 +25,6 @@ import {
 } from '../utils/helper.js';
 
 import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment-timezone';
-
-
-export const getCourtsAppointmentDetails = async(req,res) => {
-
-    // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
-    // This api has been tested by postman
-    let data = {};
-    data['court_id'] = req.query['court_id'];
-    const admin_id = req.token;
-    const isadmin = await isAdmin(admin_id)
-    if (isadmin) {
-        const result = await getCourtsAppointmentDetailsQuery(data)
-        return res.status(200).json(result)
-
-    } else {
-
-        const message = "You are not the admin!"
-        return res.status(401).send(message)
-    }
-}
-
 
 export const getUserHistories = async(req,res) => {
 
@@ -100,28 +78,48 @@ export const getCourtsAppointments = async(req,res) => {
     // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
     // This api has been tested by postman
     const admin_id = req.token;
+    req.query['query_time'] = req.query['query_time'].replace(/\+/g, ' ')
 
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
         const result = await getCourtsAppointmentQuery(req.query)
         //date filter
         let courts = []
-        for(let i = 0; i < result.length; i++) {
-            let court = await getCourtAllAppointment(result[i]['court_id'])
-            let found = 0;
-            for(let j = 0; j < court.length; j++) {
-                court[j]['date'] = parseISODate(court[j]['date'])
-
-                if(availableCourtChecker(court[j], req.query['query_time'])) {
-                    found = 1
-                    break;
+        //if time is 00:00:00
+        if (req.query['query_time'].split(" ")[1] === "00:00:00") {
+            for (let i = 0; i < result.length; i++) {
+                let court = await getCourtAllAppointment(result[i]['court_id'])
+                let found = 0;
+                for (let j = 0; j < court.length; j++) {
+                    court[j]['date'] = parseISODate(court[j]['date'])
+    
+                    if (court[j]['date'].split(" ")[0] === req.query['query_time'].split(" ")[0]) {
+                        found = 1
+                        break;
+                    }
+                }
+                if (found === 1) {
+                    courts.push(result[i])
+                }                
+            }
+        } else {
+            for(let i = 0; i < result.length; i++) {
+                let court = await getCourtAllAppointment(result[i]['court_id'])
+                let found = 0;
+                for(let j = 0; j < court.length; j++) {
+                    court[j]['date'] = parseISODate(court[j]['date'])
+    
+                    if(availableCourtChecker(court[j], req.query['query_time'])) {
+                        found = 1
+                        break;
+                    }
+                }
+                if (found === 1) {
+                    courts.push(result[i])
                 }
             }
-            if (found === 1) {
-                courts.push(result[i])
-            }
         }
-        
+              
         //pagination and count the total page
         let limit = 10;
         let page = req.query['page'] !== undefined ? req.query['page'] : 1;
@@ -135,6 +133,37 @@ export const getCourtsAppointments = async(req,res) => {
             "courts": paginatedResults
         }
         return res.status(200).json(returns)
+
+    } else {
+
+        const message = "You are not the admin!"
+        return res.status(401).send(message)
+    }
+}
+
+export const getCourtsAppointmentDetails = async(req,res) => {
+
+    // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
+    // This api has been tested by postman
+    let data = {};
+    data['court_id'] = req.query['court_id'];
+    req.query['query_time'] = req.query['query_time'].replace(/\+/g, ' ')
+    const admin_id = req.token;
+    const isadmin = await isAdmin(admin_id)
+    if (isadmin) {
+        const result = await getCourtsAppointmentDetailsQuery(data)
+        //date filter
+        let courts = []
+        //if time is 00:00:00
+        if (req.query['query_time'].split(" ")[1] === "00:00:00") {
+            for (let i = 0; i < result.length; i++) {
+                result[i]['date'] = parseISODate(result[i]['date'])
+                if (result[i]['date'] === req.query['query_time'].split(" ")[0]) {
+                    courts.push(result[i])
+                }       
+            }
+        }
+        return res.status(200).json(courts)
 
     } else {
 
