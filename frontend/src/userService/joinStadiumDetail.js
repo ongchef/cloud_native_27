@@ -16,6 +16,7 @@ import axios from "axios";
 import authHeader from "../authService/authHeader";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import FetchData from "../authService/fetchData";
 
 export default function JoinStadiumDetail() {
   const location = useLocation();
@@ -61,6 +62,22 @@ export default function JoinStadiumDetail() {
     let formattedDate = `${year}-${month}-${day}`;
     setDate(formattedDate);
   }, [appointmentDetail]);
+
+  const joinAppointment = () => {
+    let jAppointment = {
+      appointment_id: appointmentDetail.appointment_id,
+    };
+    FetchData.postData(
+      "http://localhost:3000/api/users/appointment/join",
+      jAppointment
+    ).then((res) => {
+      console.log(res);
+      if (res === 200) {
+        console.log("加入成功");
+        //window.location.reload();
+      }
+    });
+  };
   return (
     <div>
       <h1>Order Stadium Detail</h1>
@@ -132,8 +149,14 @@ export default function JoinStadiumDetail() {
                             fontSize: "14px",
                           }}
                         >
-                          {date} {appointmentDetail.start_time.substring(0, 5)}~
-                          {appointmentDetail.end_time.substring(0, 5)}
+                          {date}
+                          {appointmentDetail.start_time
+                            ? appointmentDetail.start_time.substring(0, 5)
+                            : " "}
+                          ~
+                          {appointmentDetail.end_time
+                            ? appointmentDetail.end_time.substring(0, 5)
+                            : " "}
                         </span>
                       </Typography>
                       <Typography variant="body2" color="000000">
@@ -175,7 +198,9 @@ export default function JoinStadiumDetail() {
                           alt="Remy Sharp"
                           src="/broken-image.jpg"
                         >
-                          {appointmentDetail.creator_name[0]}
+                          {appointmentDetail.creator_name
+                            ? appointmentDetail.creator_name[0]
+                            : " "}
                         </Avatar>
                         主揪人：{appointmentDetail.creator_name}
                       </Box>
@@ -184,6 +209,7 @@ export default function JoinStadiumDetail() {
                           width="300px"
                           variant="outlined"
                           onClick={() => {
+                            joinAppointment();
                             console.log("加入場地api");
                           }}
                         >
