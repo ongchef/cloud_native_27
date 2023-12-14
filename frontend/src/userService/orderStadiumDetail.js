@@ -14,7 +14,7 @@ import ButtonM from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import Snackbar from "@mui/material/Snackbar";
 // Ant Design components
 import { Input } from "antd";
 import { Button } from "antd";
@@ -26,7 +26,7 @@ import Map from "../commonService/map";
 import authHeader from "../authService/authHeader";
 import pic2 from "../pic/羽球3.png";
 import FetchData from "../authService/fetchData";
-import LinearProgress from '@mui/material/LinearProgress';
+import LinearProgress from "@mui/material/LinearProgress";
 export default function OrderStadiumDetail() {
   // Inside your component
   const location = useLocation();
@@ -44,7 +44,14 @@ export default function OrderStadiumDetail() {
   const [level, setLevel] = useState("新手友善");
   const [note, setNote] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setOpen(false);
+  };
   const handleSwitchChange = () => {
     setSwitchState(!switchState);
   };
@@ -102,10 +109,11 @@ export default function OrderStadiumDetail() {
     const bookingList = data[0].appointment_time.map((time) => ({
       period: [
         parseInt(time.start_time.split(":")[0]) * 2,
-        parseInt(time.end_time.split(":")[0]) * 2,
+        parseInt(time.end_time.split(":")[0]) * 2 + 1,
       ],
     }));
-
+    console.log(bookingList);
+    console.log(availableTime);
     setCourtInfo(courtData);
     setAvailableTime(availableTime);
     setBookingList(bookingList);
@@ -175,7 +183,13 @@ export default function OrderStadiumDetail() {
     FetchData.postData(
       "http://localhost:3000/api/users/appointment",
       appointment
-    ).then((res)=>console.log(res));
+    ).then((res) => {
+      console.log(res);
+      if (res === 200) {
+        setOpen(true);
+        //window.location.reload();
+      }
+    });
   };
 
   function TimeBtn(props) {
@@ -327,7 +341,6 @@ export default function OrderStadiumDetail() {
                     </Typography>
 
                     <Box mx={1}>
-                      
                       {loading ? (
                         // <Grid
                         //   container
@@ -343,7 +356,7 @@ export default function OrderStadiumDetail() {
                         //   </Box>
                         // </Grid>
 
-                        <LinearProgress/>
+                        <LinearProgress />
                       ) : (
                         bookingList &&
                         availableTime && (
