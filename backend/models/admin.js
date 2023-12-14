@@ -175,3 +175,16 @@ export const getProviders = () => {
         });
     });
 }
+
+// get user detail
+export const getUserDetailQuery = (data) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM STADIUM.USER where user_id = ?`,[data],(error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    })
+}

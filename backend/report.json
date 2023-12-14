@@ -1,0 +1,315 @@
+Server is running on port 3000
+connecting success
+{
+  "stats": {
+    "suites": 5,
+    "tests": 13,
+    "passes": 7,
+    "pending": 0,
+    "failures": 6,
+    "start": "2023-12-14T08:07:58.696Z",
+    "end": "2023-12-14T08:08:11.606Z",
+    "duration": 12910
+  },
+  "tests": [
+    {
+      "title": "should return all providers when the user is admin",
+      "fullTitle": "get all providers API should return all providers when the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 815,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get all providers API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 158,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return no court when there is no corresponding court to the filter",
+      "fullTitle": "get courts API should return no court when there is no corresponding court to the filter",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 315,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return corresponding courts with the filter and the user is admin",
+      "fullTitle": "get courts API should return corresponding courts with the filter and the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2003,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get courts API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2001,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return corresponding court detail with the court_id when the user is admin",
+      "fullTitle": "get court detail API should return corresponding court detail with the court_id when the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2003,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return no court detail with the court_id that there are no appointments with this court",
+      "fullTitle": "get court detail API should return no court detail with the court_id that there are no appointments with this court",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2003,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get court detail API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2002,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return all users when the user is admin",
+      "fullTitle": "get all user API should return all users when the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 335,
+      "currentRetry": 0,
+      "err": {
+        "message": "expected null to be a string",
+        "showDiff": false,
+        "actual": null,
+        "operator": "strictEqual",
+        "stack": "AssertionError: expected null to be a string\n    at Context.<anonymous> (file:///Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js:163:65)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"
+      }
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get all user API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 163,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return user appointments with the user_id",
+      "fullTitle": "get court detail API should return user appointments with the user_id",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 533,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return no user appointment detail with the user_id that there are no appointments with this user",
+      "fullTitle": "get court detail API should return no user appointment detail with the user_id that there are no appointments with this user",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 363,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get court detail API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 202,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    }
+  ],
+  "pending": [],
+  "failures": [
+    {
+      "title": "should return corresponding courts with the filter and the user is admin",
+      "fullTitle": "get courts API should return corresponding courts with the filter and the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2003,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get courts API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2001,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return corresponding court detail with the court_id when the user is admin",
+      "fullTitle": "get court detail API should return corresponding court detail with the court_id when the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2003,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return no court detail with the court_id that there are no appointments with this court",
+      "fullTitle": "get court detail API should return no court detail with the court_id that there are no appointments with this court",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2003,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get court detail API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 2002,
+      "currentRetry": 0,
+      "err": {
+        "stack": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)\n    at listOnTimeout (node:internal/timers:559:17)\n    at processTimers (node:internal/timers:502:7)",
+        "message": "Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js)",
+        "code": "ERR_MOCHA_TIMEOUT",
+        "timeout": 2000,
+        "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js"
+      }
+    },
+    {
+      "title": "should return all users when the user is admin",
+      "fullTitle": "get all user API should return all users when the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 335,
+      "currentRetry": 0,
+      "err": {
+        "message": "expected null to be a string",
+        "showDiff": false,
+        "actual": null,
+        "operator": "strictEqual",
+        "stack": "AssertionError: expected null to be a string\n    at Context.<anonymous> (file:///Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js:163:65)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"
+      }
+    }
+  ],
+  "passes": [
+    {
+      "title": "should return all providers when the user is admin",
+      "fullTitle": "get all providers API should return all providers when the user is admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 815,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get all providers API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 158,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return no court when there is no corresponding court to the filter",
+      "fullTitle": "get courts API should return no court when there is no corresponding court to the filter",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 315,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get all user API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 163,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return user appointments with the user_id",
+      "fullTitle": "get court detail API should return user appointments with the user_id",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 533,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return no user appointment detail with the user_id that there are no appointments with this user",
+      "fullTitle": "get court detail API should return no user appointment detail with the user_id that there are no appointments with this user",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 363,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return unauthorized when user is not an admin",
+      "fullTitle": "get court detail API should return unauthorized when user is not an admin",
+      "file": "/Users/leeshuchen/Desktop/cloud_native_27/backend/test/admin.js",
+      "duration": 202,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    }
+  ]
+}

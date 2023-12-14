@@ -7,7 +7,8 @@ import {
     putUsersByIdQuery,
     deleteUsersByIdQuery,
     isAdmin,
-    getProviders
+    getProviders,
+    getUserDetailQuery
 } from "../models/admin.js";
 import {
     getUsersAppointmentIdQuery,
@@ -55,11 +56,16 @@ export const getUserHistoryDetails = async(req,res) => {
     const admin_id = req.token;
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
-        const app_id = await getUsersAppointmentIdQuery(data['user_id'])
-        if (app_id.length === 0) {
-            
+        const user = await getUserDetail(data['user_id'])
+        if (user.length === 0) {
             const message = "User doesn't exist!"
             return res.status(404).send(message)
+        }
+        const app_id = await getUsersAppointmentIdQuery(data['user_id'])
+        console.log(app_id);
+        if (app_id.length === 0) {
+            
+            return res.status(200).send([])
         }
         const app_id_list = app_id.map(item => item.appointment_id);
         const history = await getCourtsInfoByAppointmentIdQuery(app_id_list)
@@ -306,7 +312,30 @@ export const getAllProviders = async(req,res) => {
     const admin_id = req.token;
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
-        const  result= await getProviders()
+        const result = await getProviders()
+        return res.status(200).json(result)
+
+    } else {
+
+        const message = "You are not the admin!"
+        return res.status(401).send(message)
+    }
+}
+
+export const getUserDetail = async(req,res) => {
+
+    // TODO: the admin_id shoud be automatically added in the request, auth (got it from Frontend)
+    // This api has been tested by postman
+    const admin_id = req.token;
+    const isadmin = await isAdmin(admin_id)
+    if (isadmin) {
+        const result = await getUserDetailQuery(req.query['user_id'])
+        if (result.length === 0) {
+            const message = "User doesn't exist!"
+            return res.status(404).json(message)
+
+        }
+        
         return res.status(200).json(result)
 
     } else {

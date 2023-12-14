@@ -7,7 +7,8 @@ import {
     putUsersById,
     deleteUsersById,
     courtsProvider,
-    getAllProviders
+    getAllProviders,
+    getUserDetail
 } from '../controllers/admin.js';
 
 const router = express.Router();
@@ -35,5 +36,8 @@ router.delete("/user", deleteUsersById);
 
 // GET /api/admin/getProviders
 router.get("/getProviders", getAllProviders);
+
+// GET /api/admin/getUserDetail
+router.get("/getUserDetail", getUserDetail);
 
 export default router
