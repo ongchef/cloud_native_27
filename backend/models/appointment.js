@@ -106,7 +106,7 @@ export const getCourtsNotInIdListQuery = (data) => {
 
 export const getCourtsOrderInfoInIdListQuery = (data) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT c.name, c.location, c.address, c.available, c.court_id, c.image_url FROM STADIUM.COURT c where court_id in (?)`, [data], (error, results) => {
+        db.query(`SELECT c.name, c.location, c.address, c.available, c.court_id, c.image_url, c.ball_type_id FROM STADIUM.COURT c where court_id in (?)`, [data], (error, results) => {
             if (error) {
                 reject(error);
             } else {
