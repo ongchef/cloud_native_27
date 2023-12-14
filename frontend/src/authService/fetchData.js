@@ -51,9 +51,14 @@ async function postDateWithImg(url, data, img) {
   var bodyFormData = new FormData();
   // img = new Blob(img)
   console.log(img)
-  bodyFormData.append("name", data.name,"data");
-  // bodyFormData.append("court.jpg", img);
-  bodyFormData.append('files[]', img, "img")
+  console.log(data)
+  const obj = JSON.stringify(data);
+  const bytes = new TextEncoder().encode(obj);
+  const blob = new Blob([bytes], {
+      type: "application/json;charset=utf-8"
+  });
+  bodyFormData.append("data", blob, "data");
+  bodyFormData.append('img', img, "img")
   axios({
     method: "post",
     url: url,
