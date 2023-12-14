@@ -55,10 +55,11 @@ export default function JoinStadium() {
     return await axios.get("http://localhost:3000/api/users/appointment/join", {
       headers: authHeader(),
       params: {
-        querytime: date + time.$d.toString().substring(15, 24),
+        query_time: date + time.$d.toString().substring(15, 24),
         ball: sport,
         address: location,
         public_index: publicIndex,
+        page: 1,
       },
     });
   }
@@ -125,8 +126,9 @@ export default function JoinStadium() {
             >
               <MenuItem value={"1"}>羽球</MenuItem>
               <MenuItem value={"2"}>籃球</MenuItem>
-              <MenuItem value={"3"}>排球</MenuItem>
-              <MenuItem value={"4"}>桌球</MenuItem>
+              <MenuItem value={"3"}>桌球</MenuItem>
+              <MenuItem value={"4"}>排球</MenuItem>
+              <MenuItem value={null}>ALL</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -144,6 +146,7 @@ export default function JoinStadium() {
               <MenuItem value={"大安區"}>大安區</MenuItem>
               <MenuItem value={"文山區"}>文山區</MenuItem>
               <MenuItem value={"信義區"}>信義區</MenuItem>
+              <MenuItem value={null}>ALL</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -187,7 +190,37 @@ export default function JoinStadium() {
             "Wonu Juan",
           ]}
         />
-        <StadiumCard
+        {(appointmentList || []).map((appointment) => {
+          const DateInGMT8 = new Date(appointment.date);
+          let year = DateInGMT8.getFullYear();
+          let month = DateInGMT8.getMonth() + 1; // getMonth() returns month index starting from 0
+          let day = DateInGMT8.getDate();
+
+          // Pad single digit month and day with leading 0
+          month = month < 10 ? "0" + month : month;
+          day = day < 10 ? "0" + day : day;
+
+          let formattedDate = `${year}-${month}-${day}`;
+          console.log(formattedDate);
+          //console.log(status);
+          return (
+            <StadiumCard
+              id={appointment.appointment_id}
+              image={pic}
+              title={appointment.court_name + " - " + appointment.location}
+              description={[
+                appointment.address,
+                formattedDate,
+                appointment.start_time.substring(0, 5) +
+                  " ~ " +
+                  appointment.end_time.substring(0, 5),
+                [appointment.ball, appointment.level, appointment.rule],
+                appointment.creator_name,
+              ]}
+            />
+          );
+        })}
+        {/* <StadiumCard
           id={2}
           image={pic2}
           title={"球場名稱2"}
@@ -234,7 +267,7 @@ export default function JoinStadium() {
             ["Basketball", "新手友善", "雙打"],
             "Bryan Chen",
           ]}
-        />
+        /> */}
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}

@@ -12,10 +12,18 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import axios from "axios";
+import authHeader from "../authService/authHeader";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function JoinStadiumDetail() {
+  const location = useLocation();
   const navigate = useNavigate();
   const tags = ["Basketball", "現場報隊", "新手友善"];
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+  const [date, setDate] = useState();
   useEffect(() => {
     let url = new URL(window.location.href);
     let params = url.searchParams;
@@ -23,6 +31,36 @@ export default function JoinStadiumDetail() {
       console.log(`key: ${pair[0]}, value: ${pair[1]}`);
     }
   });
+  const [appointmentDetail, setAppointmentDetail] = useState([]);
+
+  async function getStadiumDetail() {
+    return await axios.get(
+      "http://localhost:3000/api/users/appointmentDetail/join",
+      {
+        headers: authHeader(),
+        params: {
+          appointment_id: id,
+        },
+      }
+    );
+  }
+  useEffect(() => {
+    getStadiumDetail().then((res) => setAppointmentDetail(res.data[0]));
+  }, []);
+  useEffect(() => {
+    console.log(appointmentDetail);
+    const DateInGMT8 = new Date(appointmentDetail.date);
+    let year = DateInGMT8.getFullYear();
+    let month = DateInGMT8.getMonth() + 1; // getMonth() returns month index starting from 0
+    let day = DateInGMT8.getDate();
+
+    // Pad single digit month and day with leading 0
+    month = month < 10 ? "0" + month : month;
+    day = day < 10 ? "0" + day : day;
+
+    let formattedDate = `${year}-${month}-${day}`;
+    setDate(formattedDate);
+  }, [appointmentDetail]);
   return (
     <div>
       <h1>Order Stadium Detail</h1>
@@ -70,7 +108,8 @@ export default function JoinStadiumDetail() {
                       component="div"
                       sx={{ fontWeight: "bold" }}
                     >
-                      台大舊體育館 - 籃球Ａ場 2023/11/02
+                      {appointmentDetail.court_name} -{" "}
+                      {appointmentDetail.location} {date}
                     </Typography>
                     <Box
                       mx={1}
@@ -81,7 +120,7 @@ export default function JoinStadiumDetail() {
                       gap={1}
                     >
                       <Typography variant="body2" color="text.secondary">
-                        106台北市大安區羅斯福路四段1號
+                        {appointmentDetail.address}
                       </Typography>
                       <Typography variant="body2" color="000000">
                         <span
@@ -93,7 +132,8 @@ export default function JoinStadiumDetail() {
                             fontSize: "14px",
                           }}
                         >
-                          2023/11/29 16:00~18:00
+                          {date} {appointmentDetail.start_time.substring(0, 5)}~
+                          {appointmentDetail.end_time.substring(0, 5)}
                         </span>
                       </Typography>
                       <Typography variant="body2" color="000000">
@@ -117,7 +157,11 @@ export default function JoinStadiumDetail() {
                         ))}
                       </Typography>
                       <Typography variant="body2" color="000000">
-                        當前場地預約人數： <strong>4/8</strong>
+                        當前場地預約人數：{" "}
+                        <strong>
+                          {appointmentDetail.attendence}/
+                          {appointmentDetail.available}
+                        </strong>
                       </Typography>
                       <Box
                         display="flex"
@@ -131,9 +175,9 @@ export default function JoinStadiumDetail() {
                           alt="Remy Sharp"
                           src="/broken-image.jpg"
                         >
-                          B
+                          {appointmentDetail.creator_name[0]}
                         </Avatar>
-                        主揪人：{"Bryan Chen"}
+                        主揪人：{appointmentDetail.creator_name}
                       </Box>
                       <Box display="flex" justifyContent="flex-end">
                         <Button
