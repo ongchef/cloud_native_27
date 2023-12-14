@@ -6,19 +6,19 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
-	Button,
 	Box,
 } from '@mui/material';
 import AdminUserRow from './adminUserRow';
-import axios from 'axios';
+import FetchData from '../authService/fetchData';
 
 export default function AdminUserHistory() {
 	const [users, setUsers] = useState([]);
+	const API_URL = 'http://localhost:3000/api/admin/userHistories';
 
 	const fetchUsers = useCallback(async () => {
 		try {
-			const response = await axios.get('http://localhost:3000/api/users');
-			setUsers(response.data);
+			const fetchedUsers = await FetchData.getData(API_URL);
+			setUsers(fetchedUsers);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -26,6 +26,7 @@ export default function AdminUserHistory() {
 
 	useEffect(() => {
 		fetchUsers();
+		console.log(users);
 	}, [fetchUsers]);
 
 	return (
@@ -50,9 +51,10 @@ export default function AdminUserHistory() {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{users.map((user) => (
-							<AdminUserRow key={user.id} user={user} />
-						))}
+						{users &&
+							users.map((user) => (
+								<AdminUserRow key={user.user_id} user={user} />
+							))}
 					</TableBody>
 				</Table>
 			</TableContainer>

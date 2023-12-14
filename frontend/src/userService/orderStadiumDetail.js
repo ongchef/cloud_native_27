@@ -165,8 +165,6 @@ export default function OrderStadiumDetail() {
         .padStart(2, "0")}`;
     }
 
-    let a = "19:30";
-    a = roundUpToNearestHalfHour(a);
     let appointment = {
       court_id: id,
       public: switchState ? 0 : 1,

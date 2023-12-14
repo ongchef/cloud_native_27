@@ -57,7 +57,7 @@ export default function OrderStadium() {
     return await axios.get("http://localhost:3000/api/users/appointment", {
       headers: authHeader(),
       params: {
-        querytime: date + time.format("HH:mm:ss"),
+        query_time: date + " " + time.format("HH:mm:ss"),
         ball: sport,
         address: location,
       },
@@ -128,8 +128,9 @@ export default function OrderStadium() {
             >
               <MenuItem value={"1"}>羽球</MenuItem>
               <MenuItem value={"2"}>籃球</MenuItem>
-              <MenuItem value={"3"}>排球</MenuItem>
-              <MenuItem value={"4"}>桌球</MenuItem>
+              <MenuItem value={"3"}>桌球</MenuItem>
+              <MenuItem value={"4"}>排球</MenuItem>
+              <MenuItem value={null}>ALL</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -147,6 +148,7 @@ export default function OrderStadium() {
               <MenuItem value={"大安區"}>大安區</MenuItem>
               <MenuItem value={"文山區"}>文山區</MenuItem>
               <MenuItem value={"信義區"}>信義區</MenuItem>
+              <MenuItem value={null}>ALL</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -157,7 +159,7 @@ export default function OrderStadium() {
         </Box>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-        {stadiumList.map((court) => {
+        {(stadiumList || []).map((court) => {
           const weekdayMapping = [
             "日",
             "一",
