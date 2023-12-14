@@ -33,6 +33,7 @@ import FetchData from "../../authService/fetchData";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import Slider from '@mui/material/Slider';
 
 const week = {
   mon: {ch:"一",num:1},
@@ -379,10 +380,23 @@ export default function CreateStadium() {
         </Container>
         
         <Container>
+          
           <Box my={2}>
-            
+          
             <TabContext value={panel}>
               <TabPanel value="basic">
+              <Box
+                display='flex'
+                justifyContent='center'>
+              <Slider
+                aria-label="Custom marks"
+                defaultValue={50}
+                valueLabelDisplay="on"
+                valueLabelFormat={(value) => "基本資訊"}
+                disabled
+                sx={{width:'70vw'}}         
+                />
+              </Box>
               <Card sx={{ width: "80vw", margin: "auto" }}>
               <Grid container>
                 <Grid item xs={6} >
@@ -497,6 +511,17 @@ export default function CreateStadium() {
               </Card>
               </TabPanel>
               <TabPanel value="time">
+              <Box
+                  display='flex'
+                  justifyContent='center'>
+                <Slider
+                  aria-label="Custom marks"
+                  defaultValue={100}
+                  valueLabelDisplay="on"
+                  valueLabelFormat={(value) => "開放時間"}
+                  disabled
+                  sx={{width:'70vw'}}          />
+                </Box>
                 <Card sx={{ width: "50vw", margin: "auto" }}>
                 <CardContent sx={{display:'flex',justifyContent:'flex-end'}}>
                 <AddDialog
