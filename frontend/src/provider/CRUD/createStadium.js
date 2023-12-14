@@ -28,7 +28,12 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import dayjs from "dayjs";
+import Chip from '@mui/material/Chip';
 import FetchData from "../../authService/fetchData";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import TabContext from '@mui/lab/TabContext';
+import TabPanel from '@mui/lab/TabPanel';
+
 const week = {
   mon: {ch:"一",num:1},
   tue: {ch:"二",num:2},
@@ -38,6 +43,13 @@ const week = {
   sat: {ch:"六",num:6},
   sun: {ch:"日",num:7},
 };
+
+const sportType={
+  羽球:1,
+  排球:2,
+  排球:3,
+  桌球:4,
+}
 function checkTimeSeries(newTime) {
   if (newTime[1].isBefore(newTime[0])) {
     alert("起始時間與結束時間未按照順序");
@@ -155,7 +167,7 @@ const AddDialog = (props) => {
   };
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="outlined" onClick={handleClickOpen} size="small">
         新增開放時間
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -207,7 +219,7 @@ const FormDialog = (props) => {
         color="primary"
       >
         {Object.keys(week).map((eng) => {
-          return <JButton value={eng}>{week[eng]}</JButton>;
+          return <JButton value={eng}>{week[eng].ch}</JButton>;
         })}
       </JToggleButtonGroup>
 
@@ -254,7 +266,8 @@ export default function CreateStadium() {
   const [image, setImage] = useState();
   const [court, setCourt] = useState({});
   const [imgblob, setImgBlob] = useState();
-  const [sport, setSport] = useState();
+  const [sport, setSport] = useState([]);
+  const [panel, setPanel] = useState('basic');
   const [availableTime, setAvailableTime] = useState({
     mon: {
       0: [dayjs("9:00", "HH:mm"), dayjs("11:00", "HH:mm")],
@@ -282,15 +295,31 @@ export default function CreateStadium() {
       
       flatAvailableTime=[...flatAvailableTime,...newTime]
     }
-    FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob);
+    FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
+    .then((res)=>{
+      console.log(res)
+      console.log(res===200)
+      if(res===200){
+        alert("新增成功")
+      }
+    })
   }
   const handleChange = (e) => {
     setCourt({ ...court, [e.target.id]: e.target.value });
   };
-  const handleSportChange = (e) => {
-    setCourt({ ...court, [e.target.name]: e.target.value });
+  const handleSportChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSport(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+    
   };
-
+  useEffect(()=>{
+    setCourt({ ...court, ball_type_id: sport.map((ch)=>sportType[ch]) });
+  },[sport])
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       let img = URL.createObjectURL(e.target.files[0]);
@@ -330,28 +359,39 @@ export default function CreateStadium() {
   return (
     <div>
       <h1> 新增場地資訊 </h1>
+      {/* <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"> */}
       <Box
         display="flex"
-        width="70vw"
+        
         flexDirection="column"
         justifyContent="center"
       >
-        <Container maxWidth="sm" width="90vw">
-          <Button width="300px" variant="outlined" onClick={() => navigate(-1)}>
+        <Container width="90vw">
+          <Button variant="outlined" onClick={() => navigate(-1)}>
             <ArrowBackIcon />
             返回搜尋頁
           </Button>
           {/* 內容1 */}
         </Container>
-        <Container maxWidth="sm">
+        
+        <Container>
           <Box my={2}>
-            <Card sx={{ width: "70vw", margin: "auto" }}>
+            
+            <TabContext value={panel}>
+              <TabPanel value="basic">
+              <Card sx={{ width: "80vw", margin: "auto" }}>
               <Grid container>
-                <Grid item xs={6}>
+                <Grid item xs={6} >
+                  <CardContent >
                   {image && (
                     <CardMedia component="img" src={image} alt="Stadium" />
                   )}
                   <TextField
+                    required
                     type="file"
                     onChange={(e) => {
                       handleImageChange(e);
@@ -361,9 +401,11 @@ export default function CreateStadium() {
                   {/* <Button variant="contained" color="primary" component="span">
                         Upload
                     </Button> */}
+                    </CardContent>
                 </Grid>
                 <Grid item xs={6}>
                   <CardContent>
+                    <Box mb={2}>
                     <Typography>球場名稱</Typography>
                     <TextField
                       id="name"
@@ -371,24 +413,49 @@ export default function CreateStadium() {
                       size="small"
                       onChange={handleChange}
                     />
+                    </Box>
+                    <Box my={2}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">球類</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
+                        multiple
                         value={sport}
                         onChange={handleSportChange}
                         label="球類"
                         name="ball_type_id"
-                        style={{ width: "80px" }}
+                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                        // style={{ width: "80px" }}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 48 * 4.5 + 8,
+                              width: 250,
+                            },
+                          },
+                        }}
+                        renderValue={(selected) => (
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                            {selected.map((value) => (
+                              <Chip key={sportType[value]} label={value} />
+                            ))}
+                          </Box>
+                        )}
                       >
-                        <MenuItem value={undefined}>所有球類</MenuItem>
-                        <MenuItem  value={"1"}>羽球</MenuItem>
-                        <MenuItem value={"2"}>籃球</MenuItem>
-                        <MenuItem value={"3"}>排球</MenuItem>
-                        <MenuItem value={"4"}>桌球</MenuItem>
+                        {/* {Object.entries(sportType).map((entries)=>{console.log(sportCh,sportId)})} */}
+                        {Object.entries(sportType).map((entries) => (
+                        <MenuItem
+                          key={entries[0]}
+                          value={entries[0]}
+                        >
+                          {entries[0]}
+                        </MenuItem>
+                      ))}
                       </Select>
                     </FormControl>
+                    </Box>
+                    <Box my={2}>
                     <Typography>球場地點</Typography>
                     <TextField
                       id="location"
@@ -396,6 +463,8 @@ export default function CreateStadium() {
                       size="small"
                       onChange={handleChange}
                     />
+                    </Box>
+                    <Box my={2}>
                     <Typography>球場地址</Typography>
                     <TextField
                       id="address"
@@ -403,6 +472,8 @@ export default function CreateStadium() {
                       size="small"
                       onChange={handleChange}
                     />
+                    </Box>
+                    <Box my={2}>
                     <Typography>最大使用人數</Typography>
                     <TextField
                       id="available"
@@ -410,7 +481,32 @@ export default function CreateStadium() {
                       size="small"
                       onChange={handleChange}
                     />
-                    {Object.keys(availableTime).map((day) => {
+                    </Box>
+                    
+                    
+                  </CardContent>
+                </Grid>
+                {/* <Grid item xs={4}>
+                  <CardContent>
+                    </CardContent>
+                </Grid> */}
+              </Grid>
+              <Box sx={{display:'flex' ,justifyContent:'center'}}>
+              <Button onClick={()=>setPanel("time")}>下一頁</Button>
+              </Box>
+              </Card>
+              </TabPanel>
+              <TabPanel value="time">
+                <Card sx={{ width: "50vw", margin: "auto" }}>
+                <CardContent sx={{display:'flex',justifyContent:'flex-end'}}>
+                <AddDialog
+                          availableTime={availableTime}
+                          setAvailableTime={setAvailableTime}
+                        />
+                </CardContent>
+                  <CardContent sx={{display:'flex',alignItems:'center', flexDirection:'column'}}>
+                  
+                  {Object.keys(availableTime).map((day) => {
                       return Object.keys(availableTime[day]).map((id) => {
                         return (
                           <Typography>
@@ -430,18 +526,24 @@ export default function CreateStadium() {
                         );
                       });
                     })}
-                    <AddDialog
-                      availableTime={availableTime}
-                      setAvailableTime={setAvailableTime}
-                    />
+                    
+                    </CardContent>
+                    <Box sx={{display:'flex' ,justifyContent:'center'}}>
+                    <Button onClick={()=>setPanel("basic")}>上一頁</Button>
                     <Button onClick={handleSubmit}>送出</Button>
-                  </CardContent>
-                </Grid>
-              </Grid>
-            </Card>
+                    </Box>
+                    </Card>
+                </TabPanel>
+               
+              </TabContext>
+            
           </Box>
         </Container>
+       
+        
+        
       </Box>
+      {/* </Box> */}
       {/* 添加這一行 */}
     </div>
   );
