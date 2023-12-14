@@ -34,10 +34,10 @@ router.put("/user", putUsersById);
 // DELETE /api/admin/user?user_id
 router.delete("/user", deleteUsersById);
 
+// GET /api/admin/getUserDetail
+router.get("/user", getUserDetail);
+
 // GET /api/admin/getProviders
 router.get("/getProviders", getAllProviders);
-
-// GET /api/admin/getUserDetail
-router.get("/getUserDetail", getUserDetail);
 
 export default router
