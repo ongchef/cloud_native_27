@@ -9,32 +9,29 @@ import {
 	Typography,
 } from '@mui/material';
 import axios from 'axios';
+import FetchData from '../authService/fetchData';
 
 const AdminAddProvider = () => {
-	const [unitName, setUnitName] = useState('');
-	const [contactPhone, setContactPhone] = useState('');
-	const [contactEmail, setContactEmail] = useState('');
-	const [loginPassword, setLoginPassword] = useState('');
+	const [name, setName] = useState('');
+	const [phone, setPhone] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 
 	const [loading, setLoading] = useState(false);
 
-	const API_URL = 'http://localhost:3000/api/users/';
+	const API_URL = 'http://localhost:3000/api/admin/courtsProvider';
 
 	const registerProvider = async () => {
+		const provider = {
+			role_id: 3,
+			name: name,
+			password: password,
+			email: email,
+			phone: phone,
+		};
+
 		try {
-			const response = await axios.post(
-				API_URL,
-				JSON.stringify({
-					role_id: 3,
-					name: unitName,
-					password: loginPassword,
-					email: contactEmail,
-					phone: contactPhone,
-				}),
-				{
-					headers: { 'Content-Type': 'application/json' },
-				}
-			);
+			const response = FetchData.postData(API_URL, provider);
 
 			console.log('Registration successful:', response.data);
 			return response.data;
@@ -47,23 +44,16 @@ const AdminAddProvider = () => {
 	const handleAddProvider = (e) => {
 		e.preventDefault();
 		setLoading(true);
-		if (unitName && contactPhone && contactEmail && loginPassword) {
+		if (name && phone && email && password) {
 			console.log({
-				unitName,
-				contactPhone,
-				contactEmail,
-				loginPassword,
+				unitName: name,
+				contactPhone: phone,
+				contactEmail: email,
+				loginPassword: password,
 			});
 		}
 		try {
-			const roleId = 2;
-			registerProvider({
-				unitName,
-				contactEmail,
-				contactPhone,
-				loginPassword,
-				roleId,
-			});
+			registerProvider();
 		} catch (error) {
 			console.log(error);
 		}
@@ -90,8 +80,8 @@ const AdminAddProvider = () => {
 					<Typography variant="subtitle1">單位名稱</Typography>
 					<TextField
 						variant="outlined"
-						value={unitName}
-						onChange={(e) => setUnitName(e.target.value)}
+						value={name}
+						onChange={(e) => setName(e.target.value)}
 						required
 					/>
 				</FormControl>
@@ -100,8 +90,8 @@ const AdminAddProvider = () => {
 					<Typography variant="subtitle1">聯絡電話</Typography>
 					<TextField
 						variant="outlined"
-						value={contactPhone}
-						onChange={(e) => setContactPhone(e.target.value)}
+						value={phone}
+						onChange={(e) => setPhone(e.target.value)}
 						required
 					/>
 				</FormControl>
@@ -111,8 +101,8 @@ const AdminAddProvider = () => {
 					<TextField
 						type="email"
 						variant="outlined"
-						value={contactEmail}
-						onChange={(e) => setContactEmail(e.target.value)}
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
 						required
 					/>
 				</FormControl>
@@ -122,8 +112,8 @@ const AdminAddProvider = () => {
 					<TextField
 						type="password"
 						variant="outlined"
-						value={loginPassword}
-						onChange={(e) => setLoginPassword(e.target.value)}
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
 						required
 					/>
 				</FormControl>
