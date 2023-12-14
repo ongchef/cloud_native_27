@@ -279,14 +279,13 @@ export default function UpdateStadium() {
   const [imgblob, setImgBlob] = useState();
   const [panel, setPanel] = useState('basic');
   const [ availableTime, setAvailableTime] = useState({
-    mon:{0:[dayjs("9:00",'HH:mm'),dayjs("11:00",'HH:mm')],
-    1:[dayjs("13:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
-    tue:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
-    wed:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
-    thu:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
-    fri:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
-    sat:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
-    sun:{0:[dayjs("9:00",'HH:mm'),dayjs("22:00",'HH:mm')]}
+    mon:{},
+    tue:{},
+    wed:{},
+    thu:{},
+    fri:{},
+    sat:{},
+    sun:{}
   })
   useEffect(()=>{
     console.log(availableTime)
@@ -301,7 +300,24 @@ export default function UpdateStadium() {
       else{
         setSport([Object.keys(sportType).find(key => Object.is(res[0].ball_type_id,sportType[key]))])
       }
+      var newAvailableTime = availableTime
+      res[0].available_time.map((time)=>{
+        const weekday = Object.keys(week).find(key => {
+          return Object.is(time.weekday,week[key].num)});
+        console.log(weekday)
+        console.log(newAvailableTime)
+        newAvailableTime={
+          ...newAvailableTime,
+          [weekday]: {
+            ...availableTime[weekday],
+            [Object.keys(availableTime[weekday]).length]: [dayjs(time.start_time,'HH:mm'),dayjs(time.end_time,'HH:mm')],
+          },
+        }
+      })
+      setAvailableTime(newAvailableTime)
+      // delete res[0].available_time
       setCourt(res[0])
+      setImage(res[0].image_url.split(".jpg")[0]+".jpg")
     })
   },[])
   function handleSubmit() {
@@ -319,14 +335,14 @@ export default function UpdateStadium() {
       
       flatAvailableTime=[...flatAvailableTime,...newTime]
     }
-    FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
-    .then((res)=>{
-      console.log(res)
-      console.log(res===200)
-      if(res===200){
-        alert("新增成功")
-      }
-    })
+    // FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
+    // .then((res)=>{
+    //   console.log(res)
+    //   console.log(res===200)
+    //   if(res===200){
+    //     alert("新增成功")
+    //   }
+    // })
   }
   const handleChange = (e) => {
     setCourt({ ...court, [e.target.id]: e.target.value });
