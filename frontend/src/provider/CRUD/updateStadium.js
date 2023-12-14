@@ -315,9 +315,23 @@ export default function UpdateStadium() {
         }
       })
       setAvailableTime(newAvailableTime)
-      // delete res[0].available_time
+      delete res[0].available_time
       setCourt(res[0])
       setImage(res[0].image_url.split(".jpg")[0]+".jpg")
+      fetch(res[0].image_url.split(".jpg")[0]+".jpg", {
+        method: 'GET', 
+        mode: 'cors'})
+        .then((response) =>  {
+          console.log(response.text())
+          response.blob()
+          console.log(response.blob())})
+        .then((blob) => {
+          console.log(blob)
+          const url = URL.createObjectURL(blob);
+          console.log(url)
+          setImgBlob(blob)
+        })
+        .catch((error) => console.error(error));
     })
   },[])
   function handleSubmit() {
@@ -335,14 +349,14 @@ export default function UpdateStadium() {
       
       flatAvailableTime=[...flatAvailableTime,...newTime]
     }
-    // FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
-    // .then((res)=>{
-    //   console.log(res)
-    //   console.log(res===200)
-    //   if(res===200){
-    //     alert("新增成功")
-    //   }
-    // })
+    FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
+    .then((res)=>{
+      console.log(res)
+      console.log(res===200)
+      if(res===200){
+        alert("新增成功")
+      }
+    })
   }
   const handleChange = (e) => {
     setCourt({ ...court, [e.target.id]: e.target.value });
