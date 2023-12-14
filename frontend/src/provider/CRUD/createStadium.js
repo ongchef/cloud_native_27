@@ -395,7 +395,7 @@ export default function CreateStadium() {
                 valueLabelFormat={(value) => "基本資訊"}
                 disabled
                 sx={{width:'70vw'}}         
-                 />
+                />
               </Box>
               <Card sx={{ width: "80vw", margin: "auto" }}>
               <Grid container>

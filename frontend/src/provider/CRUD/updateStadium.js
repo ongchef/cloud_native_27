@@ -36,7 +36,7 @@ const week = {
   "sun":"日"
 }
 async function SearchCourt(court_id){
-  return FetchData.getData("http://localhost:3000/api/admin/courtDetail",0,{court_id:court_id})
+  return FetchData.getData("http://localhost:3000/api/courts/admin",0,{court_id:court_id})
 }
 function checkTimeSeries(availableTime) {
   for (const daytime of Object.values(availableTime)) {
