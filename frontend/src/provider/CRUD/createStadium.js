@@ -226,6 +226,7 @@ export default function CreateStadium() {
   const navigate = useNavigate();
   const [image, setImage] = useState();
   const [ court, setCourt] = useState({});
+  // const [imgblob, setImgBlob] = useState();
   const [ availableTime, setAvailableTime] = useState({
     mon:{0:[dayjs("9:00",'HH:mm'),dayjs("11:00",'HH:mm')],
     1:[dayjs("13:00",'HH:mm'),dayjs("22:00",'HH:mm')]},
@@ -253,6 +254,7 @@ export default function CreateStadium() {
     if (e.target.files && e.target.files[0]) {
       let img = URL.createObjectURL(e.target.files[0]);
       setImage(img);
+      // setImgBlob(e.target.files[0])
     }
   };
   function handleDelete (day,id){

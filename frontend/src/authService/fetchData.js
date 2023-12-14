@@ -49,13 +49,16 @@ async function putData(url, body) {
   }
 async function postDateWithImg(url, data, img) {
   var bodyFormData = new FormData();
-
-  bodyFormData.append("name", data.name);
-  bodyFormData.append("court.jpg", img);
+  // img = new Blob(img)
+  console.log(img)
+  bodyFormData.append("name", data.name,"data");
+  // bodyFormData.append("court.jpg", img);
+  bodyFormData.append('files[]', img, "img")
   axios({
     method: "post",
     url: url,
     data: bodyFormData,
+    files:img,
     headers: { "Content-Type": "multipart/form-data", ...authHeader() },
   });
 }
