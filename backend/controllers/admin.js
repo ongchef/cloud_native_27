@@ -78,6 +78,11 @@ export const getUserHistoryDetails = async(req,res) => {
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
         const app_id = await getUsersAppointmentIdQuery(data['user_id'])
+        if (app_id.length === 0) {
+            
+            const message = "User doesn't exist!"
+            return res.status(404).send(message)
+        }
         const app_id_list = app_id.map(item => item.appointment_id);
         const history = await getCourtsInfoByAppointmentIdQuery(app_id_list)
         return res.status(200).json(history)
@@ -119,7 +124,7 @@ export const getCourtsAppointments = async(req,res) => {
         
         //pagination and count the total page
         let limit = 10;
-        let page = req.query['page'];
+        let page = req.query['page'] !== undefined ? req.query['page'] : 1;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 

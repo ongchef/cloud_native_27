@@ -19,7 +19,6 @@ export const getCourtsAppointmentQuery = (params) => {
             searchQuery += ` AND U.name = '${name}'`;
         }
     }
-    console.log(searchQuery);
 
     return new Promise((resolve, reject) => {
 
@@ -42,7 +41,6 @@ export const getCourtsAppointmentQuery = (params) => {
                         if (found) {
                             result.push(court)
                         }
-                        console.log(result);
                         return result
                     }, [])
                     resolve(search_results);
