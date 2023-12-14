@@ -209,9 +209,8 @@ export const getUsersAppointment = async(req,res) => {
     const search_res = await searchCourtsQuery(ball, address)
     // get the list of court id according to search results
     const search_res_list = search_res.map((item) => item.court_id);
-
     // no search results according to ball and address query
-    if (typeof search_res_list === "undefined") {
+    if (typeof search_res_list === "undefined" || search_res_list.length == 0) {
         return res.status(200).json([])
     }
 
