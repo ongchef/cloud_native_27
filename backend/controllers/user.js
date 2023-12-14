@@ -153,6 +153,16 @@ export const postUsersAppointment = async(req,res) => {
     const { date, start_time, end_time, ...appointment_cols } = req.body;
 
     try {
+        if (typeof start_time === "undefined") {
+            return res.status(400).json("請輸入完整預約時間!")
+
+        } else if (typeof end_time === "undefined") {
+            return res.status(400).json("請輸入完整預約時間!")
+
+        } else if (typeof date === "undefined") {
+            return res.status(400).json("請輸入預約日期!")
+        }
+
         // insert appointment table first
         const app_result = await postUsersAppointmentQuery({
             "creator_id": user_id,
