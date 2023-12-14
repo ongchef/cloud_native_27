@@ -56,13 +56,12 @@ export const getUserHistoryDetails = async(req,res) => {
     const admin_id = req.token;
     const isadmin = await isAdmin(admin_id)
     if (isadmin) {
-        const user = await getUserDetail(data['user_id'])
+        const user = await getUserDetailQuery(data['user_id'])
         if (user.length === 0) {
             const message = "User doesn't exist!"
             return res.status(404).send(message)
         }
         const app_id = await getUsersAppointmentIdQuery(data['user_id'])
-        console.log(app_id);
         if (app_id.length === 0) {
             
             return res.status(200).send([])
@@ -331,15 +330,14 @@ export const getUserDetail = async(req,res) => {
     if (isadmin) {
         const result = await getUserDetailQuery(req.query['user_id'])
         if (result.length === 0) {
-            const message = "User doesn't exist!"
+            const message = "User doesn't exist!";
             return res.status(404).json(message)
 
+        } else {
+            return res.status(200).json(result)
+
         }
-        
-        return res.status(200).json(result)
-
     } else {
-
         const message = "You are not the admin!"
         return res.status(401).send(message)
     }
