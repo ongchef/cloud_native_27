@@ -188,7 +188,9 @@ export const getUsersAppointment = async(req,res) => {
         return res.status(401).json("You are not the user!")
     }
 
-    const { ball, address, query_time } = req.query;
+    let { ball, address, query_time } = req.query;
+    query_time = query_time.replace("+", " ");
+
     const page = req.query['page'] || 1;
     const limit = 10;
     let offset = (page - 1) * limit;
@@ -288,7 +290,8 @@ export const getUsersAppointmentDetail = async(req,res) => {
         return res.status(401).json("You are not the user!")
     }
 
-    const { court_id, query_time } = req.query;
+    let { court_id, query_time } = req.query;
+    query_time = query_time.replace("+", " ");
 
     const data = {}
     data['court_id'] = court_id;
@@ -330,7 +333,9 @@ export const getUsersAppointmentJoin = async(req,res) => {
         return res.status(401).json("You are not the user!")
     }
 
-    const { ball, address, query_time, public_index } = req.query;
+    let { ball, address, query_time, public_index } = req.query;
+    query_time = query_time.replace("+", " ");
+
     const page = req.query['page'] || 1;
     const limit = 10;
     let offset = (page - 1) * limit;
