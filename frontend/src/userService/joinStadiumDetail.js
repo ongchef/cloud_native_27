@@ -149,7 +149,7 @@ export default function JoinStadiumDetail() {
                             fontSize: "14px",
                           }}
                         >
-                          {date}
+                          {date}{" "}
                           {appointmentDetail.start_time
                             ? appointmentDetail.start_time.substring(0, 5)
                             : " "}
