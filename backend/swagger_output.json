@@ -153,7 +153,7 @@
             "schema": {
               "type": "time"
             },
-            "description": "YYYY-MM-DD HH:MM:SS"
+            "description": "YYYY-MM-DD+HH:MM:SS"
           },
           {
             "in": "query",
@@ -596,6 +596,14 @@
               "type": "string"
             },
             "description": "Bearer + authentication token"
+          },
+          {
+            "in": "query",
+            "name": "court_id",
+            "schema": {
+              "type": "integer",
+              "example": "2"
+            }
           }
         ],
         "responses": {
@@ -724,7 +732,7 @@
               "type": "string",
               "example": "2023-11-12 00:00:00"
             },
-            "description": "YYYY-MM-DD HH:MM:SS"
+            "description": "YYYY-MM-DD+HH:MM:SS"
           },
           {
             "in": "query",
@@ -794,6 +802,15 @@
               "type": "string"
             },
             "description": "court id"
+          },
+          {
+            "in": "query",
+            "name": "query_time",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "YYYY-MM-DD+00:00:00"
           }
         ],
         "responses": {
@@ -909,6 +926,37 @@
       }
     },
     "/api/admin/user": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bearer + authentication token"
+          },
+          {
+            "in": "query",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "user id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
       "put": {
         "description": "",
         "parameters": [

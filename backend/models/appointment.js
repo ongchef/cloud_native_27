@@ -176,3 +176,35 @@ export const checkAppointmentByIdQuery = (data) => {
         });
     });
 }
+
+export const checkAppointmentsByTimeQuery = (date) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM STADIUM.APPOINTMENT_TIME WHERE date >= ?`, [date], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+export const getUsersAppointmentsInfoByIdQuery = (appointment_id) => {
+    return new Promise((resolve, reject) => {
+        db.query(`
+        SELECT u.name, app_t.date, app_t.start_time, app_t.end_time, c.name as court_name, c.location, c.address,
+        app.ball, app.level, app.rule, app.attendence
+        FROM STADIUM.APPOINTMENT_TIME app_t
+        INNER JOIN STADIUM.APPOINTMENT app ON app_t.appointment_id = app.appointment_id
+        INNER JOIN STADIUM.COURT c ON c.court_id = app.court_id
+        INNER JOIN STADIUM.PARTICIPANT p ON app.appointment_id = p.appointment_id
+        INNER JOIN STADIUM.USER u ON u.user_id = p.user_id
+        WHERE app_t.appointment_id in (?)`, [appointment_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}

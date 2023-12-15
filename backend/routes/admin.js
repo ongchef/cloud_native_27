@@ -34,7 +34,7 @@ router.put("/user", putUsersById);
 // DELETE /api/admin/user?user_id
 router.delete("/user", deleteUsersById);
 
-// GET /api/admin/user
+// GET /api/admin/user?user_id
 router.get("/user", getUserDetail);
 
 // GET /api/admin/getProviders
