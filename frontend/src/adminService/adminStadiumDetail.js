@@ -16,6 +16,7 @@ import Tooltip from "@mui/material/Tooltip";
 import FetchData from "../authService/fetchData";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+import moment from "moment";
 
 const availableTime = [26, 40];
 const bookingList = [
@@ -36,58 +37,47 @@ const bookingList = [
   },
 ];
 async function SearchReserved(courtId, datetime) {
+  datetime = datetime+"+00:00:00"
   return FetchData.getData("http://localhost:3000/api/admin/courtDetail", 1, {
-    date: datetime,
+    query_time: datetime,
     court_id: courtId,
   });
 }
-function TimeBtn() {
-  const availableTimeList = Array.from(
-    new Array(availableTime[1] - 1 - availableTime[0] + 1),
-    (x, i) => (i + availableTime[0]) / 2
-  );
-  const btnList = availableTimeList.map((time) => {
-    return (
-      <Grid item>
-        {bookingList.some(
-          (item) => item.period[0] / 2 <= time && item.period[1] / 2 > time
-        ) ? (
-          <Tooltip
-            title={
-              bookingList.find(
-                (item) =>
-                  item.period[0] / 2 <= time && item.period[1] / 2 > time
-              ).num + "/8"
-            }
-            placement="top"
-          >
-            <Button variant="outlined">
-              {Math.floor(time)}:{time % 1 ? "30" : "00"}
-            </Button>
-          </Tooltip>
-        ) : (
-          <Button variant="outlined" color="inherit">
-            {Math.floor(time)}:{time % 1 ? "30" : "00"}
-          </Button>
-        )}
-      </Grid>
-    );
-  });
-  return btnList;
-}
-function EventFounders() {
+
+function EventFounders({holderList}) {
+  console.log(holderList)
+  holderList.sort(function (a, b) {
+    console.log(a.period[0])
+    if (moment(a.period[0],"HH:ss").isAfter(moment(b.period[0],"HH:ss"))) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }); 
   return (
     <>
-      {bookingList.map((booking, index) => (
-        <Typography key={index}>
-          {Math.floor(booking.period[0] / 2)}:
-          {booking.period[0] % 2 ? "30" : "00"}~
-          {Math.floor(booking.period[1] / 2)}:
-          {booking.period[1] % 2 ? "30" : "00"} 主揪人:{booking.Founder}{" "}
-          <span style={{ color: booking.num === 8 ? "red" : "#1890FF" }}>
-            {booking.num}/8
-          </span>
-        </Typography>
+  
+      {holderList.map((booking, index) => (
+        <>
+          <Grid item xs={4} display='flex' justifyContent='left' >
+          {booking.period[0].split(":")[0]}:{booking.period[0].split(":")[1]}~{booking.period[1].split(":")[0]}:{booking.period[1].split(":")[1]} 
+          </Grid>
+          <Grid item xs={3} display='flex' justifyContent='left' >
+            主揪人:{booking.period[2]}
+          </Grid>
+          <Grid item xs={2} display='flex' justifyContent='left' >
+          {booking.period[3]}/8
+          </Grid>
+          </>
+        // <Typography key={index}>
+        //   {booking.period[0].split(":")[0]}:
+        //   {booking.period[0].split(":")[1]}~
+        //   {booking.period[1].split(":")[0]}:
+        //   {booking.period[1].split(":")[1]} 主揪人:{booking.period[2]}{" "}
+        //   <span style={{ color: booking.num === 8 ? "red" : "#1890FF" }}>
+        //     {booking.period[3]}/8
+        //   </span>
+        // </Typography>
       ))}
     </>
   );
@@ -99,16 +89,121 @@ export default function AdminStadiumDetail() {
   const id = searchParams.get("id");
   const datetime = searchParams.get("time");
   const [courtInfo, setCourtInfo] = useState({});
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [availableTime, setAvailableTime] = useState();
+  const [bookingList, setBookingList] = useState([]);
+  const [holderList, setHolderList] = useState([])
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate();
   useEffect(() => {
-    let url = new URL(window.location.href);
-    let params = url.searchParams;
-    for (let pair of params.entries()) {
-      console.log(`key: ${pair[0]}, value: ${pair[1]}`);
-    }
-  });
-  const [selectedOptions, setSelectedOptions] = useState([""]);
+    setLoading(true)
+    SearchReserved(id,datetime).then((res)=>{
+      console.log(res)
+      SetDetails(res);
+        setLoading(false)
+    })
+  },[]);
 
+  function SetDetails(data) {
+    const date = new Date(datetime.split(" ")[0]);
+    const weekday = date.getDay() || 7; // Convert Sunday from 0 to 7
+    console.log(data)
+    // 要等API改
+    const availableTimeObj = data.available_time.find(
+      (time) => time.weekday === weekday
+    );
+    const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
+    const weekdayInChinese = weekdayMapping[weekday];
+    console.log(availableTimeObj)
+    const availableTime1 = [
+      parseInt(availableTimeObj.start_time.split(":")[0]) * 2,
+      parseInt(availableTimeObj.end_time.split(":")[0]) * 2,
+    ];
+    const bookingList1 = data.appointment.map((time) => ({
+      period: [
+        parseInt(time.start_time.split(":")[0]) * 2,
+        parseInt(time.end_time.split(":")[0]) * 2,
+        time.name,
+        time.participant_count
+
+      ],
+    }));
+    const bookingList2 = data.appointment.map((time) => ({
+      period: [
+        time.start_time,
+       time.end_time,
+        time.name,
+        time.participant_count
+
+      ],
+    }));
+    const courtData = { ...data };
+    delete courtData.available_time;
+    delete courtData.appointment_time;
+    courtData.weekday = weekdayInChinese;
+    courtData.availableTimeinday =
+      availableTimeObj.start_time.substring(0, 5) +
+      "~" +
+      availableTimeObj.end_time.substring(0, 5);
+    setAvailableTime(availableTime1);
+    setBookingList(bookingList1);
+    setHolderList(bookingList2)
+    setCourtInfo(courtData);
+    console.log(availableTime);
+    console.log(bookingList);
+  }
+  
+  function TimeBtn(props) {
+    const { availableTime, bookingList } = props;
+    var num
+    console.log(availableTime[1] - availableTime[0]);
+    const availableTimeList = Array.from(
+      new Array(availableTime[1] - availableTime[0]),
+      (x, i) => (i + availableTime[0]) / 2
+    );
+    const btnList = availableTimeList.map((time) => {
+      const value = `${Math.floor(time)}:${time % 1 ? "30" : "00"}`;
+      return (
+        <Grid item>
+          {bookingList.some(
+            (item) => {
+              num=item.period[2]
+              return item.period[0] / 2 <= time && item.period[1] / 2 > time}
+          ) ? (
+            <Tooltip title={num+"/"+courtInfo.available} placement="top"> 
+            <div>
+            <Button
+              variant="outlined"
+              color="inherit"
+              disabled
+              key={value}
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+              style={{ width: "80px" }}
+            >
+              {value}
+            </Button>
+            </div>
+            </Tooltip>
+          ) : (
+            <Button
+              variant="outlined"
+              color="inherit"
+              key={value}
+              value={time % 1 ? "30" : "00"}
+              type={selectedOptions.includes(value) ? "primary" : "default"}
+              onClick={() => handleButtonClick(value)}
+              style={{ width: "80px" }}
+            >
+              {value}
+            </Button>
+          )}
+        </Grid>
+      );
+    });
+    return btnList;
+  }
   const handleButtonClick = (value) => {
     const index = selectedOptions.indexOf(value);
     if (index < 0) {
@@ -217,11 +312,18 @@ export default function AdminStadiumDetail() {
 
                     <Box mx={1}>
                       <Grid container spacing={1}>
-                        <TimeBtn />
+                      {bookingList && availableTime && (
+                          <TimeBtn
+                            bookingList={bookingList}
+                            availableTime={availableTime}
+                          />)
+                        }
                       </Grid>
                     </Box>
-                    <Box m={1}>
-                      <EventFounders></EventFounders>
+                    <Box my={1} display='flex' justifyContent='left'>
+                      <Grid container spacing={1}>
+                      {holderList&& <EventFounders holderList={holderList}></EventFounders>}
+                      </Grid>
                     </Box>
                     {/* <Box display="flex" justifyContent="flex-end">
                       <Tooltip
