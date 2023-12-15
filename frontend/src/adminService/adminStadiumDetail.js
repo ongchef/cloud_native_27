@@ -292,7 +292,8 @@ export default function AdminStadiumDetail() {
                         paddingX={1}
                         paddingY={0.6}
                       >
-                        建議最大使用人數 : {courtInfo.available}
+                        建議最大使用人數 : {courtInfo.available} <br />
+                        場地球類：{ballNames}
                       </Typography>
                       <Typography
                         variant="body1"
@@ -301,7 +302,7 @@ export default function AdminStadiumDetail() {
                         paddingY={0.6}
                         sx={{ fontWeight: "bold" }}
                       >
-                        場地球類：{ballNames}
+                        負責人聯絡電話 ： {courtInfo.contact}
                       </Typography>
                       <Typography
                         variant="body1"
