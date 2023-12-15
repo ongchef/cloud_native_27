@@ -47,9 +47,9 @@ const week = {
 
 const sportType={
   羽球:1,
-  排球:2,
-  排球:3,
-  桌球:4,
+  籃球:2,
+  桌球:3,
+  排球:4,
 }
 function checkTimeSeries(newTime) {
   if (newTime[1].isBefore(newTime[0])) {
