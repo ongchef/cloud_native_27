@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Card, TextField } from "@mui/material";
+import { Card, CircularProgress, TextField } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -278,6 +278,7 @@ export default function UpdateStadium() {
   const [sport, setSport] = useState([]);
   const [imgblob, setImgBlob] = useState();
   const [panel, setPanel] = useState('basic');
+  const [loading, setLoading] = useState(true)
   const [ availableTime, setAvailableTime] = useState({
     mon:{},
     tue:{},
@@ -288,6 +289,7 @@ export default function UpdateStadium() {
     sun:{}
   })
   useEffect(()=>{
+    setLoading(true)
     console.log(availableTime)
     SearchCourt(id).then((res)=>{
       console.log(res)
@@ -318,6 +320,7 @@ export default function UpdateStadium() {
       delete res[0].available_time
       setCourt(res[0])
       res[0].image_url&&setImage(res[0].image_url.split(".jpg")[0]+".jpg")
+      setLoading(false)
       // fetch(res[0].image_url.split(".jpg")[0]+".jpg", {
       //   method: 'GET', 
       //   mode: 'cors'})
@@ -349,12 +352,15 @@ export default function UpdateStadium() {
       
       flatAvailableTime=[...flatAvailableTime,...newTime]
     }
+    setLoading(true)
     FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
     .then((res)=>{
       console.log(res)
       console.log(res===200)
       if(res===200){
-        alert("新增成功")
+        setLoading(false)
+        alert("修改成功")
+        window.location.href="readStadium"
       }
     })
   }
@@ -424,6 +430,16 @@ export default function UpdateStadium() {
         flexDirection="column"
         justifyContent="center"
       >
+      {loading?
+      <Box
+          paddingTop={20}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress size={100} />
+        </Box>:
+        (<>
         <Container width="90vw">
           <Button variant="outlined" onClick={() => navigate(-1)}>
             <ArrowBackIcon />
@@ -635,7 +651,8 @@ export default function UpdateStadium() {
                
               </TabContext>
           </Box>
-        </Container>     
+        </Container>  
+        </>)}   
       </Box>
     </div>
   );
