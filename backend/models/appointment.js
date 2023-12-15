@@ -65,7 +65,7 @@ export const searchCourtsQuery = (ball, address) => {
 export const getCourtsInfoByAppointmentIdQuery = (data) => {
     return new Promise((resolve, reject) => {
         db.query(`SELECT c.name as court_name, c.location, c.address, c.image_url, app_t.date, app_t.start_time, app_t.end_time, 
-        app.ball, app.level, app.rule, s.name as creator_name, app.attendence, c.available, app.appointment_id
+        app.ball, app.level, app.rule, s.name as creator_name, app.attendence, c.available, app.appointment_id, app.public
         FROM STADIUM.APPOINTMENT app 
         INNER JOIN STADIUM.COURT c on app.court_id = c.court_id 
         INNER JOIN STADIUM.APPOINTMENT_TIME app_t on app.appointment_id = app_t.appointment_id
