@@ -8,7 +8,8 @@ import {
     deleteUsersByIdQuery,
     isAdmin,
     getProviders,
-    getUserDetailQuery
+    getUserDetailQuery,
+    getCourtAvailableQuery,
 } from "../models/admin.js";
 import {
     getUsersAppointmentIdQuery,
@@ -168,7 +169,12 @@ export const getCourtsAppointmentDetails = async(req,res) => {
                 }       
             }
         }
-        return res.status(200).json(courts)
+        const available = await getCourtAvailableQuery(data['court_id'])
+        const returns = {
+            available_time: available,
+            appointment: courts
+        }
+        return res.status(200).json(returns)
 
     } else {
 
