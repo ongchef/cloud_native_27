@@ -10,7 +10,7 @@ import moment from 'moment/moment';
 import FetchData from '../authService/fetchData';
 import { useLocation, useNavigate } from 'react-router-dom'; // 引入useNavigate
 
-export default function UserHistory() {
+export default function AdminUserHistoryDetail() {
 	const [date, setDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
 	const [userHistoryList, setUserHistoryList] = useState([]);
 	const API_URL = 'http://localhost:3000/api/admin/userHistoryDetails';
@@ -86,39 +86,6 @@ export default function UserHistory() {
 							/>
 						);
 					})}
-					{/* <HistoryCard
-            image={pic}
-            title={"球場名稱1"}
-            description={[
-              "106台北市大安區羅斯福路四段1號",
-              "2023-11-02",
-              "19:00~21:00",
-              ["Basketball", "新手友善", "雙打"],
-            ]}
-            status={true}
-          />
-          <HistoryCard
-            image={pic2}
-            title={"球場名稱2"}
-            description={[
-              "106台北市大安區羅斯福路四段1號",
-              "2023-11-02",
-              "19:00~21:00",
-              ["Basketball", "新手友善", "雙打"],
-            ]}
-            status={true}
-          />
-          <HistoryCard
-            image={pic2}
-            title={"球場名稱3"}
-            description={[
-              "106台北市大安區羅斯福路四段1號",
-              "2023-11-02",
-              "19:00~21:00",
-              ["Basketball", "新手友善", "雙打"],
-            ]}
-            status={false}
-          /> */}
 				</Box>
 			</Box>
 		</div>

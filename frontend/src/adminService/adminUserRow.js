@@ -5,31 +5,56 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of
 export default function AdminUserRow({ user }) {
 	const navigate = useNavigate();
 
-	const handleViewHistory = (userId) => {
-		console.log(userId);
+	const handleViewUserHistory = (userId) => {
 		navigate(`/adminUserHistoryDetail?id=${userId}`);
 	};
 
-	const handleModifyUser = (userId) => {
-		console.log(`修改使用者 ${userId} 的資料`);
+	const handleViewUserProfile = (userId) => {
+		navigate(`/adminUserProfile?id=${userId}`);
 	};
 
 	return (
 		<TableRow>
-			<TableCell>{user.name}</TableCell>
-			<TableCell>{user.email}</TableCell>
-			<TableCell>{user.phone}</TableCell>
-			<TableCell>
+			<TableCell
+				sx={{
+					justifyContent: 'center',
+					textAlign: 'center',
+				}}>
+				{user.name}
+			</TableCell>
+			<TableCell
+				sx={{
+					justifyContent: 'center',
+					textAlign: 'center',
+				}}>
+				{user.email}
+			</TableCell>
+			<TableCell
+				sx={{
+					justifyContent: 'center',
+					textAlign: 'center',
+				}}>
+				{user.phone}
+			</TableCell>
+			<TableCell
+				sx={{
+					justifyContent: 'center',
+					textAlign: 'center',
+				}}>
 				<Button
 					variant="outlined"
-					onClick={() => handleViewHistory(user.user_id)}>
+					onClick={() => handleViewUserHistory(user.user_id)}>
 					查看歷史紀錄
 				</Button>
 			</TableCell>
-			<TableCell>
+			<TableCell
+				sx={{
+					justifyContent: 'center',
+					textAlign: 'center',
+				}}>
 				<Button
 					variant="outlined"
-					onClick={() => handleModifyUser(user.user_id)}>
+					onClick={() => handleViewUserProfile(user.user_id)}>
 					修改資料
 				</Button>
 			</TableCell>

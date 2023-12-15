@@ -39,6 +39,7 @@ import UserProfile from './userService/userProfile';
 import Map from './commonService/map';
 import UpdateStadium from './provider/CRUD/updateStadium';
 import AdminUserHistoryDetail from './adminService/adminUserHistoryDetail';
+import AdminUserProfile from './adminService/adminUserProfile';
 
 const drawerWidth = 240;
 
@@ -325,6 +326,7 @@ export default function App() {
 					path="/adminUserHistoryDetail"
 					element={<AdminUserHistoryDetail />}
 				/>
+				<Route exact path="/adminUserProfile" element={<AdminUserProfile />} />
 			</Routes>
 			<AuthVerify logOut={logOut} />
 		</div>

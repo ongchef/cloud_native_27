@@ -43,11 +43,41 @@ export default function AdminUserHistory() {
 									borderBottom: 1,
 								},
 							}}>
-							<TableCell>使用者名稱</TableCell>
-							<TableCell>信箱</TableCell>
-							<TableCell>電話</TableCell>
-							<TableCell>查看使用者歷史紀錄</TableCell>
-							<TableCell>修改使用者資料</TableCell>
+							<TableCell
+								sx={{
+									justifyContent: 'center',
+									textAlign: 'center',
+								}}>
+								使用者名稱
+							</TableCell>
+							<TableCell
+								sx={{
+									justifyContent: 'center',
+									textAlign: 'center',
+								}}>
+								信箱
+							</TableCell>
+							<TableCell
+								sx={{
+									justifyContent: 'center',
+									textAlign: 'center',
+								}}>
+								電話
+							</TableCell>
+							<TableCell
+								sx={{
+									justifyContent: 'center',
+									textAlign: 'center',
+								}}>
+								查看使用者歷史紀錄
+							</TableCell>
+							<TableCell
+								sx={{
+									justifyContent: 'center',
+									textAlign: 'center',
+								}}>
+								修改使用者資料
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
