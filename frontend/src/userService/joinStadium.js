@@ -206,6 +206,7 @@ export default function JoinStadium() {
             "19:00~21:00",
             ["Basketball", "新手友善", "雙打"],
             "Wonu Juan",
+            [4, 8],
           ]}
         />
         {(appointmentList || []).map((appointment) => {
@@ -234,6 +235,7 @@ export default function JoinStadium() {
                   appointment.end_time.substring(0, 5),
                 [appointment.ball, appointment.level, appointment.rule],
                 appointment.creator_name,
+                [appointment.attendence, appointment.available],
               ]}
             />
           );

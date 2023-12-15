@@ -93,7 +93,10 @@ export default function JoinStadiumCard({ id, image, title, description }) {
                   ))}
                 </Typography>
                 <Typography variant="body2" color="000000">
-                  當前場地預約人數： <strong>4/8</strong>
+                  當前場地預約人數：{" "}
+                  <strong>
+                    {description[5][0]}/{description[5][1]}
+                  </strong>
                 </Typography>
                 <Box
                   display="flex"

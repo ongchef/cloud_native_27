@@ -54,6 +54,7 @@ export default function OrderStadiumDetail() {
   const [open, setOpen] = useState(false);
   const [balls, setBalls] = useState();
   const [ball, setBall] = useState();
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -199,8 +200,9 @@ export default function OrderStadiumDetail() {
     ).then((res) => {
       console.log(res);
       if (res === 200) {
-        setOpen(true);
+        alert("預約成功");
         //window.location.reload();
+        navigate(`/userHistory`);
       }
     });
   };
@@ -283,199 +285,129 @@ export default function OrderStadiumDetail() {
           {/* 內容1 */}
         </Container>
         <Container maxWidth="sm">
-          <Box my={2}>
-            <Card sx={{ width: "70vw", margin: "auto" }}>
-              <Grid
-                paddingLeft="30px"
-                container
-                spacing={2}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Grid item xs={12} sm={6}>
-                  <CardMedia
-                    component="img"
-                    image={courtInfo.image_url.split(".jpg")[0] + ".jpg"} // 替換為您的圖片URL
-                    alt="Stadium"
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <CardContent>
-                    <Typography
-                      variant="h5"
-                      component="div"
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      {courtInfo.name} - {courtInfo.location}{" "}
-                      {datetime.split(" ")[0]}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      paddingX={1}
-                      paddingY={0.6}
-                    >
-                      {courtInfo.address}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="000000"
-                      paddingY={0.6}
-                      paddingX={1}
-                    >
-                      <span
-                        style={{
-                          color: "000000",
-                          backgroundColor: "#D9D9D9",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                        }}
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Box my={2}>
+              <Card sx={{ width: "70vw", margin: "auto" }}>
+                <Grid
+                  paddingLeft="30px"
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Grid item xs={12} sm={6}>
+                    <CardMedia
+                      component="img"
+                      image={courtInfo.image_url.split(".jpg")[0] + ".jpg"} // 替換為您的圖片URL
+                      alt="Stadium"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <CardContent>
+                      <Typography
+                        variant="h5"
+                        component="div"
+                        sx={{ fontWeight: "bold" }}
                       >
-                        週{courtInfo.weekday} {courtInfo.availableTimeinday}{" "}
-                        開放預約
-                      </span>
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="000000"
-                      paddingX={1}
-                      paddingY={0.6}
-                    >
-                      建議最大使用人數 : {courtInfo.available}
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      color="000000"
-                      paddingX={1}
-                      paddingY={0.6}
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      預約時間：
-                    </Typography>
+                        {courtInfo.name} - {courtInfo.location}{" "}
+                        {datetime.split(" ")[0]}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        paddingX={1}
+                        paddingY={0.6}
+                      >
+                        {courtInfo.address}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="000000"
+                        paddingY={0.6}
+                        paddingX={1}
+                      >
+                        <span
+                          style={{
+                            color: "000000",
+                            backgroundColor: "#D9D9D9",
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                          }}
+                        >
+                          週{courtInfo.weekday} {courtInfo.availableTimeinday}{" "}
+                          開放預約
+                        </span>
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.6}
+                      >
+                        建議最大使用人數 : {courtInfo.available}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.6}
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        預約時間：
+                      </Typography>
 
-                    <Box mx={1}>
-                      {loading ? (
-                        // <Grid
-                        //   container
-                        //   spacing={1}
-                        //   sx={{
-                        //     display: "flex",
-                        //     justifyContent: "center",
-                        //     alignItems: "center",
-                        //   }}
-                        // >
-                        //   <Box>
-                        //     <CircularProgress size={55}/>
-                        //   </Box>
-                        // </Grid>
+                      <Box mx={1}>
+                        {loading ? (
+                          // <Grid
+                          //   container
+                          //   spacing={1}
+                          //   sx={{
+                          //     display: "flex",
+                          //     justifyContent: "center",
+                          //     alignItems: "center",
+                          //   }}
+                          // >
+                          //   <Box>
+                          //     <CircularProgress size={55}/>
+                          //   </Box>
+                          // </Grid>
 
-                        <LinearProgress />
-                      ) : (
-                        bookingList &&
-                        availableTime && (
-                          <Grid container spacing={1} sx={{}}>
-                            <TimeBtn
-                              bookingList={bookingList}
-                              availableTime={availableTime}
-                            />
-                          </Grid>
-                        )
-                      )}
-                    </Box>
-                    <Box
-                      m={1}
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Radio.Group
-                        defaultValue={ball || ""}
-                        buttonStyle="solid"
-                        onChange={(e) => setLevel(e.target.value)}
-                        gap={1}
+                          <LinearProgress />
+                        ) : (
+                          bookingList &&
+                          availableTime && (
+                            <Grid container spacing={1} sx={{}}>
+                              <TimeBtn
+                                bookingList={bookingList}
+                                availableTime={availableTime}
+                              />
+                            </Grid>
+                          )
+                        )}
+                      </Box>
+                      <Box
+                        m={1}
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
                       >
-                        {(balls || []).map((ball) => (
-                          <Radio.Button
-                            style={{ margin: "0 10px" }}
-                            value={ball}
-                          >
-                            {ball}
-                          </Radio.Button>
-                        ))}
-                      </Radio.Group>
-                    </Box>
-                    <Box my={1} display="flex" alignItems="center">
-                      <Typography
-                        variant="body1"
-                        color="000000"
-                        paddingX={1}
-                        paddingY={0.2}
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        強度：
-                      </Typography>
-                      <Radio.Group
-                        defaultValue="新手友善"
-                        buttonStyle="solid"
-                        onChange={(e) => setLevel(e.target.value)}
-                        gap={1}
-                      >
-                        <Radio.Button value="新手友善">新手友善</Radio.Button>
-                        <Radio.Button value="Advanced">Advanced</Radio.Button>
-                        <Radio.Button value="頂尖對決">頂尖對決</Radio.Button>
-                      </Radio.Group>
-                    </Box>
-                    <Box my={1} display="flex" alignItems="center">
-                      <Typography
-                        variant="body1"
-                        color="000000"
-                        paddingX={1}
-                        paddingY={0.2}
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        規則：
-                      </Typography>
-                      <Radio.Group
-                        defaultValue="單打"
-                        buttonStyle="solid"
-                        onChange={(e) => setRule(e.target.value)}
-                      >
-                        <Radio.Button value="單打">單打</Radio.Button>
-                        <Radio.Button value="雙打">雙打</Radio.Button>
-                      </Radio.Group>
-                    </Box>
-                    <Box my={1} display="flex" alignItems="center">
-                      <Typography
-                        variant="body1"
-                        color="000000"
-                        paddingX={1}
-                        paddingY={0.2}
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        備註：
-                      </Typography>
-                      <Input
-                        placeholder="e.g. 激烈碰撞"
-                        style={{ width: 300 }}
-                        onChange={(e) => setNote(e.target.value)}
-                      />
-                    </Box>
-                    <Box my={1} display="flex" alignItems="center">
-                      <Typography
-                        variant="body1"
-                        color="000000"
-                        paddingX={1}
-                        paddingY={0.2}
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        將此預約設定為私人房間：
-                      </Typography>
-                      <Switch
-                        checked={switchState}
-                        onChange={handleSwitchChange}
-                      />
-                    </Box>
-                    {switchState && (
+                        <Radio.Group
+                          defaultValue={ball || ""}
+                          buttonStyle="solid"
+                          gap={1}
+                        >
+                          {(balls || []).map((ball) => (
+                            <Radio.Button
+                              style={{ margin: "0 10px" }}
+                              value={ball}
+                            >
+                              {ball}
+                            </Radio.Button>
+                          ))}
+                        </Radio.Group>
+                      </Box>
                       <Box my={1} display="flex" alignItems="center">
                         <Typography
                           variant="body1"
@@ -484,40 +416,113 @@ export default function OrderStadiumDetail() {
                           paddingY={0.2}
                           sx={{ fontWeight: "bold" }}
                         >
-                          密碼：
+                          強度：
                         </Typography>
-
+                        <Radio.Group
+                          defaultValue="新手友善"
+                          buttonStyle="solid"
+                          onChange={(e) => setLevel(e.target.value)}
+                          gap={1}
+                        >
+                          <Radio.Button value="新手友善">新手友善</Radio.Button>
+                          <Radio.Button value="Advanced">Advanced</Radio.Button>
+                          <Radio.Button value="頂尖對決">頂尖對決</Radio.Button>
+                        </Radio.Group>
+                      </Box>
+                      <Box my={1} display="flex" alignItems="center">
+                        <Typography
+                          variant="body1"
+                          color="000000"
+                          paddingX={1}
+                          paddingY={0.2}
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          規則：
+                        </Typography>
+                        <Radio.Group
+                          defaultValue="單打"
+                          buttonStyle="solid"
+                          onChange={(e) => setRule(e.target.value)}
+                        >
+                          <Radio.Button value="單打">單打</Radio.Button>
+                          <Radio.Button value="雙打">雙打</Radio.Button>
+                        </Radio.Group>
+                      </Box>
+                      <Box my={1} display="flex" alignItems="center">
+                        <Typography
+                          variant="body1"
+                          color="000000"
+                          paddingX={1}
+                          paddingY={0.2}
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          備註：
+                        </Typography>
                         <Input
-                          type="password"
-                          style={{ width: 200 }}
-                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="e.g. 激烈碰撞"
+                          style={{ width: 300 }}
+                          onChange={(e) => setNote(e.target.value)}
                         />
                       </Box>
-                    )}
-                    <Box display="flex" justifyContent="flex-end">
-                      <ButtonM
-                        width="300px"
-                        variant="outlined"
-                        onClick={() => {
-                          console.log(validateTime());
-                        }}
-                      >
-                        <ArrowForwardIcon />
-                        預約場地
-                      </ButtonM>
-                    </Box>
-                  </CardContent>
+                      <Box my={1} display="flex" alignItems="center">
+                        <Typography
+                          variant="body1"
+                          color="000000"
+                          paddingX={1}
+                          paddingY={0.2}
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          將此預約設定為私人房間：
+                        </Typography>
+                        <Switch
+                          checked={switchState}
+                          onChange={handleSwitchChange}
+                        />
+                      </Box>
+                      {switchState && (
+                        <Box my={1} display="flex" alignItems="center">
+                          <Typography
+                            variant="body1"
+                            color="000000"
+                            paddingX={1}
+                            paddingY={0.2}
+                            sx={{ fontWeight: "bold" }}
+                          >
+                            密碼：
+                          </Typography>
+
+                          <Input
+                            type="password"
+                            style={{ width: 200 }}
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        </Box>
+                      )}
+                      <Box display="flex" justifyContent="flex-end">
+                        <ButtonM
+                          width="300px"
+                          variant="outlined"
+                          onClick={() => {
+                            console.log(validateTime());
+                          }}
+                        >
+                          <ArrowForwardIcon />
+                          預約場地
+                        </ButtonM>
+                      </Box>
+                    </CardContent>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Card>
-            <Box>
-              <Map
-                latitude={25.014057657671447}
-                longtitude={121.53812819619687}
-                name={"台大綜合體育館 - 一樓多功能球場"}
-              />
+              </Card>
+              <Box>
+                <Map
+                  latitude={25.014057657671447}
+                  longtitude={121.53812819619687}
+                  name={"台大綜合體育館 - 一樓多功能球場"}
+                />
+              </Box>
             </Box>
-          </Box>
+          )}
         </Container>
       </Box>
     </div>

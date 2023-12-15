@@ -26,7 +26,7 @@ export default function JoinStadiumDetail() {
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("id");
   const [date, setDate] = useState();
-  const [password, setPassword] = useState();
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     let url = new URL(window.location.href);
@@ -45,7 +45,6 @@ export default function JoinStadiumDetail() {
         headers: authHeader(),
         params: {
           appointment_id: id,
-          ...(password && password !== null && { password: password }),
         },
       }
     );
@@ -81,6 +80,7 @@ export default function JoinStadiumDetail() {
   const joinAppointment = () => {
     let jAppointment = {
       appointment_id: appointmentDetail.appointment_id,
+      password: password,
     };
     FetchData.postData(
       "http://localhost:3000/api/users/appointment/join",
@@ -89,7 +89,9 @@ export default function JoinStadiumDetail() {
       console.log(res);
       if (res === 200) {
         console.log("加入成功");
+        alert("加入成功");
         //window.location.reload();
+        navigate(`/userHistory`);
       }
     });
   };
