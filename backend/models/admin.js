@@ -173,13 +173,13 @@ export const deleteUsersByIdQuery = async(data) => {
 export const isAdmin = (data) => {
     return new Promise((resolve, reject) => {
         const admin_id = data
-        db.query('SELECT u.user_id, r.role_id FROM USER u JOIN ROLE_REF r ON u.role_id = r.role_id WHERE u.user_id = ? AND r.role_id = 1;', [admin_id], (error, results) => {
+        db.query('SELECT u.* FROM USER u JOIN ROLE_REF r ON u.role_id = r.role_id WHERE u.user_id = ? AND r.role_id = 1;', [admin_id], (error, results) => {
         
             if (error) {
                 reject(false);
             } else {
 
-                if (results.length === 0) {
+                if (results.length === 0 || results === undefined) {
                     resolve(false)
                 } else {
                     resolve(true)
