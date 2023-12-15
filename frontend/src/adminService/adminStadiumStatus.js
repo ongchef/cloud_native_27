@@ -19,6 +19,7 @@ import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination";
 import FetchData from "../authService/fetchData";
+import Typography from "@mui/material/Typography";
 export default function AdminStadiumStatus() {
   const [sport, setSport] = useState("ALL");
   const [location, setLocation] = useState("ALL");
@@ -38,7 +39,7 @@ export default function AdminStadiumStatus() {
     let l = location !== "ALL" ? location : "";
     let p = provider !== "ALL" ? provider : "";
     console.log(s, l, p);
-    return FetchData.getData("http://localhost:3000/api/admin/court", 1, {
+    return FetchData.getData("http://localhost:3000/api/admin/court", page, {
       query_time: date + time.$d.toString().substring(15, 24),
       ...(s && s !== null && { ball: s }),
       ...(l && l !== null && { address: l }),
@@ -68,7 +69,7 @@ export default function AdminStadiumStatus() {
         let day = moment(date).day();
       }
     });
-  }, []);
+  }, [page]);
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
@@ -182,6 +183,11 @@ export default function AdminStadiumStatus() {
           </Button>
         </Box>
       </Box>
+      <Box display="flex" justifyContent="center">
+        <Typography variant="h4" width="70%">
+          以下場地有預約紀錄
+        </Typography>
+      </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         {stadiumList.map((court) => {
           return (
@@ -225,7 +231,12 @@ export default function AdminStadiumStatus() {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
-        <Pagination count={10} color="primary" /> {/* 添加這一行 */}
+        <Pagination
+          count={totalPage}
+          onChange={(event, num) => setPage(num)}
+          page={page}
+          color="primary"
+        />{" "}
       </Box>
     </>
   );

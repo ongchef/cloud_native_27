@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import FetchData from "../authService/fetchData";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ballTypes = {
   1: "羽球",
@@ -231,107 +232,111 @@ export default function AdminStadiumDetail() {
           {/* 內容1 */}
         </Container>
         <Container maxWidth="sm">
-          <Box my={2}>
-            <Card sx={{ width: "70vw", margin: "auto" }}>
-              <Grid
-                paddingLeft="30px"
-                container
-                spacing={2}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Grid item xs={12} sm={6}>
-                  <CardMedia
-                    component="img"
-                    image={courtInfo.image_url.split(".jpg")[0] + ".jpg"} // 替換為您的圖片URL
-                    alt="Stadium"
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <CardContent>
-                    <Typography
-                      variant="h5"
-                      component="div"
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      {courtInfo.name} - {courtInfo.location} {datetime}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      paddingX={1}
-                      paddingY={0.6}
-                    >
-                      {courtInfo.address}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="000000"
-                      paddingY={0.6}
-                      paddingX={1}
-                    >
-                      <span
-                        style={{
-                          color: "000000",
-                          backgroundColor: "#D9D9D9",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                        }}
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Box my={2}>
+              <Card sx={{ width: "70vw", margin: "auto" }}>
+                <Grid
+                  paddingLeft="30px"
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Grid item xs={12} sm={6}>
+                    <CardMedia
+                      component="img"
+                      image={courtInfo.image_url.split(".jpg")[0] + ".jpg"} // 替換為您的圖片URL
+                      alt="Stadium"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <CardContent>
+                      <Typography
+                        variant="h5"
+                        component="div"
+                        sx={{ fontWeight: "bold" }}
                       >
-                        週{courtInfo.weekday} {courtInfo.availableTimeinday}{" "}
-                        開放預約
-                      </span>
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="000000"
-                      paddingX={1}
-                      paddingY={0.6}
-                    >
-                      建議最大使用人數 : {courtInfo.available}
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      color="000000"
-                      paddingX={1}
-                      paddingY={0.6}
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      場地球類：{ballNames}
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      color="000000"
-                      paddingX={1}
-                      paddingY={0.6}
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      預約狀況：
-                    </Typography>
-                    <Box mx={1}>
-                      <Grid container spacing={1}>
-                        {bookingList && availableTime && (
-                          <TimeBtn
-                            bookingList={bookingList}
-                            availableTime={availableTime}
-                          />
-                        )}
-                      </Grid>
-                    </Box>
-                    <Box my={1} display="flex" justifyContent="left">
-                      <Grid container spacing={1}>
-                        {holderList && (
-                          <EventFounders
-                            holderList={holderList}
-                          ></EventFounders>
-                        )}
-                      </Grid>
-                    </Box>
-                  </CardContent>
+                        {courtInfo.name} - {courtInfo.location} {datetime}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        paddingX={1}
+                        paddingY={0.6}
+                      >
+                        {courtInfo.address}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="000000"
+                        paddingY={0.6}
+                        paddingX={1}
+                      >
+                        <span
+                          style={{
+                            color: "000000",
+                            backgroundColor: "#D9D9D9",
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                          }}
+                        >
+                          週{courtInfo.weekday} {courtInfo.availableTimeinday}{" "}
+                          開放預約
+                        </span>
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.6}
+                      >
+                        建議最大使用人數 : {courtInfo.available}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.6}
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        場地球類：{ballNames}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        color="000000"
+                        paddingX={1}
+                        paddingY={0.6}
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        預約狀況：
+                      </Typography>
+                      <Box mx={1}>
+                        <Grid container spacing={1}>
+                          {bookingList && availableTime && (
+                            <TimeBtn
+                              bookingList={bookingList}
+                              availableTime={availableTime}
+                            />
+                          )}
+                        </Grid>
+                      </Box>
+                      <Box my={1} display="flex" justifyContent="left">
+                        <Grid container spacing={1}>
+                          {holderList && (
+                            <EventFounders
+                              holderList={holderList}
+                            ></EventFounders>
+                          )}
+                        </Grid>
+                      </Box>
+                    </CardContent>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Card>
-          </Box>
+              </Card>
+            </Box>
+          )}
         </Container>
       </Box>
       {/* 添加這一行 */}

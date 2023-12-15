@@ -18,6 +18,7 @@ import pic2 from "../pic/羽球3.png";
 import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
 import FetchData from "../authService/fetchData";
+import Typography from "@mui/material/Typography";
 export default function OrderStadium() {
   const [sport, setSport] = useState();
   const [location, setLocation] = useState();
@@ -163,6 +164,11 @@ export default function OrderStadium() {
             Search
           </Button>
         </Box>
+      </Box>
+      <Box display="flex" justifyContent="center">
+        <Typography variant="h4" width="70%">
+          以下場地可供預約
+        </Typography>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         {(stadiumList || []).map((court) => {

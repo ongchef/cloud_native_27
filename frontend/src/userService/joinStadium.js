@@ -17,9 +17,10 @@ import RadioGroup from "@mui/material/RadioGroup"; // 引入RadioGroup元件
 import FormControlLabel from "@mui/material/FormControlLabel"; // 引入FormControlLabel元件
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
-import Pagination from "@mui/material/Pagination";
 
+import Pagination from "@mui/material/Pagination";
 import FetchData from "../authService/fetchData";
+import Typography from "@mui/material/Typography";
 export default function JoinStadium() {
   const [sport, setSport] = useState();
   const [location, setLocation] = useState();
@@ -194,6 +195,11 @@ export default function JoinStadium() {
             Search
           </Button>
         </Box>
+      </Box>
+      <Box display="flex" justifyContent="center">
+        <Typography variant="h4" width="70%">
+          以下組隊房間可供加入
+        </Typography>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         <StadiumCard
