@@ -13,6 +13,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TextField } from "@mui/material";
 import axios from "axios";
 import authHeader from "../authService/authHeader";
+import FetchData from "../authService/fetchData";
 
 export default function UserProfile() {
   const [userProfile, setUserProfile] = useState([]);
@@ -21,6 +22,33 @@ export default function UserProfile() {
       headers: authHeader(),
     });
   }
+  const updateUserProfile = () => {
+    let userdata = profile;
+    console.log(userdata);
+    let login = { name: userdata.name, password: userdata.password };
+    console.log(login);
+    FetchData.postData("http://localhost:3000/api/users/login", login).then(
+      (res) => {
+        console.log(res);
+        if (res === 200) {
+          delete userdata.password;
+          FetchData.putData("http://localhost:3000/api/users", userdata).then(
+            (res) => {
+              console.log(res);
+              if (res === 200) {
+                console.log("個人資訊更新成功");
+                alert("個人資訊成功");
+                window.location.reload();
+              }
+            }
+          );
+        } else if (res === 401) {
+          alert("密碼錯誤");
+          window.location.reload();
+        }
+      }
+    );
+  };
   useEffect(() => {
     getUserProfile().then((res) => {
       setUserProfile(res.data[0]);
@@ -29,6 +57,7 @@ export default function UserProfile() {
         email: res.data[0].email,
         phone: res.data[0].phone,
         line_ID: res.data[0].line_id,
+        password: "",
       });
     });
   }, []);
@@ -91,6 +120,7 @@ export default function UserProfile() {
                     onChange={handleChange}
                     style={{ width: "70%" }}
                     value={profile.name}
+                    disabled
                   />
                 </Box>
                 <Box
@@ -147,7 +177,6 @@ export default function UserProfile() {
                     value={profile.phone}
                   />
                 </Box>
-
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -156,9 +185,22 @@ export default function UserProfile() {
                   width="70%"
                 >
                   <Typography variant="h5" style={{}}>
-                    Password :
+                    欲更新基本資料
                   </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width="70%"
+                >
+                  <Typography variant="h5" style={{}}>
+                    請輸入密碼 :
+                  </Typography>
+                  <br></br>
                   <TextField
+                    id="password"
                     label="Password"
                     type="password"
                     onChange={handleChange}
@@ -174,6 +216,7 @@ export default function UserProfile() {
                     variant="contained"
                     color="primary"
                     style={{ width: "100px" }}
+                    onClick={updateUserProfile}
                   >
                     Save
                   </Button>
