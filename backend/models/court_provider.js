@@ -278,3 +278,15 @@ export const putCourtAvaTimeByIdQuery = (court_id, data) => {
         });
     });
 }
+
+export const deleteCourtAvaTimeByIdQuery = (court_id) => {
+    return new Promise((resolve, reject) => {
+        db.query(`DELETE FROM STADIUM.COURT_AVAILABLE_TIME WHERE court_id = ?`, [court_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}

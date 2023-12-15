@@ -10,6 +10,7 @@ import {
     isCourtsProvider,
     getCourtsAppointmentByDate,
     insertCourtAvaTime,
+    deleteCourtAvaTimeByIdQuery,
     putCourtAvaTimeByIdQuery
 } from "../models/court_provider.js";
 
@@ -282,17 +283,28 @@ export const putCourtsById = async(req,res) => {
                                 ...court_data,
                                 ...update_data
                             }
+                            // update ball_type_id if necessary
                             if (typeof court_data['ball_type_id'] !== "undefined") {
                                 court_data['ball_type_id'] = court_data['ball_type_id'].toString();
                             }
+                            // update available_time if necessary
                             if (typeof court_data['available_time'] !== "undefined") {
                                 court_ava_time = JSON.parse(JSON.stringify(court_data['available_time']))
                                 delete court_data['available_time'];
-                                const put_court_avatime_result = await Promise.all(
-                                    court_ava_time.map(async(item) => {
-                                        return await putCourtAvaTimeByIdQuery(auth_data['court_id'], item)
-                                    })
-                                )
+                                try {
+                                    // delete old available_time first
+                                    // the court may not have available time in the table
+                                    const delete_court_avatime_result = await deleteCourtAvaTimeByIdQuery(auth_data['court_id'])
+                                }
+                                finally {
+                                    // insert the new available_time
+                                    const insert_courttime_results = await insertCourtAvaTime(auth_data['court_id'], court_ava_time)
+                                }
+                                // const put_court_avatime_result = await Promise.all(
+                                //     court_ava_time.map(async(item) => {
+                                //         return await putCourtAvaTimeByIdQuery(auth_data['court_id'], item)
+                                //     })
+                                // )
                             }
                         }
                     }
