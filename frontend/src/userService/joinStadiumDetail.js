@@ -92,6 +92,10 @@ export default function JoinStadiumDetail() {
         alert("加入成功");
         //window.location.reload();
         navigate(`/userHistory`);
+      } else if (res === 401) {
+        console.log("密碼錯誤");
+        alert("密碼錯誤");
+        window.location.reload();
       }
     });
   };

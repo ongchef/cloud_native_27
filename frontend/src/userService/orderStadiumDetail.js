@@ -145,6 +145,7 @@ export default function OrderStadiumDetail() {
   const validateTime = () => {
     if (selectedOptions === null || selectedOptions.length === 0) {
       console.log("No time selected");
+      alert("請選擇時間");
       return false;
     }
     // Sort the selected times
@@ -164,6 +165,7 @@ export default function OrderStadiumDetail() {
       // If the difference is not 30 minutes, the times are not continuous
       if (difference !== 30) {
         console.log("Selected times are not continuous");
+        alert("請選擇連續的時間");
         return false;
       }
     }
