@@ -22,6 +22,7 @@ import pic2 from "../pic/羽球3.png";
 import Pagination from "@mui/material/Pagination"; 
 
 import FetchData from "../authService/fetchData";
+import { LinearProgress } from "@mui/material";
 
 export default function StadiumBoard() {
   const [sport, setSport] = useState();
@@ -32,6 +33,7 @@ export default function StadiumBoard() {
   const [page, setPage] = useState(1)
   const [totalPage, setTotalPage] = useState(0)
   const [weekday, setWeekday] = useState(moment(date).day());
+  const [loading, setLoading] = useState(true)
   const weekdayMapping = [
     "日",
     "一",
@@ -43,31 +45,32 @@ export default function StadiumBoard() {
     "日",
   ];
   async function SearchCourt(){
+    setLoading(true)
     return FetchData.getData("http://localhost:3000/api/courts/admin/appointment",1,
     {
       date:date,
       ...(sport&& sport && {ball_type_id:sport}),
       ...(address&& address && {address:address}),
+    })
+    .then((res)=>
+    {
+      if (res){
+        setCourtList(res.courts)
+        setTotalPage(res.total_page)
+        let day = moment(date).day()
+        if (day === 0) {
+          setWeekday(7);
+        } else {
+          setWeekday(day);
+        }
+      }
+      setLoading(false)
     }
-    )
+  )
     // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
   }
   useEffect(() => {
-    SearchCourt().then((res)=>
-      {
-        if (res){
-          setCourtList(res.courts)
-          setTotalPage(res.total_page)
-          let day = moment(date).day()
-          if (day === 0) {
-            setWeekday(7);
-          } else {
-            setWeekday(day);
-          }
-        }
-        
-      }
-    )
+    SearchCourt()
   },[]);
   const handleSportChange = (event) => {
     setSport(event.target.value);
@@ -79,6 +82,13 @@ export default function StadiumBoard() {
   return (
     <div>
       <h1>Order Stadium</h1>
+      {
+      loading?
+      <Box >
+      <LinearProgress sx={{display:'flex', justifyContent:'center'}}/>
+      </Box>
+      :
+      <>
       <Box
         display="flex"
         flexDirection="row"
@@ -143,7 +153,7 @@ export default function StadiumBoard() {
           </FormControl>
         </Box>
         <Box m={1}>
-          <Button variant="contained">Search</Button>
+          <Button variant="contained" onClick={SearchCourt}>Search</Button>
         </Box>
         
       </Box>
@@ -167,6 +177,7 @@ export default function StadiumBoard() {
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
         {console.log(courtList)}
         {
+          courtList&&
           courtList.map((court)=>{
             const weekdayInChinese = weekdayMapping[weekday];
 
@@ -239,6 +250,8 @@ export default function StadiumBoard() {
           
           /> {/* 添加這一行 */}
       </Box>
+      </>
+    }
     </div>
   );
 }
