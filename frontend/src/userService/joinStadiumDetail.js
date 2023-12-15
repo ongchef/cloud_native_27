@@ -65,7 +65,7 @@ export default function JoinStadiumDetail() {
 
     let formattedDate = `${year}-${month}-${day}`;
     setDate(formattedDate);
-    // setPublicIndex(appointmentDetail.public);
+    setPublicIndex(appointmentDetail.public);
     setAppointmentTag([
       appointmentDetail.ball,
       appointmentDetail.level,
@@ -124,7 +124,9 @@ export default function JoinStadiumDetail() {
                 <Grid item xs={12} sm={6}>
                   <CardMedia
                     component="img"
-                    image={pic} // 替換為您的圖片URL
+                    image={
+                      appointmentDetail.image_url.split(".jpg")[0] + ".jpg"
+                    } // 替換為您的圖片URL
                     alt="Stadium"
                   />
                 </Grid>

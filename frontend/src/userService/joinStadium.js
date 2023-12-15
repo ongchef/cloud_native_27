@@ -84,7 +84,7 @@ export default function JoinStadium() {
         setAppointmentList(res.courts);
       }
     });
-  }, []);
+  }, [page]);
   useEffect(() => {
     console.log(appointmentList);
   }, [appointmentList]);
@@ -224,7 +224,7 @@ export default function JoinStadium() {
           return (
             <StadiumCard
               id={appointment.appointment_id}
-              image={pic}
+              image={appointment.image_url.split(".jpg")[0] + ".jpg"}
               title={appointment.court_name + " - " + appointment.location}
               description={[
                 appointment.address,

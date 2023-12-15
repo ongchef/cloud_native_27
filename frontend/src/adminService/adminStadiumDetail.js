@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom"; // 引入useNavigate
 import { useEffect } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
-import pic2 from "../pic/羽球3.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Card } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
@@ -15,60 +14,48 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tooltip from "@mui/material/Tooltip";
 import FetchData from "../authService/fetchData";
 import { useLocation } from "react-router-dom";
-import dayjs from "dayjs";
 import moment from "moment";
 
-const availableTime = [26, 40];
-const bookingList = [
-  {
-    Founder: "Wonu Juan",
-    num: 4,
-    period: [26, 30],
-  },
-  {
-    Founder: "Gordon Sung",
-    num: 2,
-    period: [34, 38],
-  },
-  {
-    Founder: "Mingyu Kim",
-    num: 8,
-    period: [38, 40],
-  },
-];
+const ballTypes = {
+  1: "羽球",
+  2: "籃球",
+  3: "桌球",
+  4: "排球",
+};
+
 async function SearchReserved(courtId, datetime) {
-  datetime = datetime+"+00:00:00"
+  datetime = datetime + "+00:00:00";
   return FetchData.getData("http://localhost:3000/api/admin/courtDetail", 1, {
     query_time: datetime,
     court_id: courtId,
   });
 }
 
-function EventFounders({holderList}) {
-  console.log(holderList)
+function EventFounders({ holderList }) {
+  console.log(holderList);
   holderList.sort(function (a, b) {
-    console.log(a.period[0])
-    if (moment(a.period[0],"HH:ss").isAfter(moment(b.period[0],"HH:ss"))) {
+    console.log(a.period[0]);
+    if (moment(a.period[0], "HH:ss").isAfter(moment(b.period[0], "HH:ss"))) {
       return 1;
     } else {
       return -1;
     }
-  }); 
+  });
   return (
     <>
-  
       {holderList.map((booking, index) => (
         <>
-          <Grid item xs={4} display='flex' justifyContent='left' >
-          {booking.period[0].split(":")[0]}:{booking.period[0].split(":")[1]}~{booking.period[1].split(":")[0]}:{booking.period[1].split(":")[1]} 
+          <Grid item xs={4} display="flex" justifyContent="left">
+            {booking.period[0].split(":")[0]}:{booking.period[0].split(":")[1]}~
+            {booking.period[1].split(":")[0]}:{booking.period[1].split(":")[1]}
           </Grid>
-          <Grid item xs={3} display='flex' justifyContent='left' >
+          <Grid item xs={3} display="flex" justifyContent="left">
             主揪人:{booking.period[2]}
           </Grid>
-          <Grid item xs={2} display='flex' justifyContent='left' >
-          {booking.period[3]}/8
+          <Grid item xs={2} display="flex" justifyContent="left">
+            {booking.period[3]}/8
           </Grid>
-          </>
+        </>
         // <Typography key={index}>
         //   {booking.period[0].split(":")[0]}:
         //   {booking.period[0].split(":")[1]}~
@@ -92,29 +79,31 @@ export default function AdminStadiumDetail() {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [availableTime, setAvailableTime] = useState();
   const [bookingList, setBookingList] = useState([]);
-  const [holderList, setHolderList] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [holderList, setHolderList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [ballNames, setBallNames] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
-    setLoading(true)
-    SearchReserved(id,datetime).then((res)=>{
-      console.log(res)
+    setLoading(true);
+    SearchReserved(id, datetime).then((res) => {
+      //console.log(res);
       SetDetails(res);
-        setLoading(false)
-    })
-  },[]);
+      setLoading(false);
+    });
+  }, []);
 
   function SetDetails(data) {
     const date = new Date(datetime.split(" ")[0]);
     const weekday = date.getDay() || 7; // Convert Sunday from 0 to 7
-    console.log(data)
+    //console.log(data.court_info[0]);
     // 要等API改
     const availableTimeObj = data.available_time.find(
       (time) => time.weekday === weekday
     );
+
     const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
     const weekdayInChinese = weekdayMapping[weekday];
-    console.log(availableTimeObj)
+    console.log(availableTimeObj);
     const availableTime1 = [
       parseInt(availableTimeObj.start_time.split(":")[0]) * 2,
       parseInt(availableTimeObj.end_time.split(":")[0]) * 2,
@@ -124,20 +113,18 @@ export default function AdminStadiumDetail() {
         parseInt(time.start_time.split(":")[0]) * 2,
         parseInt(time.end_time.split(":")[0]) * 2,
         time.name,
-        time.participant_count
-
+        time.participant_count,
       ],
     }));
     const bookingList2 = data.appointment.map((time) => ({
       period: [
         time.start_time,
-       time.end_time,
+        time.end_time,
         time.name,
-        time.participant_count
-
+        time.participant_count,
       ],
     }));
-    const courtData = { ...data };
+    const courtData = data.court_info[0];
     delete courtData.available_time;
     delete courtData.appointment_time;
     courtData.weekday = weekdayInChinese;
@@ -145,18 +132,21 @@ export default function AdminStadiumDetail() {
       availableTimeObj.start_time.substring(0, 5) +
       "~" +
       availableTimeObj.end_time.substring(0, 5);
+    console.log(courtData);
+    const ballNames = courtData.ball_type_id
+      .split(",")
+      .map((ballType) => ballTypes[ballType])
+      .join(",");
+    setBallNames(ballNames);
     setAvailableTime(availableTime1);
     setBookingList(bookingList1);
-    setHolderList(bookingList2)
+    setHolderList(bookingList2);
     setCourtInfo(courtData);
-    console.log(availableTime);
-    console.log(bookingList);
   }
-  
+
   function TimeBtn(props) {
     const { availableTime, bookingList } = props;
-    var num
-    console.log(availableTime[1] - availableTime[0]);
+    var num;
     const availableTimeList = Array.from(
       new Array(availableTime[1] - availableTime[0]),
       (x, i) => (i + availableTime[0]) / 2
@@ -165,26 +155,25 @@ export default function AdminStadiumDetail() {
       const value = `${Math.floor(time)}:${time % 1 ? "30" : "00"}`;
       return (
         <Grid item>
-          {bookingList.some(
-            (item) => {
-              num=item.period[2]
-              return item.period[0] / 2 <= time && item.period[1] / 2 > time}
-          ) ? (
-            <Tooltip title={num+"/"+courtInfo.available} placement="top"> 
-            <div>
-            <Button
-              variant="outlined"
-              color="inherit"
-              disabled
-              key={value}
-              value={time % 1 ? "30" : "00"}
-              type={selectedOptions.includes(value) ? "primary" : "default"}
-              onClick={() => handleButtonClick(value)}
-              style={{ width: "80px" }}
-            >
-              {value}
-            </Button>
-            </div>
+          {bookingList.some((item) => {
+            num = item.period[2];
+            return item.period[0] / 2 <= time && item.period[1] / 2 > time;
+          }) ? (
+            <Tooltip title={num + "/" + courtInfo.available} placement="top">
+              <div>
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  disabled
+                  key={value}
+                  value={time % 1 ? "30" : "00"}
+                  type={selectedOptions.includes(value) ? "primary" : "default"}
+                  onClick={() => handleButtonClick(value)}
+                  style={{ width: "80px" }}
+                >
+                  {value}
+                </Button>
+              </div>
             </Tooltip>
           ) : (
             <Button
@@ -254,7 +243,7 @@ export default function AdminStadiumDetail() {
                 <Grid item xs={12} sm={6}>
                   <CardMedia
                     component="img"
-                    image={pic2} // 替換為您的圖片URL
+                    image={courtInfo.image_url.split(".jpg")[0] + ".jpg"} // 替換為您的圖片URL
                     alt="Stadium"
                   />
                 </Grid>
@@ -265,7 +254,7 @@ export default function AdminStadiumDetail() {
                       component="div"
                       sx={{ fontWeight: "bold" }}
                     >
-                      台大綜合體育館 - 一樓多功能球場 2023/11/02
+                      {courtInfo.name} - {courtInfo.location} {datetime}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -273,7 +262,7 @@ export default function AdminStadiumDetail() {
                       paddingX={1}
                       paddingY={0.6}
                     >
-                      106台北市大安區羅斯福路四段1號
+                      {courtInfo.address}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -289,7 +278,8 @@ export default function AdminStadiumDetail() {
                           paddingRight: "10px",
                         }}
                       >
-                        週一至週五 13:00~20:00 開放預約
+                        週{courtInfo.weekday} {courtInfo.availableTimeinday}{" "}
+                        開放預約
                       </span>
                     </Typography>
                     <Typography
@@ -298,7 +288,16 @@ export default function AdminStadiumDetail() {
                       paddingX={1}
                       paddingY={0.6}
                     >
-                      建議最大使用人數 : {8}
+                      建議最大使用人數 : {courtInfo.available}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="000000"
+                      paddingX={1}
+                      paddingY={0.6}
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      場地球類：{ballNames}
                     </Typography>
                     <Typography
                       variant="body1"
@@ -309,33 +308,25 @@ export default function AdminStadiumDetail() {
                     >
                       預約狀況：
                     </Typography>
-
                     <Box mx={1}>
                       <Grid container spacing={1}>
-                      {bookingList && availableTime && (
+                        {bookingList && availableTime && (
                           <TimeBtn
                             bookingList={bookingList}
                             availableTime={availableTime}
-                          />)
-                        }
+                          />
+                        )}
                       </Grid>
                     </Box>
-                    <Box my={1} display='flex' justifyContent='left'>
+                    <Box my={1} display="flex" justifyContent="left">
                       <Grid container spacing={1}>
-                      {holderList&& <EventFounders holderList={holderList}></EventFounders>}
+                        {holderList && (
+                          <EventFounders
+                            holderList={holderList}
+                          ></EventFounders>
+                        )}
                       </Grid>
                     </Box>
-                    {/* <Box display="flex" justifyContent="flex-end">
-                      <Tooltip
-                        title="Click to reserve the stadium"
-                        placement="top"
-                      >
-                        <Button width="300px" variant="outlined">
-                          <ArrowForwardIcon />
-                          預約場地
-                        </Button>
-                      </Tooltip>
-                    </Box> */}
                   </CardContent>
                 </Grid>
               </Grid>

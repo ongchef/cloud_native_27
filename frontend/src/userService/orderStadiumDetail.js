@@ -295,7 +295,7 @@ export default function OrderStadiumDetail() {
                 <Grid item xs={12} sm={6}>
                   <CardMedia
                     component="img"
-                    image={pic2} // 替換為您的圖片URL
+                    image={courtInfo.image_url.split(".jpg")[0] + ".jpg"} // 替換為您的圖片URL
                     alt="Stadium"
                   />
                 </Grid>

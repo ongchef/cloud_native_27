@@ -55,11 +55,15 @@ export default function OrderStadium() {
       setWeekday(day);
     }
 
-    return FetchData.getData("http://localhost:3000/api/users/appointment", 1, {
-      query_time: date + " " + time.format("HH:mm:ss"),
-      ball: sport,
-      address: location,
-    });
+    return FetchData.getData(
+      "http://localhost:3000/api/users/appointment",
+      page,
+      {
+        query_time: date + " " + time.format("HH:mm:ss"),
+        ball: sport,
+        address: location,
+      }
+    );
   }
   const [stadiumList, setStadiumList] = useState([]);
   useEffect(() => {
@@ -68,7 +72,7 @@ export default function OrderStadium() {
 
       setStadiumList(res.courts);
     });
-  }, []);
+  }, [page]);
 
   return (
     <div>
@@ -187,7 +191,7 @@ export default function OrderStadium() {
           return (
             <StadiumCard
               id={court.court_id}
-              image={pic}
+              image={court.image_url.split(".jpg")[0] + ".jpg"}
               title={court.name + " - " + court.location}
               description={[
                 court.address,

@@ -2,7 +2,6 @@ import Box from "@mui/material/Box"; // 引入Box元件
 import Typography from "@mui/material/Typography"; // 引入Typography元件
 import HistoryCard from "./userHistoryCard"; // 引入StadiumCard元件
 import pic from "../pic/羽球1.png";
-import pic2 from "../pic/羽球3.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import authHeader from "../authService/authHeader";
@@ -63,7 +62,7 @@ export default function UserHistory() {
             //console.log(status);
             return (
               <HistoryCard
-                image={pic}
+                image={history.image_url.split(".jpg")[0] + ".jpg"}
                 title={history.court_name + " - " + history.location}
                 description={[
                   history.address,
