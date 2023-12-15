@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Card, TextField } from "@mui/material";
+import { Card, CircularProgress, TextField } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -269,6 +269,7 @@ export default function CreateStadium() {
   const [imgblob, setImgBlob] = useState();
   const [sport, setSport] = useState([]);
   const [panel, setPanel] = useState('basic');
+  const [loading, setLoading] = useState(false)
   const [availableTime, setAvailableTime] = useState({
     mon: {
       0: [dayjs("9:00", "HH:mm"), dayjs("11:00", "HH:mm")],
@@ -296,12 +297,15 @@ export default function CreateStadium() {
       
       flatAvailableTime=[...flatAvailableTime,...newTime]
     }
+    setLoading(true)
     FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
     .then((res)=>{
       console.log(res)
       console.log(res===200)
       if(res===200){
+        setLoading(false)
         alert("新增成功")
+        window.location.href="readStadium"
       }
     })
   }
@@ -371,8 +375,18 @@ export default function CreateStadium() {
         flexDirection="column"
         justifyContent="center"
       >
+      {loading?
+      <Box
+          paddingTop={20}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress size={100} />
+        </Box>:
+        (<>
         <Container width="90vw">
-          <Button variant="outlined" onClick={() => navigate(-1)}>
+          <Button variant="outlined" onClick={() => window.location.href="readStadium"}>
             <ArrowBackIcon />
             返回搜尋頁
           </Button>
@@ -490,7 +504,9 @@ export default function CreateStadium() {
                       onChange={handleChange}
                     />
                     </Box>
-                    <Box my={2}>
+                    <Box my={2} >
+                      <Grid container spacing={2}>
+                        <Grid xs={6} item>
                     <Typography>最大使用人數</Typography>
                     <TextField
                       id="available"
@@ -499,6 +515,18 @@ export default function CreateStadium() {
                       value={court.available}
                       onChange={handleChange}
                     />
+                    </Grid>
+                    <Grid xs={6} item>
+                    <Typography>聯絡方式</Typography>
+                    <TextField
+                      id="contact"
+                      fullWidth
+                      size="small"
+                      value={court.contact}
+                      onChange={handleChange}
+                    />
+                    </Grid>
+                    </Grid>
                     </Box>
                     
                     
@@ -568,6 +596,7 @@ export default function CreateStadium() {
             
           </Box>
         </Container>
+        </>)}
        
         
         

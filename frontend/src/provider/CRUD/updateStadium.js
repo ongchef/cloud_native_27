@@ -309,15 +309,15 @@ export default function UpdateStadium() {
         newAvailableTime={
           ...newAvailableTime,
           [weekday]: {
-            ...availableTime[weekday],
-            [Object.keys(availableTime[weekday]).length]: [dayjs(time.start_time,'HH:mm'),dayjs(time.end_time,'HH:mm')],
+            ...newAvailableTime[weekday],
+            [Object.keys(newAvailableTime[weekday]).length]: [dayjs(time.start_time,'HH:mm'),dayjs(time.end_time,'HH:mm')],
           },
         }
       })
       setAvailableTime(newAvailableTime)
       delete res[0].available_time
       setCourt(res[0])
-      setImage(res[0].image_url.split(".jpg")[0]+".jpg")
+      res[0].image_url&&setImage(res[0].image_url.split(".jpg")[0]+".jpg")
       // fetch(res[0].image_url.split(".jpg")[0]+".jpg", {
       //   method: 'GET', 
       //   mode: 'cors'})
@@ -545,7 +545,9 @@ export default function UpdateStadium() {
                       onChange={handleChange}
                     />
                     </Box>
-                    <Box my={2}>
+                    <Box my={2} >
+                      <Grid container spacing={2}>
+                        <Grid xs={6} item>
                     <Typography>最大使用人數</Typography>
                     <TextField
                       id="available"
@@ -554,6 +556,18 @@ export default function UpdateStadium() {
                       value={court.available}
                       onChange={handleChange}
                     />
+                    </Grid>
+                    <Grid xs={6} item>
+                    <Typography>聯絡方式</Typography>
+                    <TextField
+                      id="contact"
+                      fullWidth
+                      size="small"
+                      value={court.contact}
+                      onChange={handleChange}
+                    />
+                    </Grid>
+                    </Grid>
                     </Box>
                   </>  
                   }
