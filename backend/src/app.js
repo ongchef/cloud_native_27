@@ -6,6 +6,7 @@ import bearerToken from 'express-bearer-token';
 import userRoutes from '../routes/user.js';
 import courtRoutes from '../routes/court_provider.js';
 import adminRoutes from '../routes/admin.js';
+import email from './email.js';
 
 const app = express();
 app.use(bodyParser.json());
@@ -33,10 +34,16 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerFile from '../swagger_output.json' assert { type: 'json' };
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
+// Send Email
+// Comment follow otherwise my mail inbox will be exploded.
+// const loopInterval = setInterval(email, 3000);
+
+// Listen
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
  console.log(`Server is running on port ${port}`);
+ console.log(email);
 });
-
 
 export default app; 
