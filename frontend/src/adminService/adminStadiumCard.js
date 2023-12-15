@@ -105,7 +105,9 @@ export default function AdminStadiumCard({
                 <Box display="flex" justifyContent="flex-end">
                   <Button
                     variant="contained"
-                    onClick={() => navigate(`/adminStadiumDetail?id=${id}`)} // Include the id in the string
+                    onClick={() =>
+                      navigate(`/adminStadiumDetail?id=${id}&time=${datetime}`)
+                    } // Include the id in the string
                   >
                     查看詳細預約狀況
                   </Button>

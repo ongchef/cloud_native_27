@@ -17,6 +17,7 @@ import authHeader from "../authService/authHeader";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import FetchData from "../authService/fetchData";
+import { Input } from "antd";
 
 export default function JoinStadiumDetail() {
   const location = useLocation();
@@ -35,7 +36,7 @@ export default function JoinStadiumDetail() {
   });
   const [appointmentTag, setAppointmentTag] = useState([]);
   const [appointmentDetail, setAppointmentDetail] = useState([]);
-
+  const [publicIndex, setPublicIndex] = useState(0);
   async function getStadiumDetail() {
     return await axios.get(
       "http://localhost:3000/api/users/appointmentDetail/join",
@@ -64,6 +65,7 @@ export default function JoinStadiumDetail() {
 
     let formattedDate = `${year}-${month}-${day}`;
     setDate(formattedDate);
+    // setPublicIndex(appointmentDetail.public);
     setAppointmentTag([
       appointmentDetail.ball,
       appointmentDetail.level,
@@ -212,25 +214,27 @@ export default function JoinStadiumDetail() {
                         </Avatar>
                         主揪人：{appointmentDetail.creator_name}
                       </Box>
-                      {/* {appointmentDetail.public_index && (
-                      <Box my={1} display="flex" alignItems="center">
-                        <Typography
-                          variant="body1"
-                          color="000000"
-                          paddingX={1}
-                          paddingY={0.2}
-                          sx={{ fontWeight: "bold" }}
-                        >
-                          密碼：
-                        </Typography>
+                      {publicIndex === 0 ? (
+                        <Box my={1} display="flex" alignItems="center">
+                          <Typography
+                            variant="body1"
+                            color="000000"
+                            paddingX={1}
+                            paddingY={0.2}
+                            sx={{ fontWeight: "bold" }}
+                          >
+                            密碼：
+                          </Typography>
 
-                        <Input
-                          type="password"
-                          style={{ width: 200 }}
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
-                      </Box>
-                    )} */}
+                          <Input
+                            type="password"
+                            style={{ width: 200 }}
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        </Box>
+                      ) : (
+                        <></>
+                      )}
                       <Box display="flex" justifyContent="flex-end">
                         <Button
                           width="300px"

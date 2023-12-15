@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tooltip from "@mui/material/Tooltip";
+import FetchData from "../authService/fetchData";
 const availableTime = [26, 40];
 const bookingList = [
   {
@@ -31,7 +32,12 @@ const bookingList = [
     period: [38, 40],
   },
 ];
-
+async function SearchReserved(courtId, datetime) {
+  return FetchData.getData("http://localhost:3000/api/admin/courtDetail", 1, {
+    date: datetime,
+    court_id: courtId,
+  });
+}
 function TimeBtn() {
   const availableTimeList = Array.from(
     new Array(availableTime[1] - 1 - availableTime[0] + 1),
@@ -85,6 +91,11 @@ function EventFounders() {
 }
 
 export default function AdminStadiumDetail() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+  const datetime = searchParams.get("time");
+  const [courtInfo, setCourtInfo] = useState({});
   const navigate = useNavigate();
   useEffect(() => {
     let url = new URL(window.location.href);
@@ -106,6 +117,7 @@ export default function AdminStadiumDetail() {
       ]);
     }
   };
+
   return (
     <div>
       <h1>Admin Stadium Detail</h1>
