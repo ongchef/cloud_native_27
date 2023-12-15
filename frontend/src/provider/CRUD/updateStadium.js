@@ -318,20 +318,20 @@ export default function UpdateStadium() {
       delete res[0].available_time
       setCourt(res[0])
       setImage(res[0].image_url.split(".jpg")[0]+".jpg")
-      fetch(res[0].image_url.split(".jpg")[0]+".jpg", {
-        method: 'GET', 
-        mode: 'cors'})
-        .then((response) =>  {
-          console.log(response.text())
-          response.blob()
-          console.log(response.blob())})
-        .then((blob) => {
-          console.log(blob)
-          const url = URL.createObjectURL(blob);
-          console.log(url)
-          setImgBlob(blob)
-        })
-        .catch((error) => console.error(error));
+      // fetch(res[0].image_url.split(".jpg")[0]+".jpg", {
+      //   method: 'GET', 
+      //   mode: 'cors'})
+      //   .then((response) =>  {
+      //     console.log(response.text())
+      //     response.blob()
+      //     console.log(response.blob())})
+      //   .then((blob) => {
+      //     console.log(blob)
+      //     const url = URL.createObjectURL(blob);
+      //     console.log(url)
+      //     setImgBlob(blob)
+      //   })
+      //   .catch((error) => console.error(error));
     })
   },[])
   function handleSubmit() {
