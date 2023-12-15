@@ -25,6 +25,8 @@ import {
     getCourtsAvaTimeByIdQuery,
     putAttendenceQuery,
     checkAppointmentByIdQuery,
+    checkAppointmentsByTimeQuery,
+    getUsersAppointmentsInfoByIdQuery
 } from '../models/appointment.js';
 
 import {
@@ -34,7 +36,8 @@ import {
     comparePassword,
     generate_uuid,
     parseISODate,
-    add_one_day
+    add_one_day,
+    notifyAppChecker
 } from '../utils/helper.js';
 
 import {
@@ -496,4 +499,43 @@ export const getUsersAppointmentJoinDetail = async(req,res) => {
         return res.status(500).send(err)
     }
     
+}
+
+export const notifyUsersByTime = async(req, res) => {
+    try {
+        let { query_time } = req.query
+        query_time = query_time.replace("+", " ");
+        // get the query time date YYYY-MM-DD
+        const query_time_date = parseISODate(query_time);
+        // get the query time time hh:mm:ss
+        const query_time_hhmmss = query_time.split(" ")[-1];
+
+        const possibly_notify_apps = await checkAppointmentsByTimeQuery(query_time_date);
+        console.log(possibly_notify_apps)
+        const notify_appointment_id_set = new Set();
+        for (let i = 0; i < possibly_notify_apps.length; i++){
+            // solve the ISOdate issue
+            possibly_notify_apps[i]['date'] = parseISODate(possibly_notify_apps[i]['date'])
+            if (notifyAppChecker(possibly_notify_apps[i], query_time)) {
+                notify_appointment_id_set.add(possibly_notify_apps[i]['appointment_id']);
+            }
+        }
+        // there are notifable appointments
+        if (notify_appointment_id_set.size !== 0) {
+
+            let notify_appointment_id_list = [...notify_appointment_id_set];
+            
+            const notifable_users_info = await getUsersAppointmentsInfoByIdQuery(notify_appointment_id_list)
+
+            return res.status(200).json(notifable_users_info);  
+        // there are not notifable appointments
+        } else {
+
+            return res.status(200).json([]);
+        }
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send(err)
+    }
 }

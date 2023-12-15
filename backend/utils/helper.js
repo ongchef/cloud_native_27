@@ -38,6 +38,21 @@ export const joinableCourtChecker = (reserved_court, query_time) => {
     return range.contains(query_time_moment)
 }
 
+// check notifable appointments according to query time
+// query_time format: 'YYYY-MM-DD hh:mm:ss'
+export const notifyAppChecker = (possibly_notify_app, query_time) => {
+
+    const moment = MomentRange.extendMoment(Moment);
+    const notify_time_period_upper = moment(query_time, moment.ISO_8601).add(3, 'hours');
+    const notify_time_period_lower = moment(query_time, moment.ISO_8601).add(2, 'hours');
+    // const start = moment(`${reserved_court['date']} ${reserved_court['start_time']}`, moment.ISO_8601);
+    // const end = moment(`${reserved_court['date']} ${reserved_court['end_time']}`, moment.ISO_8601);
+    const range = moment.range(notify_time_period_lower, notify_time_period_upper);
+    const app_time_moment = moment(`${possibly_notify_app['date']} ${possibly_notify_app['start_time']}`, moment.ISO_8601);
+
+    return range.contains(app_time_moment)
+}
+
 export const hashPassword = (plaintextPassword) => {
     return bcrypt.hash(plaintextPassword, 10);
 }
