@@ -291,7 +291,7 @@ export default function CreateStadium() {
     for (const [key, value] of Object.entries(availableTime)) {
       const timeList = Object.values(value)
       const newTime = timeList.map((time)=>{
-        return {start_time:time[0],end_time:time[1],weekday:week[key].num}
+        return {start_time:time[0].format("HH:mm"),end_time:time[1].format("HH:mm"),weekday:week[key].num}
       })
       
       flatAvailableTime=[...flatAvailableTime,...newTime]

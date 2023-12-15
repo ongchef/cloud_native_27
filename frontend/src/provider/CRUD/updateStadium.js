@@ -322,7 +322,7 @@ export default function UpdateStadium() {
       //   method: 'GET', 
       //   mode: 'cors'})
       //   .then((response) =>  {
-      //     console.log(response.text())
+      //     cons ole.log(response.text())
       //     response.blob()
       //     console.log(response.blob())})
       //   .then((blob) => {
