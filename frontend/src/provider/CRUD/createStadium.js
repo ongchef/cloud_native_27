@@ -425,6 +425,7 @@ export default function CreateStadium() {
                       id="name"
                       fullWidth
                       size="small"
+                      value={court.name}
                       onChange={handleChange}
                     />
                     </Box>
@@ -475,6 +476,7 @@ export default function CreateStadium() {
                       id="location"
                       fullWidth
                       size="small"
+                      value={court.location}
                       onChange={handleChange}
                     />
                     </Box>
@@ -484,6 +486,7 @@ export default function CreateStadium() {
                       id="address"
                       fullWidth
                       size="small"
+                      value={court.address}
                       onChange={handleChange}
                     />
                     </Box>
@@ -493,6 +496,7 @@ export default function CreateStadium() {
                       id="available"
                       fullWidth
                       size="small"
+                      value={court.available}
                       onChange={handleChange}
                     />
                     </Box>

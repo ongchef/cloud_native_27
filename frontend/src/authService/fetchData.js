@@ -59,22 +59,22 @@ async function postDateWithImg(url, data, img) {
   });
   bodyFormData.append("data", blob, "data");
   bodyFormData.append('img', img, "img")
-  // return axios({
-  //   method: "post",
-  //   url: url,
-  //   data: bodyFormData,
-  //   files:img,
-  //   headers: { "Content-Type": "multipart/form-data", ...authHeader() },
-  // }).then((res) => {
-  //   console.log(res)
-  //   return res.status;
-  // })
-  // .catch((error) => {
-  //   console.log(error);
-  //   alert("not authorized");
-  //   window.location.href = "/";
-  //   return [];
-  // });
+  return axios({
+    method: "post",
+    url: url,
+    data: bodyFormData,
+    files:img,
+    headers: { "Content-Type": "multipart/form-data", ...authHeader() },
+  }).then((res) => {
+    console.log(res)
+    return res.status;
+  })
+  .catch((error) => {
+    console.log(error);
+    alert("not authorized");
+    window.location.href = "/";
+    return [];
+  });
 }
 const FetchData = {
   getData,
