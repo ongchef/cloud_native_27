@@ -10,6 +10,7 @@ import {
     getProviders,
     getUserDetailQuery,
     getCourtAvailableQuery,
+    getCourtInfoQuery
 } from "../models/admin.js";
 import {
     getUsersAppointmentIdQuery,
@@ -166,11 +167,13 @@ export const getCourtsAppointmentDetails = async(req,res) => {
                 result[i]['date'] = parseISODate(result[i]['date'])
                 if (result[i]['date'] === req.query['query_time'].split(" ")[0]) {
                     courts.push(result[i])
-                }       
+                }
             }
         }
         const available = await getCourtAvailableQuery(data['court_id'])
+        const Info = await getCourtInfoQuery(data['court_id'])
         const returns = {
+            court_info: Info,
             available_time: available,
             appointment: courts
         }

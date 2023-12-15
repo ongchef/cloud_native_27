@@ -70,7 +70,7 @@ export const getCourtsAppointmentDetailsQuery = (data) => {
 
     return new Promise((resolve, reject) => {
 
-        db.query(`SELECT C.*, date, AT.start_time, AT.end_time, COUNT(P.appointment_id) AS participant_count, U.name 
+        db.query(`SELECT date, AT.start_time, AT.end_time, COUNT(P.appointment_id) AS participant_count, U.name 
         FROM STADIUM.APPOINTMENT_TIME AS AT INNER JOIN STADIUM.APPOINTMENT AS A ON AT.appointment_id = A.appointment_id 
         LEFT JOIN STADIUM.PARTICIPANT AS P ON A.appointment_id = P.appointment_id
         LEFT JOIN STADIUM.COURT as C ON A.court_id = C.court_id
@@ -89,6 +89,19 @@ export const getCourtsAppointmentDetailsQuery = (data) => {
 export const getCourtAvailableQuery = (court_id) => {
     return new Promise((resolve, reject) => {
         db.query('SELECT weekday, start_time, end_time FROM COURT_AVAILABLE_TIME WHERE court_id = ?', [court_id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+// get court info
+export const getCourtInfoQuery = (court_id) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM COURT WHERE court_id = ?', [court_id], (error, results) => {
             if (error) {
                 reject(error);
             } else {
