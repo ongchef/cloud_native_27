@@ -23,7 +23,7 @@ import fakeStadium from "../../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination";
 import AddIcon from "@mui/icons-material/Add";
 import FetchData from "../../authService/fetchData";
-import { FormLabel } from "@mui/material";
+import { FormLabel, LinearProgress } from "@mui/material";
 
 export default function ReadStadium() {
   const [sport, setSport] = useState(10);
@@ -32,6 +32,7 @@ export default function ReadStadium() {
   const [courtList, setCourtList] = useState([])
   const [weekday, setWeekday] = useState(moment(date).day());
   const [courtName, setCourtName] = useState()
+  const [loading, setLoading] = useState(true)
   const weekdayMapping = [
     "日",
     "一",
@@ -43,6 +44,7 @@ export default function ReadStadium() {
     "日",
   ];
   async function SearchCourt(courtName,sport,address){
+    setLoading(true)
     return FetchData.getData("http://localhost:3000/api/courts/admin",1,
     {
       ...(courtName&& courtName && {name:courtName}),
@@ -52,7 +54,7 @@ export default function ReadStadium() {
     .then((res)=>
       {
         setCourtList(res.courts)
-      
+        setLoading(false)
       }
     )
     // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
@@ -71,6 +73,13 @@ export default function ReadStadium() {
   return (
     <div>
       <h1>Order Stadium</h1>
+      {
+      loading?
+      <Box >
+      <LinearProgress sx={{display:'flex', justifyContent:'center'}}/>
+      </Box>
+      :
+      <>
       <Box
         display="flex"
         flexDirection="row"
@@ -190,6 +199,8 @@ export default function ReadStadium() {
         {/* 其他內容 */}
         <Pagination count={10} color="primary" /> {/* 添加這一行 */}
       </Box>
+      </>
+    }
     </div>
   );
 }
