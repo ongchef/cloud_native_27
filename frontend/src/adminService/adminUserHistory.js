@@ -26,7 +26,6 @@ export default function AdminUserHistory() {
 
 	useEffect(() => {
 		fetchUsers();
-		console.log(users);
 	}, [fetchUsers]);
 
 	return (

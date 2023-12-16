@@ -40,6 +40,7 @@ import Map from './commonService/map';
 import UpdateStadium from './provider/CRUD/updateStadium';
 import AdminUserHistoryDetail from './adminService/adminUserHistoryDetail';
 import AdminUserProfile from './adminService/adminUserProfile';
+import SelectSport from './userService/selectSport';
 
 const drawerWidth = 240;
 
@@ -86,6 +87,8 @@ export default function App() {
 			} else if (user.role === 'ROLE_PROVIDER') {
 				setProvider(true);
 			}
+		} else {
+			navigate('/login');
 		}
 
 		eventBus.on('logout', () => {
@@ -275,6 +278,7 @@ export default function App() {
 			<Routes>
 				<Route exact path="/login" element={<Login />} />
 				<Route exact path="/register" element={<Register />} />
+				<Route exact path="/selectSport" element={<SelectSport />} />
 
 				{/* {user && ( */}
 				<>
