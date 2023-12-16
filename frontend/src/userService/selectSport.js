@@ -1,21 +1,31 @@
 // App.js
 
 import React from 'react';
-
-import Box from '@mui/material/Box'; // 引入Box元件
-import Typography from '@mui/material/Typography'; // 引入Typography元件
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
+import {
+	Card,
+	CardActionArea,
+	CardMedia,
+	Typography,
+	Box,
+	Grid,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom'; // 引入useNavigate
 
 const sports = [
-	{ name: '羽球', image: 'badminton.png' },
-	{ name: '桌球', image: 'ping-pong.png' },
-	{ name: '排球', image: 'volleyball.png' },
-	{ name: '籃球', image: 'basketball.png' },
+	{ name: '羽球', image: 'badminton.png', index: 1 },
+	{ name: '籃球', image: 'basketball.png', index: 2 },
+	{ name: '桌球', image: 'ping-pong.png', index: 3 },
+	{ name: '排球', image: 'volleyball.png', index: 4 },
 ];
 
 export default function SelectSport() {
+	const navigate = useNavigate();
+
+	const handleSelectSport = (sport) => {
+		navigate(`/joinStadium?sport=${sport.index}`);
+		console.log(`已選擇${sport.name} index=${sport.index}`);
+	};
+
 	return (
 		<div>
 			<h1>Select Sport</h1>
@@ -37,15 +47,17 @@ export default function SelectSport() {
 						{sports.map((sport, index) => (
 							<Grid item xs={6} md={3} key={index}>
 								<Card>
-									<CardMedia
-										component="img"
-										height="140"
-										image={sport.image}
-										alt={sport.name}
-									/>
-									<Typography variant="h6" align="center">
-										{sport.name}
-									</Typography>
+									<CardActionArea onClick={() => handleSelectSport(sport)}>
+										<CardMedia
+											component="img"
+											height="140"
+											image={sport.image}
+											alt={sport.name}
+										/>
+										<Typography variant="h6" align="center">
+											{sport.name}
+										</Typography>
+									</CardActionArea>
 								</Card>
 							</Grid>
 						))}
