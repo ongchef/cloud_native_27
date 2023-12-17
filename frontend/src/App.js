@@ -1,8 +1,8 @@
 import './App.css';
 import { Routes, Route, Link, Router, Navigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
-import Login from './authService/login-new';
-import Register from './authService/register-new';
+import Login from './authService/login';
+import Register from './authService/register';
 import { useContext, useEffect, useState } from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';

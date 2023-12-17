@@ -1,294 +1,131 @@
-import React, { Component, useContext, useEffect, useState, useRef } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+import React, {
+	Component,
+	useContext,
+	useEffect,
+	useState,
+	useRef,
+} from 'react';
+import Form from 'react-validation/build/form';
+import Input from 'react-validation/build/input';
+import CheckButton from 'react-validation/build/button';
 
 import { useNavigate } from 'react-router-dom';
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import { UserContext } from "../UserContext";
-import axios from "axios";
-import AuthService from "./authService";
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { UserContext } from '../UserContext';
+import axios from 'axios';
+import AuthService from './authService';
 
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Container from '@mui/material/Container';
+import AuthInputField from './authInputField';
+
+const required = (value) => {
+	if (!value) {
+		return (
+			<div className="alert alert-danger" role="alert">
+				This field is required!
+			</div>
+		);
+	}
 };
 
 export default function Login() {
-  
-    const [userName, setUserName] = useState("")
-    const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [message, setMessage] = useState("")
-    const form = useRef();
-    const checkBtn = useRef();
-    const [user, setUser] = useContext(UserContext);
-  
-    
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [message, setMessage] = useState('');
+	const form = useRef();
+	const checkBtn = useRef();
+	const [user, setUser] = useContext(UserContext);
 
-    function handleLogin(e) {
-        e.preventDefault();
-        setMessage("")
-        setLoading(true)
-        form.current.validateAll();
-      if (checkBtn.current.context._errors.length === 0) {
+	function handleLogin(e) {
+		e.preventDefault();
+		setMessage('');
+		setLoading(true);
+		// form.current.validateAll();
+		AuthService.login(username, password).then(
+			() => {
+				// this.props.history.push("/profile");
+				window.location.href = '/';
+			},
+			(error) => {
+				const resMessage =
+					(error.response &&
+						error.response.data &&
+						error.response.data.message) ||
+					error.message ||
+					error.toString();
+				setLoading(false);
+				setMessage(resMessage);
+			}
+		);
+	}
 
-           
-            AuthService.login(userName, password)
-            .then(()=> {
-                // this.props.history.push("/profile");
-                  window.location.href='/'
-            },
-            error => {
-                const resMessage =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
-                setLoading(false)
-                setMessage(resMessage)
-            }
-            );
-      } else {
-        setLoading(false)
-      }
-    }
-
-      return (
-        <Paper sx={{
-          // height: 500,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          textAlign:'center'}} 
-          elevation={8} >
-          <Box display='flex' justifyContent='center'>
-          <div className="col-md-4">
-            <div className="card card-container">
-              {/* <img
-                src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                alt="profile-img"
-                className="profile-img-card"
-              /> */}
-              <Typography variant="h3" gutterBottom justifyContent='center' display='flex'>
-                Joinable
-              </Typography>
-              <Form
-                onSubmit={handleLogin}
-                ref={form}
-              >
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    name="username"
-                    value={userName}
-                    onChange={(e)=>setUserName(e.target.value)}
-                    validations={[required]}
-                  />
-                </div>
-  
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <Input
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    value={password}
-                    onChange={(e)=>setPassword(e.target.value)}
-                    validations={[required]}
-                  />
-                </div>
-  
-                <div className="form-group">
-                  <button
-                    className="btn btn-primary btn-block"
-                    disabled={loading}
-                    onClick={()=>handleLogin}
-                  >
-                    {loading && (
-                      <span className="spinner-border spinner-border-sm"></span>
-                    )}
-                    <span>Login</span>
-                  </button>
-                </div>
-  
-                {message && (
-                  <div className="form-group">
-                    <div className="alert alert-danger" role="alert">
-                      {message}
-                    </div>
-                  </div>
-                )}
-                <CheckButton
-                  style={{ display: "none" }}
-                  ref={checkBtn}
-                />
-              </Form>
-            </div>
-          </div>
-          </Box>
-        </Paper>
-      );
-    
-  }
-  
-
-// export default class Login extends Component {
-  
-//   constructor(props) {
-//     super(props);
-//     this.handleLogin = this.handleLogin.bind(this);
-//     this.onChangeUsername = this.onChangeUsername.bind(this);
-//     this.onChangePassword = this.onChangePassword.bind(this);
-
-//     this.state = {
-//       username: "",
-//       password: "",
-//       loading: false,
-//       message: ""
-//     };
-//   }
-
-//   onChangeUsername(e) {
-//     this.setState({
-//       username: e.target.value
-//     });
-//   }
-
-//   onChangePassword(e) {
-//     this.setState({
-//       password: e.target.value
-//     });
-//   }
-
-//   handleLogin(e) {
-//     e.preventDefault();
-
-//     this.setState({
-//       message: "",
-//       loading: true
-//     });
-
-//     this.form.validateAll();
-
-//     if (this.checkBtn.context._errors.length === 0) {
-//       AuthService.login(this.state.username, this.state.password).then(
-//         () => {
-//           // this.props.history.push("/profile");
-//         //   window.location.href='/home'
-//         },
-//         error => {
-//           const resMessage =
-//             (error.response &&
-//               error.response.data &&
-//               error.response.data.message) ||
-//             error.message ||
-//             error.toString();
-
-//           this.setState({
-//             loading: false,
-//             message: resMessage
-//           });
-//         }
-//       );
-//     } else {
-//       this.setState({
-//         loading: false
-//       });
-//     }
-//   }
-
-//   render() {
-    
-//     return (
-//       <Paper sx={{
-//         // height: 500,
-//         display: "flex",
-//         flexDirection: "column",
-//         justifyContent: "center",
-//         textAlign:'center'}} 
-//         elevation={8} >
-//         <Box display='flex' justifyContent='center'>
-//         <div className="col-md-4">
-//           <div className="card card-container">
-//             {/* <img
-//               src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-//               alt="profile-img"
-//               className="profile-img-card"
-//             /> */}
-//             <Typography variant="h3" gutterBottom justifyContent='center' display='flex'>
-//               I'm in
-//             </Typography>
-//             <Form
-//               onSubmit={this.handleLogin}
-//               ref={c => {
-//                 this.form = c;
-//               }}
-//             >
-//               <div className="form-group">
-//                 <label htmlFor="username">Username</label>
-//                 <Input
-//                   type="text"
-//                   className="form-control"
-//                   name="username"
-//                   value={this.state.username}
-//                   onChange={this.onChangeUsername}
-//                   validations={[required]}
-//                 />
-//               </div>
-
-//               <div className="form-group">
-//                 <label htmlFor="password">Password</label>
-//                 <Input
-//                   type="password"
-//                   className="form-control"
-//                   name="password"
-//                   value={this.state.password}
-//                   onChange={this.onChangePassword}
-//                   validations={[required]}
-//                 />
-//               </div>
-
-//               <div className="form-group">
-//                 <button
-//                   className="btn btn-primary btn-block"
-//                   disabled={this.state.loading}
-//                 >
-//                   {this.state.loading && (
-//                     <span className="spinner-border spinner-border-sm"></span>
-//                   )}
-//                   <span>Login</span>
-//                 </button>
-//               </div>
-
-//               {this.state.message && (
-//                 <div className="form-group">
-//                   <div className="alert alert-danger" role="alert">
-//                     {this.state.message}
-//                   </div>
-//                 </div>
-//               )}
-//               <CheckButton
-//                 style={{ display: "none" }}
-//                 ref={c => {
-//                   this.checkBtn = c;
-//                 }}
-//               />
-//             </Form>
-//           </div>
-//         </div>
-//         </Box>
-//       </Paper>
-//     );
-//   }
-// }
+	return (
+		<Container component="main" maxWidth="xs">
+			<CssBaseline />
+			<Box
+				sx={{
+					marginTop: 8,
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+				}}>
+				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+					<LockOutlinedIcon />
+				</Avatar>
+				<Typography component="h1" variant="h5">
+					Log in
+				</Typography>
+				<Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
+					<AuthInputField
+						label="Username"
+						type="username"
+						name="username"
+						setValue={setUsername}
+					/>
+					<AuthInputField
+						label="Password"
+						type="password"
+						name="password"
+						setValue={setPassword}
+					/>
+					<FormControlLabel
+						control={<Checkbox value="remember" color="primary" />}
+						label="Remember me"
+					/>
+					<Button
+						type="submit"
+						fullWidth
+						variant="contained"
+						sx={{ mt: 3, mb: 2 }}
+						ref={checkBtn}>
+						Log In
+					</Button>
+					<Grid container>
+						<Grid item xs>
+							<Link href="#" variant="body2">
+								Forgot password?
+							</Link>
+						</Grid>
+						<Grid item>
+							<Link href="/register" variant="body2">
+								{"Don't have an account? Sign Up"}
+							</Link>
+						</Grid>
+					</Grid>
+				</Box>
+			</Box>
+		</Container>
+	);
+}
