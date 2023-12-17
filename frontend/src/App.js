@@ -87,8 +87,6 @@ export default function App() {
 			} else if (user.role === 'ROLE_PROVIDER') {
 				setProvider(true);
 			}
-		} else {
-			navigate('/login');
 		}
 
 		eventBus.on('logout', () => {
