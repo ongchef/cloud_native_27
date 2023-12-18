@@ -12,8 +12,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import AuthInputField from './authInputField';
-import AuthPasswordInputField from './authPasswordInputField';
+import InputField from '../commonService/inputField';
 import LoginIcon from '@mui/icons-material/Login';
 
 const required = (value) => {
@@ -66,8 +65,9 @@ export default function Login() {
 			window.location.href = url;
 			// navigate(url);
 		} catch (error) {
-			if (error.response.status === 401) alert('錯誤帳號或密碼！');
-			else alert('伺服器錯誤，登入失敗！');
+			if (error.response.status === 401) alert('帳號或密碼錯誤！');
+			else alert('登入失敗');
+		} finally {
 			setLoading(false);
 		}
 	}
@@ -81,6 +81,7 @@ export default function Login() {
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
+					justifyContent: 'center',
 				}}>
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 					<LoginIcon />
@@ -88,10 +89,15 @@ export default function Login() {
 				<Typography component="h1" variant="h5">
 					登入
 				</Typography>
-				<Box component="form" onSubmit={handleLogin} sx={{ mt: 3 }}>
+				<Box
+					component="form"
+					onSubmit={handleLogin}
+					sx={{ mt: 3 }}
+					autoComplete="off"
+					ref={form}>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<AuthInputField
+							<InputField
 								label="帳號"
 								type="username"
 								name="username"
@@ -99,7 +105,7 @@ export default function Login() {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthPasswordInputField
+							<InputField
 								label="密碼"
 								type={showPassword ? 'text' : 'password'}
 								name="password"

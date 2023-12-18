@@ -1,64 +1,59 @@
 import React, { useState } from 'react';
-import {
-	Box,
-	TextField,
-	Button,
-	FormControl,
-	Select,
-	MenuItem,
-	Typography,
-} from '@mui/material';
-import axios from 'axios';
+import { Box, Button, FormControl, Typography } from '@mui/material';
 import FetchData from '../authService/fetchData';
+import InputField from '../commonService/inputField';
+
+import isEmail from 'validator/lib/isEmail';
 
 const AdminAddProvider = () => {
 	const [name, setName] = useState('');
-	const [phone, setPhone] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+	const [phoneNumber, setPhoneNumber] = useState('');
+
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 	const [loading, setLoading] = useState(false);
 
 	const API_URL = 'http://localhost:3000/api/admin/courtsProvider';
 
-	const registerProvider = async () => {
+	const handleAddProvider = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+
 		const provider = {
 			role_id: 3,
 			name: name,
 			password: password,
 			email: email,
-			phone: phone,
+			phone: phoneNumber,
 		};
 
+		if (confirmPassword !== password) {
+			alert('密碼與確認密碼不相同，請確認是否輸入正確');
+			setLoading(false);
+			return;
+		}
+
+		if (Boolean(email) && !isEmail(email)) {
+			alert('Email輸入錯誤，請確認是否輸入正確');
+			setLoading(false);
+			return;
+		}
+
 		try {
-			const response = FetchData.postData(API_URL, provider);
-
-			console.log('Registration successful:', response.data);
-			return response.data;
+			const response = await FetchData.postData(API_URL, provider);
+			alert('註冊成功！');
+			window.location.href = '/adminStadiumStatus';
 		} catch (error) {
-			console.error('Registration failed:', error.message);
-			throw error; // Re-throw the error for further analysis
+			console.log('err', error);
+			if (error.response.status === 400) alert(error.response.data);
+			else alert('伺服器錯誤，註冊失敗！');
+		} finally {
+			setLoading(false);
 		}
-	};
-
-	const handleAddProvider = (e) => {
-		e.preventDefault();
-		setLoading(true);
-		if (name && phone && email && password) {
-			console.log({
-				unitName: name,
-				contactPhone: phone,
-				contactEmail: email,
-				loginPassword: password,
-			});
-		}
-		try {
-			registerProvider();
-		} catch (error) {
-			console.log(error);
-		}
-
-		setLoading(false);
 	};
 
 	return (
@@ -75,8 +70,59 @@ const AdminAddProvider = () => {
 			<Box width="80vw">
 				<Typography variant="h3">註冊球場提供商</Typography>
 			</Box>
-			<form onSubmit={handleAddProvider}>
+			<form onSubmit={handleAddProvider} autoComplete="off">
 				<FormControl fullWidth margin="normal">
+					<InputField
+						label="提供商帳號"
+						type="text"
+						name="name"
+						setValue={setName}
+					/>
+				</FormControl>
+				<FormControl fullWidth margin="normal">
+					<InputField
+						label="密碼"
+						type={showPassword ? 'text' : 'password'}
+						name="password"
+						setValue={setPassword}
+						showPassword={showPassword}
+						setShowPassword={setShowPassword}
+					/>
+				</FormControl>
+
+				<FormControl fullWidth margin="normal">
+					<InputField
+						label="確認密碼"
+						type={showConfirmPassword ? 'text' : 'password'}
+						name="Confirmpassword"
+						setValue={setConfirmPassword}
+						showPassword={showConfirmPassword}
+						setShowPassword={setShowConfirmPassword}
+						error={password && confirmPassword && password !== confirmPassword}
+						helperText={'密碼與確認密碼不相同'}
+					/>
+				</FormControl>
+
+				<FormControl fullWidth margin="normal">
+					<InputField
+						label="聯絡信箱"
+						type="email"
+						name="email"
+						setValue={setEmail}
+						error={Boolean(email) && !isEmail(email)}
+						helperText={Boolean(email) && !isEmail(email) && '請輸入正確email'}
+					/>
+				</FormControl>
+				<FormControl fullWidth margin="normal">
+					<InputField
+						label="聯絡電話"
+						type="phone"
+						name="phone"
+						setValue={setPhoneNumber}
+					/>
+				</FormControl>
+
+				{/* <FormControl fullWidth margin="normal">
 					<Typography variant="subtitle1">單位名稱</Typography>
 					<TextField
 						variant="outlined"
@@ -85,7 +131,6 @@ const AdminAddProvider = () => {
 						required
 					/>
 				</FormControl>
-
 				<FormControl fullWidth margin="normal">
 					<Typography variant="subtitle1">聯絡電話</Typography>
 					<TextField
@@ -116,7 +161,7 @@ const AdminAddProvider = () => {
 						onChange={(e) => setPassword(e.target.value)}
 						required
 					/>
-				</FormControl>
+				</FormControl> */}
 
 				<FormControl fullWidth margin="normal">
 					<Button

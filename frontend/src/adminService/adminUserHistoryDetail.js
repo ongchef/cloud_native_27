@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box'; // 引入Box元件
 import Typography from '@mui/material/Typography'; // 引入Typography元件
 import HistoryCard from '../userService/userHistoryCard.js'; // 引入StadiumCard元件
+import Button from '@mui/material/Button'; // 引入Button元件
+
 import pic from '../pic/羽球1.png';
 import pic2 from '../pic/羽球3.png';
 import { useEffect, useState } from 'react';
@@ -17,6 +19,7 @@ export default function AdminUserHistoryDetail() {
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const id = searchParams.get('id');
+	const navigate = useNavigate();
 
 	async function getUserHistory({ id }) {
 		return await axios.get(API_URL, {
@@ -26,6 +29,11 @@ export default function AdminUserHistoryDetail() {
 			},
 		});
 	}
+
+	const handleBackToUserHistory = (e) => {
+		e.preventDefault();
+		navigate('/adminUserHistory');
+	};
 
 	useEffect(() => {
 		console.log(id);
@@ -46,6 +54,9 @@ export default function AdminUserHistoryDetail() {
 				{/* 修改這一行 */}
 				<Box width="80vw">
 					<Typography variant="h3">球場歷史紀錄</Typography>
+					<Button variant="contained" onClick={handleBackToUserHistory}>
+						回到使用者歷史紀錄
+					</Button>
 				</Box>
 				<Box m={0.5} sx={{ height: '70vh', overflowY: 'auto', width: '70%' }}>
 					{[...userHistoryList].reverse().map((history) => {

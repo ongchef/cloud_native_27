@@ -60,7 +60,6 @@ export default function UserProfile() {
 
 	const handleBackToUserHistory = (e) => {
 		e.preventDefault();
-		// Update profile logic here
 		navigate('/adminUserHistory');
 	};
 

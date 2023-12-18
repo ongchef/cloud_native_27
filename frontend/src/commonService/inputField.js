@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-const AuthPasswordInputField = ({
+const InputField = ({
 	label,
 	type,
 	name,
@@ -21,7 +21,6 @@ const AuthPasswordInputField = ({
 	};
 	return (
 		<TextField
-			margin="small"
 			required
 			fullWidth
 			name={name}
@@ -32,22 +31,26 @@ const AuthPasswordInputField = ({
 			onChange={(e) => {
 				setValue(e.target.value);
 			}}
-			InputProps={{
-				endAdornment: (
-					<InputAdornment position="end">
-						<IconButton
-							aria-label="toggle password visibility"
-							onClick={handleShowPassword}
-							edge="end">
-							{showPassword ? <VisibilityOff /> : <Visibility />}
-						</IconButton>
-					</InputAdornment>
-				),
-			}}
+			InputProps={
+				showPassword !== undefined
+					? {
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={handleShowPassword}
+										edge="end">
+										{showPassword ? <VisibilityOff /> : <Visibility />}
+									</IconButton>
+								</InputAdornment>
+							),
+					  }
+					: ''
+			}
 			error={error}
 			helperText={error && helperText}
 		/>
 	);
 };
 
-export default AuthPasswordInputField;
+export default InputField;

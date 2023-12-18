@@ -31,7 +31,7 @@ export default function AdminUserHistory() {
 	return (
 		<Box>
 			<h3>adminUserHistory</h3>
-			<TableContainer sx={{ overflowY: 'auto' }}>
+			<TableContainer sx={{ overflowY: 'auto', height: '70vh' }}>
 				<Table>
 					<TableHead>
 						<TableRow

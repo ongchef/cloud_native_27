@@ -1,4 +1,4 @@
-import React, { Component, useState, useRef } from 'react';
+import React, { Component, useState, useRef, useEffect } from 'react';
 import { isEmail } from 'validator';
 
 import AuthService from './authService';
@@ -12,8 +12,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Container from '@mui/material/Container';
-import AuthInputField from './authInputField';
-import AuthPasswordInputField from './authPasswordInputField';
+import InputField from '../commonService/inputField';
+import StadiumBookingDetail from '../provider/stadiumBookingDetail';
 
 const required = (value) => {
 	if (!value) {
@@ -25,14 +25,10 @@ const required = (value) => {
 	}
 };
 
-const validEmail = (value) => {
-	if (!isEmail(value)) {
-		return (
-			<div className="alert alert-danger" role="alert">
-				This is not a valid email.
-			</div>
-		);
-	}
+const isValidEmail = (value) => {
+	const isValid = value.trim() !== '' && isEmail(value);
+	console.log('isemail', isValid);
+	return isValid;
 };
 
 const vusername = (value) => {
@@ -75,13 +71,21 @@ const Register = () => {
 	const handleRegister = async (e) => {
 		e.preventDefault();
 		setMessage('');
-		setLoading(false);
+		setLoading(true);
 
 		// form.current.validateAll();
 		if (confirmPassword !== password) {
 			alert('密碼與確認密碼不相同，請確認是否輸入正確');
+			setLoading(false);
 			return;
 		}
+
+		if (Boolean(email) && !isEmail(email)) {
+			alert('Email輸入錯誤，請確認是否輸入正確');
+			setLoading(false);
+			return;
+		}
+
 		try {
 			const roleId = 2;
 			const res = await AuthService.register({
@@ -93,13 +97,13 @@ const Register = () => {
 				roleId,
 			});
 			alert('註冊成功！');
-			setLoading(true);
 			window.location.href = '/selectSport';
 		} catch (error) {
 			console.log('err', error);
 			if (error.response.status === 400) alert(error.response.data);
-			else alert('伺服器錯誤，註冊失敗！');
-			setLoading(true);
+			else alert('註冊失敗');
+		} finally {
+			setLoading(false);
 		}
 
 		setMessage('');
@@ -114,6 +118,7 @@ const Register = () => {
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
+					justifyContent: 'center',
 				}}>
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 					<PersonAddAlt1Icon />
@@ -121,10 +126,14 @@ const Register = () => {
 				<Typography component="h1" variant="h5">
 					註冊
 				</Typography>
-				<Box component="form" onSubmit={handleRegister} sx={{ mt: 3 }}>
+				<Box
+					component="form"
+					onSubmit={handleRegister}
+					sx={{ mt: 3 }}
+					autoComplete="off">
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<AuthInputField
+							<InputField
 								label="帳號"
 								type="username"
 								name="username"
@@ -132,7 +141,7 @@ const Register = () => {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthPasswordInputField
+							<InputField
 								label="密碼"
 								type={showPassword ? 'text' : 'password'}
 								name="password"
@@ -142,7 +151,7 @@ const Register = () => {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthPasswordInputField
+							<InputField
 								label="確認密碼"
 								type={showConfirmPassword ? 'text' : 'password'}
 								name="Confirmpassword"
@@ -150,13 +159,15 @@ const Register = () => {
 								showPassword={showConfirmPassword}
 								setShowPassword={setShowConfirmPassword}
 								error={
-									password && confirmPassword && password !== confirmPassword
+									Boolean(password) &&
+									Boolean(confirmPassword) &&
+									password !== confirmPassword
 								}
 								helperText={'密碼與確認密碼不相同'}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthInputField
+							<InputField
 								label="名稱"
 								type="name"
 								name="name"
@@ -164,15 +175,19 @@ const Register = () => {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthInputField
+							<InputField
 								label="信箱"
 								type="email"
 								name="email"
 								setValue={setEmail}
+								error={Boolean(email) && !isEmail(email)}
+								helperText={
+									Boolean(email) && !isEmail(email) && '請輸入正確email'
+								}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthInputField
+							<InputField
 								label="電話號碼"
 								type="phone"
 								name="phone"
@@ -180,7 +195,7 @@ const Register = () => {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthInputField
+							<InputField
 								label="Line Id"
 								type="lineId"
 								name="lineId"

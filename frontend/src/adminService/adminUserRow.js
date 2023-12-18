@@ -14,7 +14,7 @@ export default function AdminUserRow({ user }) {
 	};
 
 	return (
-		<TableRow>
+		<TableRow sx={{ margin: 'auto' }} style={{ marginBottom: '8px' }}>
 			<TableCell
 				sx={{
 					justifyContent: 'center',
