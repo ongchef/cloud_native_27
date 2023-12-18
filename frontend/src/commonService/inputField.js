@@ -45,7 +45,7 @@ const InputField = ({
 								</InputAdornment>
 							),
 					  }
-					: ''
+					: null
 			}
 			error={error}
 			helperText={error && helperText}

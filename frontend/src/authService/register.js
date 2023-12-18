@@ -1,5 +1,6 @@
 import React, { Component, useState, useRef, useEffect } from 'react';
-import { isEmail } from 'validator';
+import isEmail from 'validator/lib/isEmail';
+import isMobilePhone from 'validator/lib/isMobilePhone';
 
 import AuthService from './authService';
 
@@ -13,7 +14,6 @@ import Typography from '@mui/material/Typography';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Container from '@mui/material/Container';
 import InputField from '../commonService/inputField';
-import StadiumBookingDetail from '../provider/stadiumBookingDetail';
 
 const required = (value) => {
 	if (!value) {
@@ -57,7 +57,7 @@ const Register = () => {
 
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const [phoneNumber, setPhoneNumber] = useState('');
+	const [phone, setPhone] = useState('');
 	const [lineId, setLineId] = useState('');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -81,7 +81,13 @@ const Register = () => {
 		}
 
 		if (Boolean(email) && !isEmail(email)) {
-			alert('Email輸入錯誤，請確認是否輸入正確');
+			alert('Email格式不正確，請確認是否輸入正確');
+			setLoading(false);
+			return;
+		}
+
+		if (Boolean(phone) && !isMobilePhone(phone, 'zh-TW')) {
+			alert('電話格式不正確，請確認是否輸入正確');
 			setLoading(false);
 			return;
 		}
@@ -91,7 +97,7 @@ const Register = () => {
 			const res = await AuthService.register({
 				username,
 				email,
-				phoneNumber,
+				phone,
 				password,
 				lineId,
 				roleId,
@@ -191,7 +197,13 @@ const Register = () => {
 								label="電話號碼"
 								type="phone"
 								name="phone"
-								setValue={setPhoneNumber}
+								setValue={setPhone}
+								error={Boolean(phone) && !isMobilePhone(phone, 'zh-TW')}
+								helperText={
+									Boolean(phone) &&
+									!isMobilePhone(phone, 'zh-TW') &&
+									'請輸入正確電話'
+								}
 							/>
 						</Grid>
 						<Grid item xs={12}>

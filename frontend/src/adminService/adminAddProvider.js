@@ -4,6 +4,7 @@ import FetchData from '../authService/fetchData';
 import InputField from '../commonService/inputField';
 
 import isEmail from 'validator/lib/isEmail';
+import isMobilePhone from 'validator/lib/isMobilePhone';
 
 const AdminAddProvider = () => {
 	const [name, setName] = useState('');
@@ -39,6 +40,12 @@ const AdminAddProvider = () => {
 
 		if (Boolean(email) && !isEmail(email)) {
 			alert('Email輸入錯誤，請確認是否輸入正確');
+			setLoading(false);
+			return;
+		}
+
+		if (Boolean(phoneNumber) && !isMobilePhone(phoneNumber, 'zh-TW')) {
+			alert('電話格式不正確，請確認是否輸入正確');
 			setLoading(false);
 			return;
 		}
@@ -119,6 +126,12 @@ const AdminAddProvider = () => {
 						type="phone"
 						name="phone"
 						setValue={setPhoneNumber}
+						error={Boolean(phoneNumber) && !isMobilePhone(phoneNumber, 'zh-TW')}
+						helperText={
+							Boolean(phoneNumber) &&
+							!isMobilePhone(phoneNumber, 'zh-TW') &&
+							'請輸入正確電話'
+						}
 					/>
 				</FormControl>
 
