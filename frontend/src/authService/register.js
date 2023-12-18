@@ -149,6 +149,10 @@ const Register = () => {
 								setValue={setConfirmPassword}
 								showPassword={showConfirmPassword}
 								setShowPassword={setShowConfirmPassword}
+								error={
+									password && confirmPassword && password !== confirmPassword
+								}
+								helperText={'密碼與確認密碼不相同'}
 							/>
 						</Grid>
 						<Grid item xs={12}>

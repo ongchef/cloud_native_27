@@ -12,6 +12,8 @@ const AuthPasswordInputField = ({
 	setValue,
 	showPassword,
 	setShowPassword,
+	error,
+	helperText,
 }) => {
 	const handleShowPassword = () => {
 		console.log(showPassword);
@@ -42,6 +44,8 @@ const AuthPasswordInputField = ({
 					</InputAdornment>
 				),
 			}}
+			error={error}
+			helperText={error && helperText}
 		/>
 	);
 };
