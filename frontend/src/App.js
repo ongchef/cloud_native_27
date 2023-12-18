@@ -129,7 +129,7 @@ export default function App() {
 								display="flex"
 								variant="h6"
 								onClick={logOut}
-								to="/login"
+								// to="/login"
 								sx={{ marginLeft: 'auto' }}>
 								Logout
 							</Button>

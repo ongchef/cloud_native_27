@@ -47,28 +47,92 @@ export default function Login() {
 	const form = useRef();
 	const checkBtn = useRef();
 	const [user, setUser] = useContext(UserContext);
+	const navigate = useNavigate();
 
-	function handleLogin(e) {
+	async function handleLogin(e) {
 		e.preventDefault();
 		setMessage('');
 		setLoading(true);
 		// form.current.validateAll();
-		AuthService.login(username, password).then(
-			() => {
-				// this.props.history.push("/profile");
-				window.location.href = '/';
-			},
-			(error) => {
-				const resMessage =
-					(error.response &&
-						error.response.data &&
-						error.response.data.message) ||
-					error.message ||
-					error.toString();
-				setLoading(false);
-				setMessage(resMessage);
+		try {
+			const res = await AuthService.login(username, password);
+			console.log(res);
+			let url;
+			switch (res.data.role_id) {
+				case 1:
+					url = '/adminStadiumStatus';
+					break;
+				case 2:
+					url = '/selectSport';
+					break;
+				case 3:
+					url = '/stadiumBoard';
+					break;
+				default:
+					// 預設情況，指定一個默認的 URL
+					url = '/';
+					break;
 			}
-		);
+			window.location.href = url;
+			// navigate(url);
+		} catch (error) {
+			const resMessage =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			setLoading(false);
+			setMessage(resMessage);
+		}
+		// }
+		try {
+			const res = await AuthService.login(username, password);
+			navigate('/');
+			// console.log(res.data.role_id);
+			// let url;
+			// switch (res.data.role_id) {
+			// 	case 1:
+			// 		url = '/adminStadiumStatus';
+			// 		break;
+			// 	case 2:改了
+			// 		url = '/selectSport';
+			// 		break;
+			// 	case 3:
+			// 		url = '/stadiumBoard';
+			// 		break;
+			// 	default:
+			// 		url = '/';
+			// 		break;
+			// }
+			// navigate(url);
+			setLoading(false);
+		} catch (error) {
+			const resMessage =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			setLoading(false);
+			setMessage(resMessage);
+		}
+		// AuthService.login(username, password).then(
+		// 	() => {
+		// 		// this.props.history.push("/profile");
+		// 		window.location.href = '/';
+		// 	},
+		// 	(error) => {
+		// 		const resMessage =
+		// 			(error.response &&
+		// 				error.response.data &&
+		// 				error.response.data.message) ||
+		// 			error.message ||
+		// 			error.toString();
+		// 		setLoading(false);
+		// 		setMessage(resMessage);
+		// 	}
+		// );
 	}
 
 	return (

@@ -30,7 +30,8 @@ export default function JoinStadium() {
 	const [sport, setSport] = useState(initSport ? initSport : null); // 加入預設值以防止mui警告
 	const [location, setLocation] = useState(null); // 加入預設值以防止mui警告
 	const [date, setDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
-	const [time, setTime] = useState(dayjs('00:00:00', 'HH:mm:ss'));
+	const [time, setTime] = useState(dayjs()); // 目前時間
+	// const [time, setTime] = useState(dayjs().format('HH:mm:ss'));
 	const [minute, setMinute] = useState(0);
 	const [page, setPage] = useState(1);
 	const [totalPage, setTotalPage] = useState(0);
@@ -153,6 +154,19 @@ export default function JoinStadium() {
 	// 	}
 	// }, [searchParams]);
 
+	// const fetchData = useCallback(async () => {
+	// 	try {
+	// 		const res = await SearchAppointment();
+	// 		setAppointmentList(res.courts);
+	// 		setTotalPage(res.total_page);
+	// 	} catch (error) {
+	// 		console.log('Error:' + error);
+	// 	}
+	// }, []);
+
+	// useEffect(() => {
+	// 	fetchData();
+	// }, [fetchData]);
 	const fetchData = useCallback(async () => {
 		try {
 			const res = await SearchAppointment();
@@ -164,6 +178,8 @@ export default function JoinStadium() {
 	}, []);
 
 	useEffect(() => {
+		console.log(time);
+		console.log(dayjs().format('HH:mm:ss'));
 		fetchData();
 	}, [fetchData]);
 
@@ -280,7 +296,7 @@ export default function JoinStadium() {
 				</Typography>
 			</Box>
 			<Box m={0.5} sx={{ height: '70vh', overflowY: 'auto' }}>
-				<StadiumCard
+				{/* <StadiumCard
 					id={1}
 					image={pic}
 					title={'球場名稱2'}
@@ -292,7 +308,7 @@ export default function JoinStadium() {
 						'Wonu Juan',
 						[4, 8],
 					]}
-				/>
+				/> */}
 				{(appointmentList || []).map((appointment) => {
 					const DateInGMT8 = new Date(appointment.date);
 					let year = DateInGMT8.getFullYear();
@@ -308,6 +324,7 @@ export default function JoinStadium() {
 					//console.log(status);
 					return (
 						<StadiumCard
+							key={appointment.appointment_id}
 							id={appointment.appointment_id}
 							image={appointment.image_url.split('.jpg')[0] + '.jpg'}
 							title={appointment.court_name + ' - ' + appointment.location}

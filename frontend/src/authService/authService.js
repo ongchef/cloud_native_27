@@ -3,7 +3,8 @@ import { UserContext } from '../UserContext';
 import { useContext } from 'react';
 import fakeUser from '../testData/fakeUser';
 
-const API_URL = 'http://localhost:3000/api/users/';
+const REGISTER_API_URL = 'http://localhost:3000/api/users/';
+const LOGIN_API_URL = 'http://localhost:3000/api/users/login';
 
 // const register = ({ username, password, name, email, phone, lineId }) => {
 const register = async ({
@@ -17,7 +18,7 @@ const register = async ({
 }) => {
 	try {
 		const response = await axios.post(
-			API_URL,
+			REGISTER_API_URL,
 			JSON.stringify({
 				line_id: lineId,
 				role_id: roleId,
@@ -39,46 +40,31 @@ const register = async ({
 	}
 };
 
-const login = (userName, password) => {
-	function delay() {
-		return new Promise(function (resolve, reject) {
-			setTimeout(function () {
-				if (
-					userName !== 'user' &&
-					userName !== 'provider' &&
-					userName !== 'admin'
-				) {
-					reject(fakeUser(userName));
-				} else {
-					resolve(fakeUser(userName));
-				}
-			}, 1000);
-		});
-	}
-
-	return axios
-		.post('http://localhost:3000/api/users/login', {
+const login = async (userName, password) => {
+	try {
+		const res = await axios.post(LOGIN_API_URL, {
 			name: userName,
 			password: password,
-		})
-		.then((res) => {
-			console.log(res);
-			const role =
-				res.data.role_id === 1
-					? 'ROLE_ADMIN'
-					: res.data.role_id === 2
-					? 'ROLE_USER'
-					: 'ROLE_PROVIDER';
-			localStorage.setItem(
-				'user',
-				JSON.stringify({
-					role: role,
-					accessToken: res.data.user_id,
-				})
-			);
-			return res;
 		});
-
+		console.log(res);
+		const role =
+			res.data.role_id === 1
+				? 'ROLE_ADMIN'
+				: res.data.role_id === 2
+				? 'ROLE_USER'
+				: 'ROLE_PROVIDER';
+		localStorage.setItem(
+			'user',
+			JSON.stringify({
+				role: role,
+				accessToken: res.data.user_id,
+			})
+		);
+		return res;
+	} catch (error) {
+		console.error('Login failed:', error.message);
+		throw error; // Re-throw the error for further analysis
+	}
 	// return axios
 	//   .post(API_URL + "signin", {
 	//     userName,
