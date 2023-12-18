@@ -131,7 +131,7 @@ const Register = () => {
 					<LockOutlinedIcon />
 				</Avatar>
 				<Typography component="h1" variant="h5">
-					Sign up
+					註冊
 				</Typography>
 				<Box component="form" onSubmit={handleRegister} sx={{ mt: 3 }}>
 					<Grid container spacing={2}>
@@ -189,12 +189,12 @@ const Register = () => {
 						fullWidth
 						variant="contained"
 						sx={{ mt: 3, mb: 2 }}>
-						Sign Up
+						註冊
 					</Button>
 					<Grid container justifyContent="flex-end">
 						<Grid item>
 							<Link href="/login" variant="body2">
-								Already have an account? Sign in
+								已經有帳號？登入
 							</Link>
 						</Grid>
 					</Grid>

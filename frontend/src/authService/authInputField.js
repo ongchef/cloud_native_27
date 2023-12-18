@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 const AuthInputField = ({ label, type, name, setValue }) => {
 	return (
 		<TextField
-			margin="normal"
+			margin="small"
 			required
 			fullWidth
 			name={name}

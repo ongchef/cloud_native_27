@@ -41,6 +41,8 @@ import UpdateStadium from './provider/CRUD/updateStadium';
 import AdminUserHistoryDetail from './adminService/adminUserHistoryDetail';
 import AdminUserProfile from './adminService/adminUserProfile';
 import SelectSport from './userService/selectSport';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const drawerWidth = 240;
 
@@ -131,7 +133,8 @@ export default function App() {
 								onClick={logOut}
 								// to="/login"
 								sx={{ marginLeft: 'auto' }}>
-								Logout
+								<LogoutIcon></LogoutIcon>
+								登出
 							</Button>
 						) : (
 							''
@@ -165,14 +168,16 @@ export default function App() {
 						<>
 							<ListItem disablePadding>
 								<ListItemButton to="/register">
-									<ListItemIcon></ListItemIcon>
-									<ListItemText primary={'Register'} />
+									<ListItemIcon>
+										{<PersonAddAlt1Icon></PersonAddAlt1Icon>}
+									</ListItemIcon>
+									<ListItemText primary={'註冊'} />
 								</ListItemButton>
 							</ListItem>
 							<ListItem disablePadding>
 								<ListItemButton to="/login">
 									<ListItemIcon>{<LoginIcon></LoginIcon>}</ListItemIcon>
-									<ListItemText primary={'Login'} />
+									<ListItemText primary={'登入'} />
 								</ListItemButton>
 							</ListItem>
 						</>

@@ -149,42 +149,48 @@ export default function Login() {
 					<LockOutlinedIcon />
 				</Avatar>
 				<Typography component="h1" variant="h5">
-					Log in
+					登入
 				</Typography>
-				<Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
-					<AuthInputField
-						label="Username"
-						type="username"
-						name="username"
-						setValue={setUsername}
-					/>
-					<AuthInputField
-						label="Password"
-						type="password"
-						name="password"
-						setValue={setPassword}
-					/>
-					<FormControlLabel
+				<Box component="form" onSubmit={handleLogin} sx={{ mt: 3 }}>
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							<AuthInputField
+								label="Username"
+								type="username"
+								name="username"
+								setValue={setUsername}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<AuthInputField
+								label="Password"
+								type="password"
+								name="password"
+								setValue={setPassword}
+							/>
+						</Grid>
+						{/* <FormControlLabel
 						control={<Checkbox value="remember" color="primary" />}
 						label="Remember me"
-					/>
+					/> */}
+					</Grid>
 					<Button
 						type="submit"
 						fullWidth
 						variant="contained"
 						sx={{ mt: 3, mb: 2 }}
 						ref={checkBtn}>
-						Log In
+						登入
 					</Button>
 					<Grid container>
-						<Grid item xs>
+						{/* <Grid item xs>
 							<Link href="#" variant="body2">
-								Forgot password?
+							Forgot password?
 							</Link>
-						</Grid>
+						</Grid> */}
 						<Grid item>
 							<Link href="/register" variant="body2">
-								{"Don't have an account? Sign Up"}
+								還沒有帳號？註冊
 							</Link>
 						</Grid>
 					</Grid>
