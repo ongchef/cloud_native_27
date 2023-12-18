@@ -98,6 +98,12 @@ export default function App() {
 			} else if (user.role === 'ROLE_PROVIDER') {
 				setProvider(true);
 			}
+		} else {
+			if (
+				window.location.pathname !== '/login' &&
+				window.location.pathname !== '/register'
+			)
+				window.location.href = '/login';
 		}
 
 		eventBus.on('logout', () => {

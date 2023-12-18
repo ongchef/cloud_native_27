@@ -103,7 +103,7 @@ const Register = () => {
 				roleId,
 			});
 			alert('註冊成功！');
-			window.location.href = '/selectSport';
+			window.location.href = '/';
 		} catch (error) {
 			console.log('err', error);
 			if (error.response.status === 400) alert(error.response.data);
