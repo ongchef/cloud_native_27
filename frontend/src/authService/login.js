@@ -1,33 +1,20 @@
-import React, {
-	Component,
-	useContext,
-	useEffect,
-	useState,
-	useRef,
-} from 'react';
-import Form from 'react-validation/build/form';
-import Input from 'react-validation/build/input';
-import CheckButton from 'react-validation/build/button';
+import React, { useContext, useState, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { UserContext } from '../UserContext';
-import axios from 'axios';
 import AuthService from './authService';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import AuthInputField from './authInputField';
+import AuthPasswordInputField from './authPasswordInputField';
+import LoginIcon from '@mui/icons-material/Login';
 
 const required = (value) => {
 	if (!value) {
@@ -49,6 +36,8 @@ export default function Login() {
 	const [user, setUser] = useContext(UserContext);
 	const navigate = useNavigate();
 
+	const [showPassword, setShowPassword] = useState(false);
+
 	async function handleLogin(e) {
 		e.preventDefault();
 		setMessage('');
@@ -56,7 +45,9 @@ export default function Login() {
 		// form.current.validateAll();
 		try {
 			const res = await AuthService.login(username, password);
+			setLoading(false);
 			console.log(res);
+			alert('登入成功！');
 			let url;
 			switch (res.data.role_id) {
 				case 1:
@@ -69,70 +60,16 @@ export default function Login() {
 					url = '/stadiumBoard';
 					break;
 				default:
-					// 預設情況，指定一個默認的 URL
 					url = '/';
 					break;
 			}
 			window.location.href = url;
 			// navigate(url);
 		} catch (error) {
-			const resMessage =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
+			if (error.response.status === 401) alert('錯誤帳號或密碼！');
+			else alert('伺服器錯誤，登入失敗！');
 			setLoading(false);
-			setMessage(resMessage);
 		}
-		// }
-		try {
-			const res = await AuthService.login(username, password);
-			navigate('/');
-			// console.log(res.data.role_id);
-			// let url;
-			// switch (res.data.role_id) {
-			// 	case 1:
-			// 		url = '/adminStadiumStatus';
-			// 		break;
-			// 	case 2:改了
-			// 		url = '/selectSport';
-			// 		break;
-			// 	case 3:
-			// 		url = '/stadiumBoard';
-			// 		break;
-			// 	default:
-			// 		url = '/';
-			// 		break;
-			// }
-			// navigate(url);
-			setLoading(false);
-		} catch (error) {
-			const resMessage =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			setLoading(false);
-			setMessage(resMessage);
-		}
-		// AuthService.login(username, password).then(
-		// 	() => {
-		// 		// this.props.history.push("/profile");
-		// 		window.location.href = '/';
-		// 	},
-		// 	(error) => {
-		// 		const resMessage =
-		// 			(error.response &&
-		// 				error.response.data &&
-		// 				error.response.data.message) ||
-		// 			error.message ||
-		// 			error.toString();
-		// 		setLoading(false);
-		// 		setMessage(resMessage);
-		// 	}
-		// );
 	}
 
 	return (
@@ -146,7 +83,7 @@ export default function Login() {
 					alignItems: 'center',
 				}}>
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-					<LockOutlinedIcon />
+					<LoginIcon />
 				</Avatar>
 				<Typography component="h1" variant="h5">
 					登入
@@ -155,18 +92,20 @@ export default function Login() {
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
 							<AuthInputField
-								label="Username"
+								label="帳號"
 								type="username"
 								name="username"
 								setValue={setUsername}
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<AuthInputField
-								label="Password"
-								type="password"
+							<AuthPasswordInputField
+								label="密碼"
+								type={showPassword ? 'text' : 'password'}
 								name="password"
 								setValue={setPassword}
+								showPassword={showPassword}
+								setShowPassword={setShowPassword}
 							/>
 						</Grid>
 						{/* <FormControlLabel
@@ -179,7 +118,8 @@ export default function Login() {
 						fullWidth
 						variant="contained"
 						sx={{ mt: 3, mb: 2 }}
-						ref={checkBtn}>
+						ref={checkBtn}
+						disabled={loading}>
 						登入
 					</Button>
 					<Grid container>

@@ -3,7 +3,7 @@ import { Routes, Route, Link, Router, Navigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import Login from './authService/login';
 import Register from './authService/register';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -77,6 +77,15 @@ export default function App() {
 	const [admin, setAdmin] = useState(false);
 	const [provider, setProvider] = useState(false);
 
+	const logOut = useCallback(() => {
+		AuthService.logout();
+		setVerified(false);
+		setUser(false);
+		setAdmin(false);
+		setProvider(false);
+		navigate('/login');
+	}, []);
+
 	useEffect(() => {
 		const user = AuthService.getCurrentUser();
 		console.log(user);
@@ -98,16 +107,7 @@ export default function App() {
 		return () => {
 			eventBus.remove('logout');
 		};
-	}, []);
-
-	const logOut = () => {
-		AuthService.logout();
-		setVerified(false);
-		setUser(false);
-		setAdmin(false);
-		setProvider(false);
-		navigate('/login');
-	};
+	}, [logOut]);
 
 	return (
 		<div>
