@@ -37,7 +37,8 @@ import {
     generate_uuid,
     parseISODate,
     add_one_day,
-    notifyAppChecker
+    notifyAppChecker,
+    notifyAppForSpecificUsersChecker
 } from '../utils/helper.js';
 
 import {
@@ -507,7 +508,7 @@ export const notifyUsersByTime = async(time) => {
         // get the query time date YYYY-MM-DD
         const query_time_date = parseISODate(query_time);
         // get the query time time hh:mm:ss
-        const query_time_hhmmss = query_time.split(" ")[-1];
+        // const query_time_hhmmss = query_time.split(" ")[-1];
 
         const possibly_notify_apps = await checkAppointmentsByTimeQuery(query_time_date);
         //console.log(possibly_notify_apps)
@@ -536,6 +537,46 @@ export const notifyUsersByTime = async(time) => {
     }
 }
 
+export const notifyUsersByTimeById = async(req,res) => {
+    try {
+        const user_token = req.token;
+        const isusersexist = await isUsersExist(user_token);
+        if (!isusersexist) {
+            return res.status(401).json("You are not the user!")
+        }
+        const app_id = await getUsersAppointmentIdQuery(user_token);
+        if (app_id.length == 0){
+            return res.status(200).json([]);
+        } else {
+            const app_id_list = app_id.map(item => item.appointment_id);
+            const app_history = await getCourtsInfoByAppointmentIdQuery(app_id_list)
+
+            let { query_time } = req.query
+            query_time = query_time.replace("+", " ");
+
+            const notify_appointment_list = [];
+            for (let i = 0; i < app_history.length; i++){
+                // solve the ISOdate issue
+                app_history[i]['date'] = parseISODate(app_history[i]['date'])
+
+                if (notifyAppForSpecificUsersChecker(app_history[i], query_time)) {
+                    notify_appointment_list.push(app_history[i]);
+                }
+            }
+            // there are notifable appointments
+            if (notify_appointment_list.length !== 0) {
+                return res.status(200).json(notify_appointment_list);
+            
+            } else {
+            //  there are not notifable appointments
+                return res.status(200).json([]);
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send(err)
+    }
+}
 // export const notifyUsersByTime = async(req, res) => {
 //     try {
 //         let { query_time } = req.query
