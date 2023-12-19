@@ -43,6 +43,7 @@ import AdminUserProfile from './adminService/adminUserProfile';
 import SelectSport from './userService/selectSport';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import SimpleBadge from './commonService/notification';
 
 const drawerWidth = 240;
 
@@ -119,6 +120,7 @@ export default function App() {
 		<div>
 			<AppBar open={open}>
 				<Toolbar>
+					
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
@@ -129,24 +131,27 @@ export default function App() {
 					</IconButton>
 					<Typography variant="h6" noWrap component="div">
 						Joinable
-					</Typography>
-					{
-						verified ? (
-							// <Box display='flex' justifyContent='right'>
+					</Typography>	
+						<Box display='flex' sx={{marginLeft : 'auto'}}>
+						{
+							user&&
+							<SimpleBadge/>
+						}
+				
+						{
+							verified && (
 							<Button
 								display="flex"
 								variant="h6"
 								onClick={logOut}
 								// to="/login"
-								sx={{ marginLeft: 'auto' }}>
+								>
 								<LogoutIcon></LogoutIcon>
 								登出
 							</Button>
-						) : (
-							''
-						)
-						// </Box>
-					}
+						) }
+						</Box>
+					
 				</Toolbar>
 			</AppBar>
 			<Drawer
