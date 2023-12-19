@@ -6,7 +6,7 @@ export default {
     port: 587,
     secure: false,
     auth: {
-        user: "billy784512369@gmail.com",
+        user: process.env.MAILUSER,
         pass: process.env.PASSKEY
     },
 };

@@ -9,15 +9,25 @@ var datetime = '2023-12-13+07:00:00';
 const send = async() => {
     const transporter = nodemailer.createTransport(emailConfig);
     let toList = [];
-    let test = await notifyUsersByTime(datetime);
+    let mailer = await notifyUsersByTime(datetime);
+    //console.log(test);
 
-    test.forEach(element => {
+    mailer.forEach(element => {
         //console.log(element);
         let to = {
-            'from': 'billy784512369@gmail.com',
-            'to': 'r12725051@ntu.edu.tw',
+            'from': 'timmy0823777@gmail.com',
+            'to': element.email,
             'subject': 'Joinable: appointment notification',
-            'text': element.start_time + '\n' + element.address,
+            'text': `${element.name} 你好：
+
+感謝你使用我們的球場系統！我們提醒您，您今天有球場預約：
+                        
+    時間：${element.start_time}
+    地點：${element.location}  ${element.court_name}
+    地址：${element.address}
+                        
+祝您玩得開心！
+By Joinable 揪你Ball`
         }
         toList.push(to);
     })
