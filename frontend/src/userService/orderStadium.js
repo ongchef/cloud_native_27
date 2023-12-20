@@ -57,7 +57,7 @@ export default function OrderStadium() {
     }
 
     return FetchData.getData(
-      "http://localhost:3000/api/users/appointment",
+      "api/users/appointment",
       page,
       {
         query_time: date + " " + time.format("HH:mm:ss"),

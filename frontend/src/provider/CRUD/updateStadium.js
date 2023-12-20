@@ -47,7 +47,7 @@ const week = {
 
 
 async function SearchCourt(court_id){
-  return FetchData.getData("http://localhost:3000/api/courts/admin",0,{court_id:court_id})
+  return FetchData.getData("api/courts/admin",0,{court_id:court_id})
 }
 
 
@@ -354,7 +354,7 @@ export default function UpdateStadium() {
     }
     setLoading(true)
 
-    FetchData.putDataWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
+    FetchData.putDataWithImg("api/courts", {...court,available_time:flatAvailableTime}, imgblob)
     .then((res)=>{
       console.log(res)
       console.log(res===200)

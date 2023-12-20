@@ -26,7 +26,7 @@ const ballTypes = {
 
 async function SearchReserved(courtId, datetime) {
   datetime = datetime + "+00:00:00";
-  return FetchData.getData("http://localhost:3000/api/admin/courtDetail", 1, {
+  return FetchData.getData("api/admin/courtDetail", 1, {
     query_time: datetime,
     court_id: courtId,
   });

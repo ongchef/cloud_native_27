@@ -10,19 +10,19 @@ import FetchData from "../authService/fetchData";
 export default function UserProfile() {
   const [userProfile, setUserProfile] = useState([]);
   async function getUserProfile() {
-    return FetchData.getData("http://localhost:3000/api/users/id", 1, {});
+    return FetchData.getData("api/users/id", 1, {});
   }
   const updateUserProfile = () => {
     let userdata = profile;
     console.log(userdata);
     let login = { name: userdata.name, password: userdata.password };
     console.log(login);
-    FetchData.postData("http://localhost:3000/api/users/login", login).then(
+    FetchData.postData("api/users/login", login).then(
       (res) => {
         console.log(res);
         if (res === 200) {
           delete userdata.password;
-          FetchData.putData("http://localhost:3000/api/users", userdata).then(
+          FetchData.putData("api/users", userdata).then(
             (res) => {
               console.log(res);
               if (res === 200) {

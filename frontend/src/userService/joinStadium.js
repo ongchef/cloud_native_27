@@ -71,7 +71,7 @@ export default function JoinStadium() {
       });
 
       const res = await FetchData.getData(
-        "http://localhost:3000/api/users/appointment/join",
+        "api/users/appointment/join",
         1,
         {
           query_time: date + time.$d.toString().substring(15, 24),

@@ -19,7 +19,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 async function SearchReserved(courtId,datetime){
   
-  return FetchData.getData("http://localhost:3000/api/courts/admin/appointmentDetail",1,{date:datetime,court_id:courtId})
+  return FetchData.getData("api/courts/admin/appointmentDetail",1,{date:datetime,court_id:courtId})
 }
 export default function StadiumBookingDetail() {
   const location = useLocation();

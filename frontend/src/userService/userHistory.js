@@ -12,7 +12,7 @@ export default function UserHistory() {
   const [userHistoryList, setUserHistoryList] = useState([]);
   async function getUserHistory() {
     return FetchData.getData(
-      "http://localhost:3000/api/users/appointment/histories",
+      "api/users/appointment/histories",
       1,
       {}
     );

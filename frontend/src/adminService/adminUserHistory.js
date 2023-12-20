@@ -13,7 +13,7 @@ import FetchData from '../authService/fetchData';
 
 export default function AdminUserHistory() {
 	const [users, setUsers] = useState([]);
-	const API_URL = 'http://localhost:3000/api/admin/userHistories';
+	const API_URL = 'api/admin/userHistories';
 
 	const fetchUsers = useCallback(async () => {
 		try {

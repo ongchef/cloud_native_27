@@ -18,7 +18,7 @@ const AdminAddProvider = () => {
 
 	const [loading, setLoading] = useState(false);
 
-	const API_URL = 'http://localhost:3000/api/admin/courtsProvider';
+	const API_URL = 'api/admin/courtsProvider';
 
 	const handleAddProvider = async (e) => {
 		e.preventDefault();

@@ -47,7 +47,7 @@ export default function ReadStadium() {
   ];
   async function SearchCourt(courtName,sport,address){
     setLoading(true)
-    return FetchData.getData("http://localhost:3000/api/courts/admin",1,
+    return FetchData.getData("api/courts/admin",1,
     {
       ...(courtName&& courtName && {name:courtName}),
       ...(sport&& sport && {ball:sport}),

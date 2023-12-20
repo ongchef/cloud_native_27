@@ -298,7 +298,7 @@ export default function CreateStadium() {
       flatAvailableTime=[...flatAvailableTime,...newTime]
     }
     setLoading(true)
-    FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
+    FetchData.postDateWithImg("api/courts", {...court,available_time:flatAvailableTime}, imgblob)
     .then((res)=>{
       console.log(res)
       console.log(res===200)

@@ -32,14 +32,14 @@ export default function AdminStadiumStatus() {
   const [time, setTime] = useState(dayjs("00:00:00", "HH:mm:ss"));
   const [stadiumList, setStadiumList] = useState([]);
   async function getProviders() {
-    return FetchData.getData("http://localhost:3000/api/admin/getProviders");
+    return FetchData.getData("api/admin/getProviders");
   }
   async function getStadium() {
     let s = sport !== "ALL" ? sport : "";
     let l = location !== "ALL" ? location : "";
     let p = provider !== "ALL" ? provider : "";
     console.log(s, l, p);
-    return FetchData.getData("http://localhost:3000/api/admin/court", page, {
+    return FetchData.getData("api/admin/court", page, {
       query_time: date + time.$d.toString().substring(15, 24),
       ...(s && s !== null && { ball: s }),
       ...(l && l !== null && { address: l }),

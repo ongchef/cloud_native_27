@@ -13,7 +13,7 @@ import authHeader from '../authService/authHeader';
 
 export default function UserProfile() {
 	const [userProfile, setUserProfile] = useState([]);
-	const API_URL = 'http://localhost:3000/api/admin/user';
+	const API_URL = 'http://140.112.107.71/api/admin/user';
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const id = searchParams.get('id');

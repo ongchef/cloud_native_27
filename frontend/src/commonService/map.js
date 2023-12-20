@@ -3,15 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import PlaceIcon from "@mui/icons-material/Place";
-import IconButton from "@mui/material/IconButton";
-import FetchData from "../authService/fetchData";
+
 import axios from "axios";
 
 export default function Map({ address, name }) {

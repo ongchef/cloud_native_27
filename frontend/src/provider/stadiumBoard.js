@@ -46,7 +46,7 @@ export default function StadiumBoard() {
   ];
   async function SearchCourt(){
     setLoading(true)
-    return FetchData.getData("http://localhost:3000/api/courts/admin/appointment",1,
+    return FetchData.getData("api/courts/admin/appointment",1,
     {
       date:date,
       ...(sport&& sport && {ball_type_id:sport}),

@@ -73,7 +73,7 @@ export default function OrderStadiumDetail() {
   };
   async function StadiumDetail() {
     return FetchData.getData(
-      "http://localhost:3000/api/users/appointmentDetail",
+      "api/users/appointmentDetail",
       1,
       {
         court_id: id,
@@ -205,7 +205,7 @@ export default function OrderStadiumDetail() {
     };
     console.log(appointment);
     FetchData.postData(
-      "http://localhost:3000/api/users/appointment",
+      "http://140.112.107.71/api/users/appointment",
       appointment
     ).then((res) => {
       console.log(res);

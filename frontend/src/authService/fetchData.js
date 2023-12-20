@@ -1,9 +1,10 @@
 import axios from "axios";
 import authHeader from "./authHeader";
 import { Navigate } from "react-router-dom";
+const ip = "http://140.112.107.71/"
 async function getData(url, page, params, redirect) {
   return await axios
-    .get(url, {
+    .get(ip+url, {
       headers: authHeader(),
       params: {
         page: page,
@@ -22,7 +23,7 @@ async function getData(url, page, params, redirect) {
 }
 async function postData(url, body, redirect) {
   return await axios
-    .post(url, body, { headers: authHeader() })
+    .post(ip+url, body, { headers: authHeader() })
     .then((res) => {
       return res.status;
     })
@@ -36,7 +37,7 @@ async function postData(url, body, redirect) {
 }
 async function putData(url, body, redirect) {
   return await axios
-    .put(url, body, { headers: authHeader() })
+    .put(ip+url, body, { headers: authHeader() })
     .then((res) => {
       return res.status;
     })
@@ -61,7 +62,7 @@ async function postDateWithImg(url, data, img, redirect) {
 
   return axios({
     method: "post",
-    url: url,
+    url: ip+url,
     data: bodyFormData,
     files: img,
 
@@ -96,7 +97,7 @@ async function putDataWithImg(url, data, img, redirect) {
 
   return axios({
     method: "put",
-    url: url,
+    url: ip+url,
     data: bodyFormData,
     files: img,
     headers: { "Content-Type": "multipart/form-data", ...authHeader() },

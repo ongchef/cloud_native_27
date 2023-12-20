@@ -43,7 +43,7 @@ export default function SimpleBadge() {
     
     const [onGoingList, setOngoinList] = useState([])
     useEffect(()=>{
-        FetchData.getData("http://localhost:3000/api/users/appointment/histories")
+        FetchData.getData("api/users/appointment/histories")
         .then((res)=>{
             console.log(res)
             setOngoinList(onGoingEvent(res))

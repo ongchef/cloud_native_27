@@ -15,7 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom'; // 引入useNavigat
 export default function AdminUserHistoryDetail() {
 	const [date, setDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
 	const [userHistoryList, setUserHistoryList] = useState([]);
-	const API_URL = 'http://localhost:3000/api/admin/userHistoryDetails';
+	const API_URL = 'api/admin/userHistoryDetails';
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const id = searchParams.get('id');

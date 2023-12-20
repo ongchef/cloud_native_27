@@ -40,7 +40,7 @@ export default function JoinStadiumDetail() {
   const [publicIndex, setPublicIndex] = useState(0);
   async function getStadiumDetail() {
     return FetchData.getData(
-      "http://localhost:3000/api/users/appointmentDetail/join",
+      "api/users/appointmentDetail/join",
       1,
       {
         appointment_id: id,
@@ -82,7 +82,7 @@ export default function JoinStadiumDetail() {
     };
     console.log(location.pathname + location.search);
     FetchData.postData(
-      "http://140.112.107.71/api/users/appointment/join",
+      "api/users/appointment/join",
       jAppointment,
       location.pathname + location.search
     ).then((res) => {
