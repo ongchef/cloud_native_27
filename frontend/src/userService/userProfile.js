@@ -3,18 +3,10 @@ import Button from "@mui/material/Button"; // 引入Button元件
 import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
-
 import { Card } from "@mui/material";
-
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Avatar from "@mui/material/Avatar";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TextField } from "@mui/material";
-import axios from "axios";
-import authHeader from "../authService/authHeader";
 import FetchData from "../authService/fetchData";
-
 export default function UserProfile() {
   const [userProfile, setUserProfile] = useState([]);
   async function getUserProfile() {
@@ -49,8 +41,8 @@ export default function UserProfile() {
   };
   useEffect(() => {
     getUserProfile().then((res) => {
-      setUserProfile(res);
-      setProfile(res);
+      setUserProfile(res[0]);
+      setProfile(res[0]);
     });
   }, []);
 
@@ -58,7 +50,7 @@ export default function UserProfile() {
     name: "",
     email: "",
     phone: "",
-    line_ID: "",
+    line_id: "",
     password: "",
   });
   useEffect(() => {
@@ -148,7 +140,7 @@ export default function UserProfile() {
                     label="Line ID"
                     onChange={handleChange}
                     style={{ width: "70%" }}
-                    value={profile.line_ID}
+                    value={profile.line_id}
                   />
                 </Box>
                 <Box

@@ -3,7 +3,6 @@ import Button from "@mui/material/Button"; // 引入Button元件
 import React, { useEffect } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
-import pic from "../pic/羽球1.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Card, CircularProgress } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
