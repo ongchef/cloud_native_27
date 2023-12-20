@@ -44,6 +44,7 @@ import SelectSport from './userService/selectSport';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import SimpleBadge from './commonService/notification';
+import Home from './home';
 
 const drawerWidth = 240;
 
@@ -290,6 +291,7 @@ export default function App() {
 				)}
 			</Drawer>
 			<Routes>
+				<Route exact path="/" element={<Home />} />
 				<Route exact path="/login" element={<Login />} />
 				<Route exact path="/register" element={<Register />} />
 				<Route exact path="/selectSport" element={<SelectSport />} />
