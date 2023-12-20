@@ -19,6 +19,8 @@ import { useLocation } from "react-router-dom";
 import FetchData from "../authService/fetchData";
 import { Input } from "antd";
 
+const balltype = ["羽球", "籃球", "桌球", "排球"];
+
 export default function JoinStadiumDetail() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -71,7 +73,7 @@ export default function JoinStadiumDetail() {
     setDate(formattedDate);
     setPublicIndex(appointmentDetail.public);
     setAppointmentTag([
-      appointmentDetail.ball,
+      balltype[appointmentDetail.ball - 1],
       appointmentDetail.level,
       appointmentDetail.rule,
     ]);
@@ -83,23 +85,23 @@ export default function JoinStadiumDetail() {
       password: password,
     };
     console.log(location.pathname + location.search);
-    // FetchData.postData(
-    //   "http://localhost:3000/api/users/appointment/join",
-    //   jAppointment,
-    //   location.pathname + location.search
-    // ).then((res) => {
-    //   console.log(res);
-    //   if (res === 200) {
-    //     console.log("加入成功");
-    //     alert("加入成功");
-    //     //window.location.reload();
-    //     navigate(`/userHistory`);
-    //   } else if (res === 401) {
-    //     console.log("密碼錯誤");
-    //     alert("密碼錯誤");
-    //     window.location.reload();
-    //   }
-    // });
+    FetchData.postData(
+      "http://localhost:3000/api/users/appointment/join",
+      jAppointment,
+      location.pathname + location.search
+    ).then((res) => {
+      console.log(res);
+      if (res === 200) {
+        console.log("加入成功");
+        alert("加入成功");
+        //window.location.reload();
+        navigate(`/userHistory`);
+      } else if (res === 401) {
+        console.log("密碼錯誤");
+        alert("密碼錯誤");
+        window.location.reload();
+      }
+    });
   };
   return (
     <div>

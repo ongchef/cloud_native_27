@@ -221,7 +221,7 @@ export default function JoinStadium() {
               minTime={moment("8:00", "HH:mm")}
               maxTime={moment("22:00", "HH:mm")}
               // views={["hours","minutes"]}
-              format="hh:mm"
+              format="HH:mm"
               // defaultValue={dayjs("0000-00-00T9:00")}
               onChange={(newTime) => {
                 setTime(newTime);
