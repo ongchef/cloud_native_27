@@ -8,6 +8,8 @@ import { Box, Divider, IconButton } from '@mui/material';
 import FetchData from '../authService/fetchData';
 import moment from 'moment';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import axios from 'axios';
+import authHeader from '../authService/authHeader';
 function NotiList({event}){
     console.log(event)
     return(
@@ -15,21 +17,13 @@ function NotiList({event}){
             <MenuItem >
                 <ListItemIcon >
                     <EventAvailableIcon/>
-                    您在{event.date.split("T")[0]}有一場活動在{event.location}-{event.court_name}
+                    您在{event.date}有一場活動在{event.location}-{event.court_name}
                 </ListItemIcon>
             </MenuItem>
         </>
     )
 }
-function onGoingEvent(eventList){
-    const onGoingList = eventList.filter((event)=>{
-        if(moment(event.date)>moment.now()){
-            console.log(event)
-            return event
-        }
-    })
-    return onGoingList
-}
+
 export default function SimpleBadge() {
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null);
@@ -43,10 +37,13 @@ export default function SimpleBadge() {
     
     const [onGoingList, setOngoinList] = useState([])
     useEffect(()=>{
-        FetchData.getData("api/users/appointment/histories")
+        const today = moment(new Date()).format("YYYY-MM-DD HH:MM:00")
+        console.log(today)
+        FetchData.getData("api/users/notification/id",0,{query_time:today})
+        // axios.get("api/users/notification/id",{query_time:today},{ headers: authHeader() })
         .then((res)=>{
             console.log(res)
-            setOngoinList(onGoingEvent(res))
+            setOngoinList(res)
         })
     },[])
     useEffect(()=>{
