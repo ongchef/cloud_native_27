@@ -80,24 +80,29 @@ export default function UserHistoryCard({
                   </span>
                 </Typography>
                 <Typography variant="body2" color="000000">
-                  {description[3].map((tag, index) => (
-                    <React.Fragment key={index}>
-                      <span
-                        style={{
-                          color: "000000",
-                          backgroundColor: "#D9D9D9",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          paddingTop: "5px",
-                          paddingBottom: "5px",
-                          fontSize: "16px",
-                        }}
-                      >
-                        {tag}
-                      </span>
-                      {index < description[3].length - 1 && <>&nbsp;</>}
-                    </React.Fragment>
-                  ))}
+                  {description[3].map(
+                    (tag, index) => (
+                      console.log(tag),
+                      tag && (
+                        <React.Fragment key={index}>
+                          <span
+                            style={{
+                              color: "000000",
+                              backgroundColor: "#D9D9D9",
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              paddingTop: "5px",
+                              paddingBottom: "5px",
+                              fontSize: "16px",
+                            }}
+                          >
+                            {tag}
+                          </span>
+                          {index < description[3].length - 1 && <>&nbsp;</>}
+                        </React.Fragment>
+                      )
+                    )
+                  )}
                 </Typography>
 
                 <Box display="flex" justifyContent="flex-end">

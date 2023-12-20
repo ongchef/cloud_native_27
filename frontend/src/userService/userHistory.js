@@ -60,7 +60,7 @@ export default function UserHistory() {
             console.log(formattedDate);
             const status =
               new Date(currentDateString) <= new Date(historyDateInGMT8String);
-            //console.log(status);
+            console.log(status);
             return (
               <HistoryCard
                 image={history.image_url.split(".jpg")[0] + ".jpg"}
