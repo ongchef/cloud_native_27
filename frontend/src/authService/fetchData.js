@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./authHeader";
 import { Navigate } from "react-router-dom";
-const ip = "http://140.112.107.71/"
+const ip = "https://140.112.107.71/"
 async function getData(url, page, params, redirect) {
   return await axios
     .get(ip+url, {

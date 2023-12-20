@@ -3,8 +3,8 @@ import { UserContext } from '../UserContext';
 import { useContext } from 'react';
 import fakeUser from '../testData/fakeUser';
 
-const REGISTER_API_URL = 'http://140.112.107.71/api/users/';
-const LOGIN_API_URL = 'http://140.112.107.71/api/users/login';
+const REGISTER_API_URL = 'https://140.112.107.71/api/users/';
+const LOGIN_API_URL = 'https://140.112.107.71/api/users/login';
 
 // const register = ({ username, password, name, email, phone, lineId }) => {
 const register = async ({
