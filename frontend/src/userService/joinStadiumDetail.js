@@ -40,7 +40,7 @@ export default function JoinStadiumDetail() {
   const [publicIndex, setPublicIndex] = useState(0);
   async function getStadiumDetail() {
     return await axios.get(
-      "http://localhost:3000/api/users/appointmentDetail/join",
+      "http://140.112.107.71/api/users/appointmentDetail/join",
       {
         headers: authHeader(),
         params: {
@@ -83,23 +83,23 @@ export default function JoinStadiumDetail() {
       password: password,
     };
     console.log(location.pathname + location.search);
-    // FetchData.postData(
-    //   "http://localhost:3000/api/users/appointment/join",
-    //   jAppointment,
-    //   location.pathname + location.search
-    // ).then((res) => {
-    //   console.log(res);
-    //   if (res === 200) {
-    //     console.log("加入成功");
-    //     alert("加入成功");
-    //     //window.location.reload();
-    //     navigate(`/userHistory`);
-    //   } else if (res === 401) {
-    //     console.log("密碼錯誤");
-    //     alert("密碼錯誤");
-    //     window.location.reload();
-    //   }
-    // });
+    FetchData.postData(
+      "http://140.112.107.71/api/users/appointment/join",
+      jAppointment,
+      location.pathname + location.search
+    ).then((res) => {
+      console.log(res);
+      if (res === 200) {
+        console.log("加入成功");
+        alert("加入成功");
+        //window.location.reload();
+        navigate(`/userHistory`);
+      } else if (res === 401) {
+        console.log("密碼錯誤");
+        alert("密碼錯誤");
+        window.location.reload();
+      }
+    });
   };
   return (
     <div>
