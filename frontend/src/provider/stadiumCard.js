@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate instead of
 import moment from "moment";
 import { useState } from "react";
 
-export default function StadiumCard({ id, image, title, description }) {
-  const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
+export default function StadiumCard({ id, image, title, description,date }) {
+  // const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const navigate = useNavigate();
   return (
     <Box my={2}>

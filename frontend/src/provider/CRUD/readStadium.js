@@ -140,7 +140,7 @@ export default function ReadStadium() {
               <Grid item xs={1.5}></Grid>
               <Grid item xs={4.5}>
                 <Typography variant="h4" color="text.secondary">
-                  球場預約情況
+                  球場資訊
                 </Typography>
               </Grid>
               <Grid item xs={3}></Grid>

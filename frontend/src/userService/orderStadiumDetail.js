@@ -205,7 +205,7 @@ export default function OrderStadiumDetail() {
     };
     console.log(appointment);
     FetchData.postData(
-      "https://140.112.107.71/api/users/appointment",
+      "api/users/appointment",
       appointment
     ).then((res) => {
       console.log(res);
