@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Container from '@mui/material/Container';
 import InputField from '../commonService/inputField';
+import AlertMessage from '../commonService/alertMessage';
 
 const required = (value) => {
 	if (!value) {
@@ -67,28 +68,36 @@ const Register = () => {
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState('');
+	const [hasError, setHasError] = useState(false);
 
 	const handleRegister = async (e) => {
 		e.preventDefault();
 		setMessage('');
 		setLoading(true);
+		setHasError(false);
 
 		// form.current.validateAll();
 		if (confirmPassword !== password) {
-			alert('密碼與確認密碼不相同，請確認是否輸入正確');
+			// alert('密碼與確認密碼不相同，請確認是否輸入正確');
 			setLoading(false);
+			setMessage('密碼與確認密碼不相同，請確認是否輸入正確');
+			setHasError(true);
 			return;
 		}
 
 		if (Boolean(email) && !isEmail(email)) {
-			alert('Email格式不正確，請確認是否輸入正確');
+			// alert('Email格式不正確，請確認是否輸入正確');
 			setLoading(false);
+			setMessage('Email格式不正確，請確認是否輸入正確');
+			setHasError(true);
 			return;
 		}
 
 		if (Boolean(phone) && !isMobilePhone(phone, 'zh-TW')) {
-			alert('電話格式不正確，請確認是否輸入正確');
+			// alert('電話格式不正確，請確認是否輸入正確');
 			setLoading(false);
+			setMessage('電話格式不正確，請確認是否輸入正確');
+			setHasError(true);
 			return;
 		}
 
@@ -102,21 +111,23 @@ const Register = () => {
 				lineId,
 				roleId,
 			});
-			alert('註冊成功！');
+			// alert('註冊成功！');
 			window.location.href = '/';
 		} catch (error) {
 			console.log('err', error);
-			if (error.response.status === 400) alert(error.response.data);
-			else alert('註冊失敗');
+			if (error.response.status === 400) {
+				if (error.response.data === '電子郵件重複!')
+					setMessage('此信箱已被註冊！');
+				else setMessage('此帳號已被註冊！');
+			} else setMessage('註冊失敗');
+			setHasError(true);
 		} finally {
 			setLoading(false);
 		}
-
-		setMessage('');
 	};
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container component="main" maxWidth="xs" display="flex">
 			<CssBaseline />
 			<Box
 				sx={{
@@ -206,14 +217,14 @@ const Register = () => {
 								}
 							/>
 						</Grid>
-						<Grid item xs={12}>
+						{/* <Grid item xs={12}>
 							<InputField
 								label="Line Id"
 								type="lineId"
 								name="lineId"
 								setValue={setLineId}
 							/>
-						</Grid>
+						</Grid> */}
 					</Grid>
 					<Button
 						type="submit"
@@ -232,6 +243,7 @@ const Register = () => {
 					</Grid>
 				</Box>
 			</Box>
+			{hasError && <AlertMessage message={message} variant="error" />}
 		</Container>
 	);
 };

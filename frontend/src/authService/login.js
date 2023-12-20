@@ -1,6 +1,5 @@
 import React, { useContext, useState, useRef } from 'react';
 
-import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { UserContext } from '../UserContext';
@@ -14,6 +13,7 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import InputField from '../commonService/inputField';
 import LoginIcon from '@mui/icons-material/Login';
+import AlertMessage from '../commonService/alertMessage';
 
 const required = (value) => {
 	if (!value) {
@@ -33,20 +33,23 @@ export default function Login() {
 	const form = useRef();
 	const checkBtn = useRef();
 	const [user, setUser] = useContext(UserContext);
-	const navigate = useNavigate();
-
+	const [hasError, setHasError] = useState(false);
+	const [loginSuccessful, setLoginSuccessful] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 
 	async function handleLogin(e) {
 		e.preventDefault();
 		setMessage('');
 		setLoading(true);
+		setHasError(false);
+		setLoginSuccessful(false);
 		// form.current.validateAll();
 		try {
 			const res = await AuthService.login(username, password);
-			setLoading(false);
 			console.log(res);
-			alert('登入成功！');
+			// alert('登入成功！');
+			setLoginSuccessful(true);
+			setMessage('登入成功');
 			let url;
 			switch (res.data.role_id) {
 				case 1:
@@ -65,15 +68,27 @@ export default function Login() {
 			window.location.href = url;
 			// navigate(url);
 		} catch (error) {
-			if (error.response.status === 401) alert('帳號或密碼錯誤！');
-			else alert('登入失敗');
+			if (error.response.status === 401) {
+				// alert('帳號或密碼錯誤！');
+				setMessage('帳號或密碼錯誤！');
+			} else {
+				alert('登入失敗');
+				setMessage('登入失敗！');
+			}
+			setHasError(true);
 		} finally {
 			setLoading(false);
+			setLoginSuccessful(false);
 		}
 	}
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container
+			component="main"
+			maxWidth="xs"
+			display="flex"
+			justifyContent="center"
+			alignItems="center">
 			<CssBaseline />
 			<Box
 				sx={{
@@ -142,6 +157,12 @@ export default function Login() {
 					</Grid>
 				</Box>
 			</Box>
+			{/* <Stack sx={{ width: '100%' }} spacing={2}>
+				{loginSuccessful && <Alert severity="success">{message}</Alert>}
+				{hasError && <Alert severity="error">{message}</Alert>}
+			</Stack> */}
+			{hasError && <AlertMessage message={message} variant="error" />}
+			{loginSuccessful && <AlertMessage message={message} variant="success" />}
 		</Container>
 	);
 }
