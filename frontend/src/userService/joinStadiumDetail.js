@@ -3,7 +3,6 @@ import Button from "@mui/material/Button"; // 引入Button元件
 import React, { useEffect } from "react";
 import Container from "@mui/material/Container"; // 引入Container元件
 import Box from "@mui/material/Box"; // 引入Box元件
-import pic from "../pic/羽球1.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Card, CircularProgress } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
@@ -12,12 +11,13 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import axios from "axios";
-import authHeader from "../authService/authHeader";
+
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import FetchData from "../authService/fetchData";
 import { Input } from "antd";
+
+const balltype = ["羽球", "籃球", "桌球", "排球"];
 
 export default function JoinStadiumDetail() {
   const location = useLocation();
@@ -39,20 +39,18 @@ export default function JoinStadiumDetail() {
   const [appointmentDetail, setAppointmentDetail] = useState([]);
   const [publicIndex, setPublicIndex] = useState(0);
   async function getStadiumDetail() {
-    return await axios.get(
-      "http://140.112.107.71/api/users/appointmentDetail/join",
+    return FetchData.getData(
+      "http://localhost:3000/api/users/appointmentDetail/join",
+      1,
       {
-        headers: authHeader(),
-        params: {
-          appointment_id: id,
-        },
+        appointment_id: id,
       }
     );
   }
   useEffect(() => {
     setLoading(true);
     getStadiumDetail().then((res) => {
-      setAppointmentDetail(res.data[0]);
+      setAppointmentDetail(res[0]);
       setLoading(false);
     });
   }, []);
@@ -71,7 +69,7 @@ export default function JoinStadiumDetail() {
     setDate(formattedDate);
     setPublicIndex(appointmentDetail.public);
     setAppointmentTag([
-      appointmentDetail.ball,
+      balltype[appointmentDetail.ball - 1],
       appointmentDetail.level,
       appointmentDetail.rule,
     ]);

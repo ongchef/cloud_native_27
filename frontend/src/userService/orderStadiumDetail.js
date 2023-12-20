@@ -21,7 +21,7 @@ import { Button } from "antd";
 import { Radio } from "antd";
 import { Switch } from "antd";
 // Other imports
-import axios from "axios";
+
 import Map from "../commonService/map";
 import authHeader from "../authService/authHeader";
 import pic2 from "../pic/羽球3.png";
@@ -72,14 +72,12 @@ export default function OrderStadiumDetail() {
     setSwitchState(!switchState);
   };
   async function StadiumDetail() {
-    return await axios.get(
+    return FetchData.getData(
       "http://localhost:3000/api/users/appointmentDetail",
+      1,
       {
-        headers: authHeader(),
-        params: {
-          court_id: id,
-          query_time: datetime,
-        },
+        court_id: id,
+        query_time: datetime,
       }
     );
   }
@@ -88,14 +86,14 @@ export default function OrderStadiumDetail() {
     setLoading(true);
     StadiumDetail().then((res) => {
       //console.log(res.data);
-      if (res.data.length > 0) {
-        let courtData = { ...res.data[0] };
+      if (res.length > 0) {
+        let courtData = { ...res[0] };
         delete courtData.available_time;
         delete courtData.appointment_time;
         setCourtInfo(courtData);
       }
 
-      SetDetails(res.data);
+      SetDetails(res);
       setLoading(false);
     });
   }, []);
@@ -530,10 +528,7 @@ export default function OrderStadiumDetail() {
                 </Grid>
               </Card>
               <Box>
-                <Map
-                  address={courtInfo.address}
-                  name={courtInfo.location}
-                />
+                <Map address={courtInfo.address} name={courtInfo.location} />
               </Box>
             </Box>
           )}

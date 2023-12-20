@@ -77,8 +77,7 @@ export default function OrderStadium() {
 
   return (
     <div>
-      <h1>Order Stadium</h1>
-
+      <h2>Order Stadium</h2>
       <Box
         display="flex"
         flexDirection="row"
@@ -87,7 +86,7 @@ export default function OrderStadium() {
         width="70%"
         margin="auto"
       >
-        <Box m={1} display="flex" flexDirection="row">
+        <Box m={0.5} display="flex" flexDirection="row">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               disablePast={true}
@@ -113,7 +112,7 @@ export default function OrderStadium() {
               minTime={moment("9:00", "HH:mm")}
               maxTime={moment("22:00", "HH:mm")}
               // views={["hours","minutes"]}
-              format="hh:mm"
+              format="HH:mm"
               // defaultValue={dayjs("0000-00-00T9:00")}
               onChange={(newTime) => {
                 setTime(newTime);

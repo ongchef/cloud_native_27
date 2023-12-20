@@ -61,46 +61,6 @@ export default function JoinStadium() {
       console.log("Error:" + error);
     }
   };
-
-  // const SearchAppointment = useCallback(async () => {
-  //   let d = date;
-  // 	//console.log(date);
-  // 	//console.log(time.$d.toString().substring(15, 24));
-  // 	d = date + time.$d.toString().substring(15, 24);
-  // 	try {
-  // 		const res = await FetchData.getData(
-  // 			'http://localhost:3000/api/users/appointment/join',
-  // 			1,
-  // 			{
-  // 				query_time: date + time.$d.toString().substring(15, 24),
-  // 				ball: sport,
-  // 				address: location,
-  // 				public_index: publicIndex,
-  // 			}
-  // 		);
-  // 		return res;
-  // 	} catch (error) {}});
-  // const SearchAppointment = async () => {
-  // 	try {
-  // 		console.log({
-  // 			query_time: date + time.$d.toString().substring(15, 24),
-  // 			ball: sport,
-  // 			address: location,
-  // 			public_index: publicIndex,
-  // 		});
-  // 		const res = await FetchData.getData(
-  // 			'http://localhost:3000/api/users/appointment/join',
-  // 			1,
-  // 			{
-  // 				query_time: date + time.$d.toString().substring(15, 24),
-  // 				ball: sport,
-  // 				address: location,
-  // 				public_index: publicIndex,
-  // 			}
-  // 		);
-  // 		return res;
-  // 	} catch (error) {}
-  // };
   async function SearchAppointment() {
     try {
       console.log({
@@ -125,48 +85,7 @@ export default function JoinStadium() {
       console.log("Error:" + error);
     }
   }
-  // return FetchData.getData(
-  // 	'http://localhost:3000/api/users/appointment/join',
-  // 	1,
-  // 	{
-  // 		query_time: date + time.$d.toString().substring(15, 24),
-  // 		ball: sport,
-  // 		address: location,
-  // 		public_index: publicIndex,
-  // 	}
-  // );
 
-  // return await axios.get("http://localhost:3000/api/users/appointment/join", {
-  //   headers: authHeader(),
-  //   params: {
-  //     query_time: date + time.$d.toString().substring(15, 24),
-  //     ball: sport,
-  //     address: location,
-  //     public_index: publicIndex,
-  //     page: 1,
-  //   },
-  // });
-  // }
-  // useEffect(() => {
-  // 	const initialSport = searchParams.get('sport');
-  // 	if (initialSport) {
-  // 		setSport(initialSport.toString());
-  // 	}
-  // }, [searchParams]);
-
-  // const fetchData = useCallback(async () => {
-  // 	try {
-  // 		const res = await SearchAppointment();
-  // 		setAppointmentList(res.courts);
-  // 		setTotalPage(res.total_page);
-  // 	} catch (error) {
-  // 		console.log('Error:' + error);
-  // 	}
-  // }, []);
-
-  // useEffect(() => {
-  // 	fetchData();
-  // }, [fetchData]);
   const fetchData = useCallback(async () => {
     try {
       const res = await SearchAppointment();
@@ -189,7 +108,7 @@ export default function JoinStadium() {
 
   return (
     <div>
-      <h1>Join Stadium</h1>
+      <h2>Join Stadium</h2>
       <Box
         display="flex"
         flexDirection="row"
@@ -221,7 +140,7 @@ export default function JoinStadium() {
               minTime={moment("8:00", "HH:mm")}
               maxTime={moment("22:00", "HH:mm")}
               // views={["hours","minutes"]}
-              format="hh:mm"
+              format="HH:mm"
               // defaultValue={dayjs("0000-00-00T9:00")}
               onChange={(newTime) => {
                 setTime(newTime);
@@ -300,19 +219,6 @@ export default function JoinStadium() {
         </Typography>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-        {/* <StadiumCard
-					id={1}
-					image={pic}
-					title={'球場名稱2'}
-					description={[
-						'106台北市大安區羅斯福路四段1號',
-						'2023-11-02',
-						'19:00~21:00',
-						['Basketball', '新手友善', '雙打'],
-						'Wonu Juan',
-						[4, 8],
-					]}
-				/> */}
         {(appointmentList || []).map((appointment) => {
           const DateInGMT8 = new Date(appointment.date);
           let year = DateInGMT8.getFullYear();
@@ -349,54 +255,6 @@ export default function JoinStadium() {
             />
           );
         })}
-        {/* <StadiumCard
-          id={2}
-          image={pic2}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Gordon Sung",
-          ]}
-        />
-        <StadiumCard
-          id={3}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Bryan Chen",
-          ]}
-        />
-        <StadiumCard
-          id={4}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Bryan Chen",
-          ]}
-        />
-        <StadiumCard
-          id={5}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Bryan Chen",
-          ]}
-        /> */}
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
