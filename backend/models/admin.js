@@ -22,7 +22,7 @@ export const getCourtsAppointmentQuery = (params) => {
 
     return new Promise((resolve, reject) => {
 
-        db.query(`SELECT * from STADIUM.COURT C JOIN STADIUM.USER U ON C.admin_id = U.user_id
+        db.query(`SELECT C.name as court_name, C.*, U.name as name from STADIUM.COURT C JOIN STADIUM.USER U ON C.admin_id = U.user_id
             ${searchQuery}`, (error, results) => {
             if (error) {
                 reject(error);
