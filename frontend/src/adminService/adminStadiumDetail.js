@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Tooltip from "@mui/material/Tooltip";
 import FetchData from "../authService/fetchData";
 import { useLocation } from "react-router-dom";
