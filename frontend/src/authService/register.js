@@ -127,15 +127,20 @@ const Register = () => {
 	};
 
 	return (
-		<Container component="main" maxWidth="xs" display="flex">
+		<Container
+			component="main"
+			maxWidth="xs"
+			display="flex"
+			justifyContent="center"
+			alignItems="center">
 			<CssBaseline />
 			<Box
 				sx={{
-					marginTop: 8,
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
 					justifyContent: 'center',
+					height: '100vh',
 				}}>
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 					<PersonAddAlt1Icon />
