@@ -19,7 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import pic from "../pic/羽球1.png";
 import pic2 from "../pic/羽球3.png";
-import Pagination from "@mui/material/Pagination"; 
+import Pagination from "@mui/material/Pagination";
 
 import FetchData from "../authService/fetchData";
 import { LinearProgress } from "@mui/material";
@@ -29,49 +29,36 @@ export default function StadiumBoard() {
   const [address, setAddress] = useState();
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [time, setTime] = useState(0);
-  const [courtList, setCourtList] = useState([])
-  const [page, setPage] = useState(1)
-  const [totalPage, setTotalPage] = useState(0)
+  const [courtList, setCourtList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
   const [weekday, setWeekday] = useState(moment(date).day());
-  const [loading, setLoading] = useState(true)
-  const weekdayMapping = [
-    "日",
-    "一",
-    "二",
-    "三",
-    "四",
-    "五",
-    "六",
-    "日",
-  ];
-  async function SearchCourt(){
-    setLoading(true)
-    return FetchData.getData("api/courts/admin/appointment",1,
-    {
-      date:date,
-      ...(sport&& sport && {ball_type_id:sport}),
-      ...(address&& address && {address:address}),
-    })
-    .then((res)=>
-    {
-      if (res){
-        setCourtList(res.courts)
-        setTotalPage(res.total_page)
-        let day = moment(date).day()
+  const [loading, setLoading] = useState(true);
+  const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六", "日"];
+  async function SearchCourt() {
+    setLoading(true);
+    return FetchData.getData("api/courts/admin/appointment", 1, {
+      date: date,
+      ...(sport && sport && { ball_type_id: sport }),
+      ...(address && address && { address: address }),
+    }).then((res) => {
+      if (res) {
+        setCourtList(res.courts);
+        setTotalPage(res.total_page);
+        let day = moment(date).day();
         if (day === 0) {
           setWeekday(7);
         } else {
           setWeekday(day);
         }
       }
-      setLoading(false)
-    }
-  )
+      setLoading(false);
+    });
     // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
   }
   useEffect(() => {
-    SearchCourt()
-  },[]);
+    SearchCourt();
+  }, []);
   const handleSportChange = (event) => {
     setSport(event.target.value);
   };
@@ -81,132 +68,123 @@ export default function StadiumBoard() {
   };
   return (
     <div>
-      <h1>Order Stadium</h1>
-      {
-      loading?
-      <Box >
-      <LinearProgress sx={{display:'flex', justifyContent:'center'}}/>
-      </Box>
-      :
-      <>
-      <Box
-        display="flex"
-        flexDirection="row"
-        justifyContent="center"
-        alignItems="center"
-        width="70vw"
-        margin="auto"
-      >
-        <Box m={1}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              disablePast={true}
-              value={dayjs(date + 1)}
-              shouldDisableDate={(date) => {
-                return date.date() > new Date().getDate() + 7;
-              }}
-              formatDate={(date) => moment(date).format("DD-MM-YYYY")}
-              onChange={(newDate) => {
-                newDate = moment(
-                  new Date(newDate.year(), newDate.month(), newDate.date())
-                ).format("YYYY-MM-DD");
-                setDate(newDate);
-              }}
-            />
-            </LocalizationProvider>
-          </Box>
-        <Box m={1}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">球類</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={sport}
-              onChange={handleSportChange}
-              label="球類"
-              style={{ width: "80px" }}
-            >
-              <MenuItem value={undefined}>所有球類</MenuItem>
-              <MenuItem value={"1"}>羽球</MenuItem>
-              <MenuItem value={"2"}>籃球</MenuItem>
-              <MenuItem value={"3"}>排球</MenuItem>
-              <MenuItem value={"4"}>桌球</MenuItem>
-            </Select>
-          </FormControl>
+      <h2>Order Stadium</h2>
+      {loading ? (
+        <Box>
+          <LinearProgress sx={{ display: "flex", justifyContent: "center" }} />
         </Box>
-        <Box m={1}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label-2">Address</InputLabel>
-            <Select
-              labelId="demo-simple-select-label-2"
-              id="demo-simple-select-2"
-              value={address}
-              onChange={handleAddressChange}
-              label="Address"
-              style={{ width: "100px" }}
-            >
-              <MenuItem value={undefined}>所有地區</MenuItem>
-              <MenuItem value={"大安區"}>大安區</MenuItem>
-              <MenuItem value={"文山區"}>文山區</MenuItem>
-              <MenuItem value={"信義區"}>信義區</MenuItem>3
-            </Select>
-          </FormControl>
-        </Box>
-        <Box m={1}>
-          <Button variant="contained" onClick={SearchCourt}>Search</Button>
-        </Box>
-        
-      </Box>
-      <Box >
-      <Grid
-            container
+      ) : (
+        <>
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="center"
+            alignItems="center"
+            width="70vw"
+            margin="auto"
           >
-    
-        <Grid item xs={1.5}>
-        </Grid>
-        <Grid item xs={4.5}>
-        <Typography variant="h4" color="text.secondary">
-                球場預約情況
-        </Typography>
-        </Grid>
-        <Grid item xs={6}>
-        
-        </Grid>
-        </Grid>    
-        </Box>
-      <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-        {console.log(courtList)}
-        {
-          courtList&&
-          courtList.map((court)=>{
-            const weekdayInChinese = weekdayMapping[weekday];
+            <Box m={1}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  disablePast={true}
+                  value={dayjs(date + 1)}
+                  shouldDisableDate={(date) => {
+                    return date.date() > new Date().getDate() + 7;
+                  }}
+                  formatDate={(date) => moment(date).format("DD-MM-YYYY")}
+                  onChange={(newDate) => {
+                    newDate = moment(
+                      new Date(newDate.year(), newDate.month(), newDate.date())
+                    ).format("YYYY-MM-DD");
+                    setDate(newDate);
+                  }}
+                />
+              </LocalizationProvider>
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">球類</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={sport}
+                  onChange={handleSportChange}
+                  label="球類"
+                  style={{ width: "80px" }}
+                >
+                  <MenuItem value={undefined}>所有球類</MenuItem>
+                  <MenuItem value={"1"}>羽球</MenuItem>
+                  <MenuItem value={"2"}>籃球</MenuItem>
+                  <MenuItem value={"3"}>排球</MenuItem>
+                  <MenuItem value={"4"}>桌球</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label-2">Address</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label-2"
+                  id="demo-simple-select-2"
+                  value={address}
+                  onChange={handleAddressChange}
+                  label="Address"
+                  style={{ width: "100px" }}
+                >
+                  <MenuItem value={undefined}>所有地區</MenuItem>
+                  <MenuItem value={"大安區"}>大安區</MenuItem>
+                  <MenuItem value={"文山區"}>文山區</MenuItem>
+                  <MenuItem value={"信義區"}>信義區</MenuItem>3
+                </Select>
+              </FormControl>
+            </Box>
+            <Box m={1}>
+              <Button variant="contained" onClick={SearchCourt}>
+                Search
+              </Button>
+            </Box>
+          </Box>
+          <Box>
+            <Grid container>
+              <Grid item xs={1.5}></Grid>
+              <Grid item xs={4.5}>
+                <Typography variant="h4" color="text.secondary">
+                  球場預約情況
+                </Typography>
+              </Grid>
+              <Grid item xs={6}></Grid>
+            </Grid>
+          </Box>
+          <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
+            {console.log(courtList)}
+            {courtList &&
+              courtList.map((court) => {
+                const weekdayInChinese = weekdayMapping[weekday];
 
-            const availableTime = court.available_time.find(
-              (time) => time.weekday === weekday
-            );
-            const startTime = availableTime
-              ? availableTime.start_time.substring(0, 5)
-              : "";
-            const endTime = availableTime
-              ? availableTime.end_time.substring(0, 5)
-              : "";
-            return (
-            <StadiumCard
-              id={court.court_id}
-              image={court.image_url.split(".jpg")[0]+".jpg"}
-              title={court.name + " - " + court.location}
-
-              description={[
-                court.address,
-                "週" + weekdayInChinese,
-                startTime + "~" + endTime,
-                court.available,
-              ]}
-            />)
-          })
-          
-        }
-        {/* // <StadiumCard
+                const availableTime = court.available_time.find(
+                  (time) => time.weekday === weekday
+                );
+                const startTime = availableTime
+                  ? availableTime.start_time.substring(0, 5)
+                  : "";
+                const endTime = availableTime
+                  ? availableTime.end_time.substring(0, 5)
+                  : "";
+                return (
+                  <StadiumCard
+                    id={court.court_id}
+                    image={court.image_url.split(".jpg")[0] + ".jpg"}
+                    title={court.name + " - " + court.location}
+                    description={[
+                      court.address,
+                      "週" + weekdayInChinese,
+                      startTime + "~" + endTime,
+                      court.available,
+                    ]}
+                  />
+                );
+              })}
+            {/* // <StadiumCard
         //   id={1}
         //   image={pic2}
         //   title={"球場名稱1"}
@@ -239,19 +217,19 @@ export default function StadiumBoard() {
         //     8,
         //   ]}
         // /> */}
-      </Box>
-      <Box display="flex" justifyContent="center" marginTop="20px">
-        {/* 其他內容 */}
-        <Pagination 
-          count={totalPage}
-          onChange={(event,num)=>setPage(num)} 
-          page={page}
-          color="primary" 
-          
-          /> {/* 添加這一行 */}
-      </Box>
-      </>
-    }
+          </Box>
+          <Box display="flex" justifyContent="center" marginTop="20px">
+            {/* 其他內容 */}
+            <Pagination
+              count={totalPage}
+              onChange={(event, num) => setPage(num)}
+              page={page}
+              color="primary"
+            />{" "}
+            {/* 添加這一行 */}
+          </Box>
+        </>
+      )}
     </div>
   );
 }

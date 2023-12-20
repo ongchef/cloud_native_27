@@ -43,16 +43,26 @@ export default function SelectSport() {
 					</Typography>
 				</Box>
 				<Box>
-					<Grid container spacing={3}>
+					<Grid
+						container
+						spacing={3}
+						direction="row"
+						justify="space-evenly"
+						alignItems="stretch">
 						{sports.map((sport, index) => (
-							<Grid item xs={6} md={3} key={index}>
-								<Card>
+							<Grid item xs={6} md={6} key={index} display="flex">
+								<Card
+									sx={{
+										margin: '0 auto',
+										padding: '0.1em',
+									}}>
 									<CardActionArea onClick={() => handleSelectSport(sport)}>
 										<CardMedia
 											component="img"
 											height="140"
 											image={sport.image}
 											alt={sport.name}
+											sx={{ padding: '0 1em 0 0', objectFit: 'contain' }}
 										/>
 										<Typography variant="h6" align="center">
 											{sport.name}
