@@ -373,20 +373,6 @@ export default function OrderStadiumDetail() {
 
                       <Box mx={1}>
                         {loading ? (
-                          // <Grid
-                          //   container
-                          //   spacing={1}
-                          //   sx={{
-                          //     display: "flex",
-                          //     justifyContent: "center",
-                          //     alignItems: "center",
-                          //   }}
-                          // >
-                          //   <Box>
-                          //     <CircularProgress size={55}/>
-                          //   </Box>
-                          // </Grid>
-
                           <LinearProgress />
                         ) : (
                           bookingList &&
@@ -453,14 +439,29 @@ export default function OrderStadiumDetail() {
                         >
                           規則：
                         </Typography>
-                        <Radio.Group
-                          defaultValue="單打"
-                          buttonStyle="solid"
-                          onChange={(e) => setRule(e.target.value)}
-                        >
-                          <Radio.Button value="單打">單打</Radio.Button>
-                          <Radio.Button value="雙打">雙打</Radio.Button>
-                        </Radio.Group>
+                        {ball === "桌球" || ball === "羽球" ? (
+                          <Radio.Group
+                            defaultValue="單打"
+                            buttonStyle="solid"
+                            onChange={(e) => setRule(e.target.value)}
+                          >
+                            <Radio.Button value="單打">單打</Radio.Button>
+                            <Radio.Button value="雙打">雙打</Radio.Button>
+                          </Radio.Group>
+                        ) : (
+                          <Radio.Group
+                            defaultValue="現場報隊"
+                            buttonStyle="solid"
+                            onChange={(e) => setRule(e.target.value)}
+                          >
+                            <Radio.Button value="現場報隊">
+                              現場報隊
+                            </Radio.Button>
+                            <Radio.Button value="組隊參加">
+                              組隊參加
+                            </Radio.Button>
+                          </Radio.Group>
+                        )}
                       </Box>
                       <Box my={1} display="flex" alignItems="center">
                         <Typography
