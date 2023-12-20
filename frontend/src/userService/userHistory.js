@@ -7,6 +7,7 @@ import axios from "axios";
 import authHeader from "../authService/authHeader";
 import moment from "moment/moment";
 
+const balltype = ["羽球", "籃球", "桌球", "排球"];
 export default function UserHistory() {
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [userHistoryList, setUserHistoryList] = useState([]);
@@ -70,7 +71,7 @@ export default function UserHistory() {
                   history.start_time.substring(0, 5) +
                     " ~ " +
                     history.end_time.substring(0, 5),
-                  [history.ball, history.level, history.rule],
+                  [balltype[history.ball - 1], history.level, history.rule],
                 ]}
                 status={status}
               />
