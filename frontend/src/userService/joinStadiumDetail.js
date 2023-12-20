@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import FetchData from "../authService/fetchData";
 import { Input } from "antd";
+import Map from "../commonService/map";
 
 const balltype = ["羽球", "籃球", "桌球", "排球"];
 
@@ -269,6 +270,9 @@ export default function JoinStadiumDetail() {
                   </Grid>
                 </Grid>
               </Card>
+              <Box>
+                <Map address={appointmentDetail.address} name={appointmentDetail.location} />
+              </Box>
             </Box>
           )}
         </Container>
