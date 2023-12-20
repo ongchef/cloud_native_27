@@ -82,22 +82,24 @@ export default function JoinStadiumDetail() {
       appointment_id: appointmentDetail.appointment_id,
       password: password,
     };
-    FetchData.postData(
-      "http://localhost:3000/api/users/appointment/join",
-      jAppointment
-    ).then((res) => {
-      console.log(res);
-      if (res === 200) {
-        console.log("加入成功");
-        alert("加入成功");
-        //window.location.reload();
-        navigate(`/userHistory`);
-      } else if (res === 401) {
-        console.log("密碼錯誤");
-        alert("密碼錯誤");
-        window.location.reload();
-      }
-    });
+    console.log(location.pathname + location.search);
+    // FetchData.postData(
+    //   "http://localhost:3000/api/users/appointment/join",
+    //   jAppointment,
+    //   location.pathname + location.search
+    // ).then((res) => {
+    //   console.log(res);
+    //   if (res === 200) {
+    //     console.log("加入成功");
+    //     alert("加入成功");
+    //     //window.location.reload();
+    //     navigate(`/userHistory`);
+    //   } else if (res === 401) {
+    //     console.log("密碼錯誤");
+    //     alert("密碼錯誤");
+    //     window.location.reload();
+    //   }
+    // });
   };
   return (
     <div>
