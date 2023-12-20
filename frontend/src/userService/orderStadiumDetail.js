@@ -206,17 +206,17 @@ export default function OrderStadiumDetail() {
       end_time: roundUpToNearestHalfHour(sortedTimes[sortedTimes.length - 1]),
     };
     console.log(appointment);
-    // FetchData.postData(
-    //   "http://localhost:3000/api/users/appointment",
-    //   appointment
-    // ).then((res) => {
-    //   console.log(res);
-    //   if (res === 200) {
-    //     alert("預約成功");
-    //     //window.location.reload();
-    //     navigate(`/userHistory`);
-    //   }
-    // });
+    FetchData.postData(
+      "http://localhost:3000/api/users/appointment",
+      appointment
+    ).then((res) => {
+      console.log(res);
+      if (res === 200) {
+        alert("預約成功");
+        //window.location.reload();
+        navigate(`/userHistory`);
+      }
+    });
   };
 
   function TimeBtn(props) {
