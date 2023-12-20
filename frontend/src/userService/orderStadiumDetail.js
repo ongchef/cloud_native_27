@@ -33,7 +33,13 @@ const ballTypes = {
   3: "桌球",
   4: "排球",
 };
-
+const ballTypeMapping = {
+  羽球: 1,
+  籃球: 2,
+  桌球: 3,
+  排球: 4,
+  // Add other ball types here
+};
 export default function OrderStadiumDetail() {
   // Inside your component
   const location = useLocation();
@@ -47,7 +53,7 @@ export default function OrderStadiumDetail() {
   const [bookingList, setBookingList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [switchState, setSwitchState] = useState(false);
-  const [rule, setRule] = useState("單打");
+  const [rule, setRule] = useState("");
   const [level, setLevel] = useState("新手友善");
   const [note, setNote] = useState("");
   const [password, setPassword] = useState("");
@@ -94,6 +100,9 @@ export default function OrderStadiumDetail() {
     });
   }, []);
 
+  useEffect(() => {
+    console.log(ball);
+  }, [ball]);
   function SetDetails(data) {
     const date = new Date(datetime.split(" ")[0]);
     const weekday = date.getDay() || 7; // Convert Sunday from 0 to 7
@@ -131,7 +140,7 @@ export default function OrderStadiumDetail() {
     setCourtInfo(courtData);
     setAvailableTime(availableTime);
     setBookingList(bookingList);
-    setBalls(["羽球", "籃球", "桌球", "排球"]);
+    setBalls(balls);
     setBall(balls[0]);
   }
 
@@ -182,11 +191,12 @@ export default function OrderStadiumDetail() {
         .toString()
         .padStart(2, "0")}`;
     }
+    console.log(balls);
 
     let appointment = {
       court_id: id,
       public: switchState ? 0 : 1,
-      ball: 3,
+      ball: ballTypeMapping[ball],
       level: level,
       rule: rule,
       password: password,
@@ -196,17 +206,17 @@ export default function OrderStadiumDetail() {
       end_time: roundUpToNearestHalfHour(sortedTimes[sortedTimes.length - 1]),
     };
     console.log(appointment);
-    FetchData.postData(
-      "http://localhost:3000/api/users/appointment",
-      appointment
-    ).then((res) => {
-      console.log(res);
-      if (res === 200) {
-        alert("預約成功");
-        //window.location.reload();
-        navigate(`/userHistory`);
-      }
-    });
+    // FetchData.postData(
+    //   "http://localhost:3000/api/users/appointment",
+    //   appointment
+    // ).then((res) => {
+    //   console.log(res);
+    //   if (res === 200) {
+    //     alert("預約成功");
+    //     //window.location.reload();
+    //     navigate(`/userHistory`);
+    //   }
+    // });
   };
 
   function TimeBtn(props) {
@@ -252,6 +262,7 @@ export default function OrderStadiumDetail() {
     });
     return btnList;
   }
+
   const handleButtonClick = (value) => {
     if (selectedOptions.includes(value)) {
       setSelectedOptions(selectedOptions.filter((option) => option !== value));
@@ -404,6 +415,7 @@ export default function OrderStadiumDetail() {
                             <Radio.Button
                               style={{ margin: "0 10px" }}
                               value={ball}
+                              onClick={() => setBall(ball)}
                             >
                               {ball}
                             </Radio.Button>
