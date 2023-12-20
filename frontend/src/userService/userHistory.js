@@ -41,25 +41,23 @@ export default function UserHistory() {
         <Box m={0.5} sx={{ height: "70vh", overflowY: "auto", width: "70%" }}>
           {[...userHistoryList].reverse().map((history) => {
             const currentDate = new Date();
-            const currentDateString = currentDate.toISOString().split("T")[0];
 
+            const currentTime = new Date();
+            console.log(currentTime);
             const historyDateInGMT8 = new Date(history.date);
+            historyDateInGMT8.setHours(history.end_time.substring(0, 2));
+            historyDateInGMT8.setMinutes(history.end_time.substring(3, 5));
             console.log(historyDateInGMT8);
-            const historyDateInGMT8String = historyDateInGMT8
-              .toISOString()
-              .split("T")[0];
             let year = historyDateInGMT8.getFullYear();
             let month = historyDateInGMT8.getMonth() + 1; // getMonth() returns month index starting from 0
             let day = historyDateInGMT8.getDate();
-
             // Pad single digit month and day with leading 0
             month = month < 10 ? "0" + month : month;
             day = day < 10 ? "0" + day : day;
-
             let formattedDate = `${year}-${month}-${day}`;
-            console.log(formattedDate);
-            const status =
-              new Date(currentDateString) <= new Date(historyDateInGMT8String);
+            // console.log(formattedDate);
+
+            const status = new Date(currentTime) <= new Date(historyDateInGMT8);
             console.log(status);
             return (
               <HistoryCard

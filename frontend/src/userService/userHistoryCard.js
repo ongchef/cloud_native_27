@@ -81,8 +81,7 @@ export default function UserHistoryCard({
                 </Typography>
                 <Typography variant="body2" color="000000">
                   {description[3].map(
-                    (tag, index) => (
-                      console.log(tag),
+                    (tag, index) =>
                       tag && (
                         <React.Fragment key={index}>
                           <span
@@ -101,7 +100,6 @@ export default function UserHistoryCard({
                           {index < description[3].length - 1 && <>&nbsp;</>}
                         </React.Fragment>
                       )
-                    )
                   )}
                 </Typography>
 
