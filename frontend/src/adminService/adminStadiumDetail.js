@@ -32,8 +32,8 @@ async function SearchReserved(courtId, datetime) {
   });
 }
 
-function EventFounders({ holderList }) {
-  console.log(holderList);
+function EventFounders({ holderList, availableNumber }) {
+  //console.log(holderList);
   holderList.sort(function (a, b) {
     console.log(a.period[0]);
     if (moment(a.period[0], "HH:ss").isAfter(moment(b.period[0], "HH:ss"))) {
@@ -54,7 +54,7 @@ function EventFounders({ holderList }) {
             主揪人:{booking.period[2]}
           </Grid>
           <Grid item xs={2} display="flex" justifyContent="left">
-            {booking.period[3]}/8
+            {booking.period[3]}/{availableNumber}
           </Grid>
         </>
         // <Typography key={index}>
@@ -104,14 +104,14 @@ export default function AdminStadiumDetail() {
 
     const weekdayMapping = ["日", "一", "二", "三", "四", "五", "六"];
     const weekdayInChinese = weekdayMapping[weekday];
-    console.log(availableTimeObj);
+    //console.log(availableTimeObj);
     const availableTime1 = [
       parseInt(availableTimeObj.start_time.split(":")[0]) * 2,
       parseInt(availableTimeObj.end_time.split(":")[0]) * 2,
     ];
     const bookingList1 = data.appointment.map((time) => ({
       period: [
-        parseInt(time.start_time.split(":")[0]) * 2,
+        parseInt(time.start_time.split(":")[0]) * 2 + 1,
         parseInt(time.end_time.split(":")[0]) * 2,
         time.name,
         time.participant_count,
@@ -133,7 +133,7 @@ export default function AdminStadiumDetail() {
       availableTimeObj.start_time.substring(0, 5) +
       "~" +
       availableTimeObj.end_time.substring(0, 5);
-    console.log(courtData);
+    //console.log(courtData);
     const ballNames = courtData.ball_type_id
       .split(",")
       .map((ballType) => ballTypes[ballType])
@@ -157,7 +157,8 @@ export default function AdminStadiumDetail() {
       return (
         <Grid item>
           {bookingList.some((item) => {
-            num = item.period[2];
+            num = item.period[3];
+            //console.log(item.period);
             return item.period[0] / 2 <= time && item.period[1] / 2 > time;
           }) ? (
             <Tooltip title={num + "/" + courtInfo.available} placement="top">
@@ -328,6 +329,7 @@ export default function AdminStadiumDetail() {
                           {holderList && (
                             <EventFounders
                               holderList={holderList}
+                              availableNumber={courtInfo.available}
                             ></EventFounders>
                           )}
                         </Grid>
