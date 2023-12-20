@@ -53,7 +53,7 @@ export default function Login() {
 					url = '/adminStadiumStatus';
 					break;
 				case 2:
-					url = '/selectSport';
+					url = '/';
 					break;
 				case 3:
 					url = '/stadiumBoard';
