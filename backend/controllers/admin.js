@@ -103,6 +103,7 @@ export const getCourtsAppointments = async(req,res) => {
             //if time is 00:00:00
             if (req.query['query_time'].split(" ")[1] === "00:00:00") {
                 for (let i = 0; i < result.length; i++) {
+                    result[i]['court_name'] = result[i]['name']
                     let court = await getCourtAllAppointment(result[i]['court_id'])
                     let found = 0;
                     for (let j = 0; j < court.length; j++) {
@@ -119,6 +120,7 @@ export const getCourtsAppointments = async(req,res) => {
                 }
             } else {
                 for(let i = 0; i < result.length; i++) {
+                    result[i]['court_name'] = result[i]['name']
                     let court = await getCourtAllAppointment(result[i]['court_id'])
                     let found = 0;
                     for(let j = 0; j < court.length; j++) {
