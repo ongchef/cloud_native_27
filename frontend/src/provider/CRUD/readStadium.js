@@ -48,7 +48,7 @@ export default function ReadStadium() {
     return FetchData.getData("http://localhost:3000/api/courts/admin",1,
     {
       ...(courtName&& courtName && {name:courtName}),
-      ...(sport&& sport && {ball_type_id:sport}),
+      ...(sport&& sport && {ball:sport}),
       ...(address&& address && {address:address}),
     })
     .then((res)=>
