@@ -189,7 +189,7 @@ export default function JoinStadium() {
 
   return (
     <div>
-      <h1>Join Stadium</h1>
+      <h2>Join Stadium</h2>
       <Box
         display="flex"
         flexDirection="row"
@@ -300,19 +300,6 @@ export default function JoinStadium() {
         </Typography>
       </Box>
       <Box m={0.5} sx={{ height: "70vh", overflowY: "auto" }}>
-        {/* <StadiumCard
-					id={1}
-					image={pic}
-					title={'球場名稱2'}
-					description={[
-						'106台北市大安區羅斯福路四段1號',
-						'2023-11-02',
-						'19:00~21:00',
-						['Basketball', '新手友善', '雙打'],
-						'Wonu Juan',
-						[4, 8],
-					]}
-				/> */}
         {(appointmentList || []).map((appointment) => {
           const DateInGMT8 = new Date(appointment.date);
           let year = DateInGMT8.getFullYear();
@@ -349,54 +336,6 @@ export default function JoinStadium() {
             />
           );
         })}
-        {/* <StadiumCard
-          id={2}
-          image={pic2}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Gordon Sung",
-          ]}
-        />
-        <StadiumCard
-          id={3}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Bryan Chen",
-          ]}
-        />
-        <StadiumCard
-          id={4}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Bryan Chen",
-          ]}
-        />
-        <StadiumCard
-          id={5}
-          image={pic}
-          title={"球場名稱2"}
-          description={[
-            "106台北市大安區羅斯福路四段1號",
-            "2023-11-02",
-            "19:00~21:00",
-            ["Basketball", "新手友善", "雙打"],
-            "Bryan Chen",
-          ]}
-        /> */}
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
