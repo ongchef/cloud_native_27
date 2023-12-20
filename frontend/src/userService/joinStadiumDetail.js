@@ -12,8 +12,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import axios from "axios";
-import authHeader from "../authService/authHeader";
+
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import FetchData from "../authService/fetchData";
@@ -41,20 +40,18 @@ export default function JoinStadiumDetail() {
   const [appointmentDetail, setAppointmentDetail] = useState([]);
   const [publicIndex, setPublicIndex] = useState(0);
   async function getStadiumDetail() {
-    return await axios.get(
+    return FetchData.getData(
       "http://localhost:3000/api/users/appointmentDetail/join",
+      1,
       {
-        headers: authHeader(),
-        params: {
-          appointment_id: id,
-        },
+        appointment_id: id,
       }
     );
   }
   useEffect(() => {
     setLoading(true);
     getStadiumDetail().then((res) => {
-      setAppointmentDetail(res.data[0]);
+      setAppointmentDetail(res[0]);
       setLoading(false);
     });
   }, []);

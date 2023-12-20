@@ -61,46 +61,6 @@ export default function JoinStadium() {
       console.log("Error:" + error);
     }
   };
-
-  // const SearchAppointment = useCallback(async () => {
-  //   let d = date;
-  // 	//console.log(date);
-  // 	//console.log(time.$d.toString().substring(15, 24));
-  // 	d = date + time.$d.toString().substring(15, 24);
-  // 	try {
-  // 		const res = await FetchData.getData(
-  // 			'http://localhost:3000/api/users/appointment/join',
-  // 			1,
-  // 			{
-  // 				query_time: date + time.$d.toString().substring(15, 24),
-  // 				ball: sport,
-  // 				address: location,
-  // 				public_index: publicIndex,
-  // 			}
-  // 		);
-  // 		return res;
-  // 	} catch (error) {}});
-  // const SearchAppointment = async () => {
-  // 	try {
-  // 		console.log({
-  // 			query_time: date + time.$d.toString().substring(15, 24),
-  // 			ball: sport,
-  // 			address: location,
-  // 			public_index: publicIndex,
-  // 		});
-  // 		const res = await FetchData.getData(
-  // 			'http://localhost:3000/api/users/appointment/join',
-  // 			1,
-  // 			{
-  // 				query_time: date + time.$d.toString().substring(15, 24),
-  // 				ball: sport,
-  // 				address: location,
-  // 				public_index: publicIndex,
-  // 			}
-  // 		);
-  // 		return res;
-  // 	} catch (error) {}
-  // };
   async function SearchAppointment() {
     try {
       console.log({
@@ -125,48 +85,7 @@ export default function JoinStadium() {
       console.log("Error:" + error);
     }
   }
-  // return FetchData.getData(
-  // 	'http://localhost:3000/api/users/appointment/join',
-  // 	1,
-  // 	{
-  // 		query_time: date + time.$d.toString().substring(15, 24),
-  // 		ball: sport,
-  // 		address: location,
-  // 		public_index: publicIndex,
-  // 	}
-  // );
 
-  // return await axios.get("http://localhost:3000/api/users/appointment/join", {
-  //   headers: authHeader(),
-  //   params: {
-  //     query_time: date + time.$d.toString().substring(15, 24),
-  //     ball: sport,
-  //     address: location,
-  //     public_index: publicIndex,
-  //     page: 1,
-  //   },
-  // });
-  // }
-  // useEffect(() => {
-  // 	const initialSport = searchParams.get('sport');
-  // 	if (initialSport) {
-  // 		setSport(initialSport.toString());
-  // 	}
-  // }, [searchParams]);
-
-  // const fetchData = useCallback(async () => {
-  // 	try {
-  // 		const res = await SearchAppointment();
-  // 		setAppointmentList(res.courts);
-  // 		setTotalPage(res.total_page);
-  // 	} catch (error) {
-  // 		console.log('Error:' + error);
-  // 	}
-  // }, []);
-
-  // useEffect(() => {
-  // 	fetchData();
-  // }, [fetchData]);
   const fetchData = useCallback(async () => {
     try {
       const res = await SearchAppointment();

@@ -3,24 +3,22 @@ import Typography from "@mui/material/Typography"; // 引入Typography元件
 import HistoryCard from "./userHistoryCard"; // 引入StadiumCard元件
 import pic from "../pic/羽球1.png";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import authHeader from "../authService/authHeader";
 import moment from "moment/moment";
+import FetchData from "../authService/fetchData";
 
 const balltype = ["羽球", "籃球", "桌球", "排球"];
 export default function UserHistory() {
   const [date, setDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [userHistoryList, setUserHistoryList] = useState([]);
   async function getUserHistory() {
-    return await axios.get(
+    return FetchData.getData(
       "http://localhost:3000/api/users/appointment/histories",
-      {
-        headers: authHeader(),
-      }
+      1,
+      {}
     );
   }
   useEffect(() => {
-    getUserHistory().then((res) => setUserHistoryList(res.data));
+    getUserHistory().then((res) => setUserHistoryList(res));
   }, []);
   return (
     <div>
