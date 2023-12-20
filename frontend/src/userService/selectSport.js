@@ -50,7 +50,7 @@ export default function SelectSport() {
 						justify="space-evenly"
 						alignItems="stretch">
 						{sports.map((sport, index) => (
-							<Grid item xs={6} md={3} key={index} display="flex">
+							<Grid item xs={6} md={6} key={index} display="flex">
 								<Card
 									sx={{
 										margin: '0 auto',
