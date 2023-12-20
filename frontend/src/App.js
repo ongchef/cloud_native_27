@@ -197,7 +197,7 @@ export default function App() {
 					{user ? (
 						<>
 							<ListItem disablePadding>
-								<ListItemButton to="/joinStadium">
+								<ListItemButton to="/selectSport">
 									<ListItemIcon></ListItemIcon>
 									<ListItemText primary={'加入場地'} />
 								</ListItemButton>
