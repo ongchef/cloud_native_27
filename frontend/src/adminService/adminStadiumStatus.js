@@ -194,7 +194,7 @@ export default function AdminStadiumStatus() {
             <StadiumCard
               id={court.court_id}
               image={court.image_url.split(".jpg")[0]+".jpg"}
-              title={court.name + " - " + court.location}
+              title={court.court_name + " - " + court.location}
               description={[
                 court.address,
                 court.contact,

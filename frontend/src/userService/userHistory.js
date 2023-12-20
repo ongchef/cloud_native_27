@@ -18,7 +18,16 @@ export default function UserHistory() {
     );
   }
   useEffect(() => {
-    getUserHistory().then((res) => setUserHistoryList(res));
+    getUserHistory().then((res) => {
+      const historyList = res.sort(function(a,b){
+        if (moment(a.date).isAfter(moment(b.date))) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+      setUserHistoryList(historyList)
+    });
   }, []);
   return (
     <div>
