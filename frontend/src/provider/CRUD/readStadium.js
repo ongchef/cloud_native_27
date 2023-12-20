@@ -33,6 +33,8 @@ export default function ReadStadium() {
   const [weekday, setWeekday] = useState(moment(date).day());
   const [courtName, setCourtName] = useState()
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(0)
   const weekdayMapping = [
     "日",
     "一",
@@ -48,12 +50,13 @@ export default function ReadStadium() {
     return FetchData.getData("http://localhost:3000/api/courts/admin",1,
     {
       ...(courtName&& courtName && {name:courtName}),
-      ...(sport&& sport && {ball_type_id:sport}),
+      ...(sport&& sport && {ball:sport}),
       ...(address&& address && {address:address}),
     })
     .then((res)=>
       {
         setCourtList(res.courts)
+        setTotalPage(res.total_page)
         setLoading(false)
       }
     )
@@ -197,7 +200,11 @@ export default function ReadStadium() {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="20px">
         {/* 其他內容 */}
-        <Pagination count={10} color="primary" /> {/* 添加這一行 */}
+        <Pagination
+          count={totalPage}
+          onChange={(event,num)=>setPage(num)} 
+          page={page}
+          color="primary" /> {/* 添加這一行 */}
       </Box>
       </>
     }
