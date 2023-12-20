@@ -303,8 +303,8 @@ export default function CreateStadium() {
       console.log(res)
       console.log(res===200)
       if(res===200){
-        setLoading(false)
         alert("新增成功")
+        setLoading(false)
         window.location.href="readStadium"
       }
     })

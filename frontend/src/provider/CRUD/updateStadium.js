@@ -347,18 +347,19 @@ export default function UpdateStadium() {
     for (const [key, value] of Object.entries(availableTime)) {
       const timeList = Object.values(value)
       const newTime = timeList.map((time)=>{
-        return {start_time:time[0],end_time:time[1],weekday:week[key].num}
+        return {start_time:time[0].format("HH:mm"),end_time:time[1].format("HH:mm"),weekday:week[key].num}
       })
       
       flatAvailableTime=[...flatAvailableTime,...newTime]
     }
     setLoading(true)
-    FetchData.postDateWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
+
+    FetchData.putDataWithImg("http://localhost:3000/api/courts", {...court,available_time:flatAvailableTime}, imgblob)
     .then((res)=>{
       console.log(res)
       console.log(res===200)
       if(res===200){
-        setLoading(false)
+        
         alert("修改成功")
         window.location.href="readStadium"
       }

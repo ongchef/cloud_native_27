@@ -58,12 +58,14 @@ async function postDateWithImg(url, data, img) {
       type: "application/json;charset=utf-8"
   });
   bodyFormData.append("data", blob, "data");
-  bodyFormData.append('img', img, "img")
+ 
+
   return axios({
     method: "post",
     url: url,
     data: bodyFormData,
     files:img,
+    
     headers: { "Content-Type": "multipart/form-data", ...authHeader() },
   }).then((res) => {
     console.log(res)
@@ -76,11 +78,46 @@ async function postDateWithImg(url, data, img) {
     return [];
   });
 }
+async function putDataWithImg(url, data, img) {
+  var bodyFormData = new FormData();
+  // img = new Blob(img)
+  console.log(img)
+  console.log(data)
+  const obj = JSON.stringify(data);
+  const bytes = new TextEncoder().encode(obj);
+  const blob = new Blob([bytes], {
+      type: "application/json;charset=utf-8"
+  });
+  bodyFormData.append("data", blob, "data");
+  if(img){
+    console.log(11)
+    bodyFormData.append('img', img, "img")
+  }
+ 
+
+  return axios({
+    method: "put",
+    url: url,
+    data: bodyFormData,
+    files:img,
+    headers: { "Content-Type": "multipart/form-data", ...authHeader() },
+  }).then((res) => {
+    console.log(res)
+    return res.status;
+  })
+  .catch((error) => {
+    console.log(error);
+    alert("not authorized");
+    // window.location.href = "/";
+    return [];
+  });
+}
 const FetchData = {
   getData,
   postData,
   postDateWithImg,
-  putData
+  putData,
+  putDataWithImg
 };
 
 export default FetchData;
