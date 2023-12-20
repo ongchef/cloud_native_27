@@ -60,7 +60,6 @@ export default function ReadStadium() {
         setLoading(false)
       }
     )
-    // return await axios.get("http://localhost:3000/api/courts/admin",{headers:authHeader()})
   }
   useEffect(() => {
     fakeStadium();

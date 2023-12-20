@@ -14,7 +14,7 @@ async function getData(url, page, params) {
       return res.data;
     })
     .catch((error) => {
-      const status = error.response.status;
+      
       console.log(error);
       alert(error.response.data);
       window.location.href = "/";
@@ -29,7 +29,7 @@ async function postData(url, body) {
     })
     .catch((error) => {
       console.log(error);
-      alert("not authorized");
+      alert(error.response.data);
       window.location.href = "/";
       return [];
     });
@@ -42,7 +42,7 @@ async function putData(url, body) {
       })
       .catch((error) => {
         console.log(error);
-        alert("not authorized");
+        alert(error.response.data);
         window.location.href = "/";
         return [];
       });
@@ -73,7 +73,7 @@ async function postDateWithImg(url, data, img) {
   })
   .catch((error) => {
     console.log(error);
-    alert("not authorized");
+    alert(error.response.data);
     window.location.href = "/";
     return [];
   });
@@ -107,7 +107,7 @@ async function putDataWithImg(url, data, img) {
   })
   .catch((error) => {
     console.log(error);
-    alert("not authorized");
+    alert(error.response.data);
     // window.location.href = "/";
     return [];
   });

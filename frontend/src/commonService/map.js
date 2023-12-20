@@ -11,8 +11,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import PlaceIcon from "@mui/icons-material/Place";
 import IconButton from "@mui/material/IconButton";
+import FetchData from "../authService/fetchData";
+import axios from "axios";
 
-export default function Map({ latitude, longtitude, name }) {
+export default function Map({ address, name }) {
   const [open, setOpen] = useState(false);
   const mapName = name;
   const handleClickOpen = () => {
@@ -23,34 +25,43 @@ export default function Map({ latitude, longtitude, name }) {
     setOpen(false);
   };
   useEffect(() => {
-    const mymap = L.map("mapid").setView([latitude, longtitude], 17);
-    const OSMUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-
-    L.tileLayer(OSMUrl).addTo(mymap);
-
-    // 使用 leaflet-color-markers ( https://github.com/pointhi/leaflet-color-markers ) 當作 marker
-    const greenIcon = new L.Icon({
-      iconUrl:
-        "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
-      shadowUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41],
-    });
-
-    const marker = L.marker([latitude, longtitude], {
-      icon: greenIcon,
-    }).addTo(mymap);
-    console.log(mapName);
-    marker.bindPopup(name).openPopup();
-    L.circle([latitude, longtitude], {
-      color: "red",
-      fillColor: "#f03",
-      fillOpacity: 0.5,
-      radius: 10,
-    }).addTo(mymap);
+    const url = ("https://geocode.search.hereapi.com/v1/geocode" +
+       "?apikey=A7Y_Qts68t_XwB9IUyFcbh9LOlUCQ50gVQuAXEJDJAU" +
+       "&q="+address)
+    axios.get(url).then((res)=>{
+      console.log(res)
+      const lat = res.data.items[0].position.lat
+      const lon = res.data.items[0].position.lng
+      const mymap = L.map("mapid").setView([lat, lon], 17);
+      const OSMUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  
+      L.tileLayer(OSMUrl).addTo(mymap);
+  
+      // 使用 leaflet-color-markers ( https://github.com/pointhi/leaflet-color-markers ) 當作 marker
+      const greenIcon = new L.Icon({
+        iconUrl:
+          "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+        shadowUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      });
+  
+      const marker = L.marker([lat, lon], {
+        icon: greenIcon,
+      }).addTo(mymap);
+      console.log(mapName);
+      marker.bindPopup(name).openPopup();
+      L.circle([lat, lon], {
+        color: "red",
+        fillColor: "#f03",
+        fillOpacity: 0.5,
+        radius: 10,
+      }).addTo(mymap);
+    })
+    
   }, []);
   return (
     <div id="mapid" style={{ height: "50vh", width: "70vw" }} />
