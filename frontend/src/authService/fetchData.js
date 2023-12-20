@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./authHeader";
 import { Navigate } from "react-router-dom";
-async function getData(url, page, params) {
+async function getData(url, page, params,url) {
   return await axios
     .get(url, {
       headers: authHeader(),
@@ -17,11 +17,11 @@ async function getData(url, page, params) {
       
       console.log(error);
       alert(error.response.data);
-      window.location.href = "/";
+      window.location.href = url?url:"/";
       return undefined;
     });
 }
-async function postData(url, body) {
+async function postData(url, body,url) {
   return await axios
     .post(url, body, { headers: authHeader() })
     .then((res) => {
@@ -30,11 +30,11 @@ async function postData(url, body) {
     .catch((error) => {
       console.log(error);
       alert(error.response.data);
-      window.location.href = "/";
+      window.location.href = url?url:"/";
       return [];
     });
 }
-async function putData(url, body) {
+async function putData(url, body,url) {
     return await axios
       .put(url, body, { headers: authHeader() })
       .then((res) => {
@@ -43,11 +43,11 @@ async function putData(url, body) {
       .catch((error) => {
         console.log(error);
         alert(error.response.data);
-        window.location.href = "/";
+        window.location.href = url?url:"/";
         return [];
       });
   }
-async function postDateWithImg(url, data, img) {
+async function postDateWithImg(url, data, img, url) {
   var bodyFormData = new FormData();
   // img = new Blob(img)
   console.log(img)
@@ -74,11 +74,11 @@ async function postDateWithImg(url, data, img) {
   .catch((error) => {
     console.log(error);
     alert(error.response.data);
-    window.location.href = "/";
+    window.location.href = url?url:"/";
     return [];
   });
 }
-async function putDataWithImg(url, data, img) {
+async function putDataWithImg(url, data, img, url) {
   var bodyFormData = new FormData();
   // img = new Blob(img)
   console.log(img)
@@ -108,7 +108,7 @@ async function putDataWithImg(url, data, img) {
   .catch((error) => {
     console.log(error);
     alert(error.response.data);
-    // window.location.href = "/";
+    window.location.href = url?url:"/";
     return [];
   });
 }
