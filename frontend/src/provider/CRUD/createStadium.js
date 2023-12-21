@@ -272,9 +272,7 @@ export default function CreateStadium() {
   const [loading, setLoading] = useState(false)
   const [availableTime, setAvailableTime] = useState({
     mon: {
-      0: [dayjs("9:00", "HH:mm"), dayjs("11:00", "HH:mm")],
-      1: [dayjs("13:00", "HH:mm"), dayjs("22:00", "HH:mm")],
-    },
+      0: [dayjs("9:00", "HH:mm"), dayjs("11:00", "HH:mm")]  },
     tue: { 0: [dayjs("9:00", "HH:mm"), dayjs("22:00", "HH:mm")] },
     wed: { 0: [dayjs("9:00", "HH:mm"), dayjs("22:00", "HH:mm")] },
     thu: { 0: [dayjs("9:00", "HH:mm"), dayjs("22:00", "HH:mm")] },
