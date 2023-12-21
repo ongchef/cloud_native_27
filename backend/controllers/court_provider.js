@@ -27,6 +27,7 @@ import {
     add_one_day,
     imageClient,
 } from "../utils/helper.js";
+import { query } from "express";
 
 export const getCourts = async(req,res) => {
     try {
@@ -259,8 +260,17 @@ export const putCourtsById = async(req,res) => {
         const iscourtsprovider = await isCourtsProvider(verify_data);
         if (iscourtsprovider) {
             const auth_data = {}
-            auth_data['court_id'] = req.query['court_id'];
+            var court_id =""
+            
+            for (let i=0; i<req.files.length; i++) {
+                if (req.files[i]['fieldname'] == 'data') {
+                    court_id=JSON.parse(req.files[i].buffer.toString())["court_id"]
+                    console.log(JSON.parse(req.files[i].buffer.toString())["court_id"])
+                }
+            }
             auth_data['admin_id'] = req.token;
+            auth_data['court_id'] = court_id;
+            console.log(auth_data)
             const iscourtadmin = await isCourtsAdmin(auth_data);
 
             if (iscourtadmin) {
@@ -270,7 +280,8 @@ export const putCourtsById = async(req,res) => {
                 let court_data = {}
                 let court_ava_time;
                 court_data = { ...auth_data };
-
+                console.log(court_data)
+                console.log(req.files)
                 if (req.files.length != 0) {
                     for (let i=0; i<req.files.length; i++) {
                         if (req.files[i]['fieldname'] == 'img') {

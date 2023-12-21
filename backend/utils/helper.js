@@ -45,8 +45,19 @@ export const notifyAppChecker = (possibly_notify_app, query_time) => {
     const moment = MomentRange.extendMoment(Moment);
     const notify_time_period_upper = moment(query_time, moment.ISO_8601).add(3, 'hours');
     const notify_time_period_lower = moment(query_time, moment.ISO_8601).add(2, 'hours');
-    // const start = moment(`${reserved_court['date']} ${reserved_court['start_time']}`, moment.ISO_8601);
-    // const end = moment(`${reserved_court['date']} ${reserved_court['end_time']}`, moment.ISO_8601);
+    const range = moment.range(notify_time_period_lower, notify_time_period_upper);
+    const app_time_moment = moment(`${possibly_notify_app['date']} ${possibly_notify_app['start_time']}`, moment.ISO_8601);
+
+    return range.contains(app_time_moment)
+}
+
+// check notifable appointments according to query time
+// query_time format: 'YYYY-MM-DD hh:mm:ss'
+export const notifyAppForSpecificUsersChecker = (possibly_notify_app, query_time) => {
+
+    const moment = MomentRange.extendMoment(Moment);
+    const notify_time_period_upper = moment(query_time, moment.ISO_8601).add(24, 'hours');
+    const notify_time_period_lower = moment(query_time, moment.ISO_8601);
     const range = moment.range(notify_time_period_lower, notify_time_period_upper);
     const app_time_moment = moment(`${possibly_notify_app['date']} ${possibly_notify_app['start_time']}`, moment.ISO_8601);
 
@@ -67,13 +78,26 @@ export const generate_uuid = () => {
 
 export const parseISODate = (date) => {
     const cur_date = new Date(date);
-    return `${cur_date.getFullYear()}-${cur_date.getMonth()+1}-${cur_date.getDate()}`
+    const yyyy = cur_date.getFullYear();
+    let mm = cur_date.getMonth() + 1; // Months start at 0
+    let dd = cur_date.getDate();
+    
+    if (mm < 10) mm = '0' + mm;
+    if (dd < 10) dd = '0' + dd;
+
+    return `${yyyy}-${mm}-${dd}`
 }
 
 export const add_one_day = (date) => {
     const cur_date = new Date(date);
-    return `${cur_date.getFullYear()}-${cur_date.getMonth()+1}-${cur_date.getDate()+1}`
-}
+    const yyyy = cur_date.getFullYear();
+    let mm = cur_date.getMonth() + 1; // Months start at 0
+    let dd = cur_date.getDate() + 1;
+    
+    if (mm < 10) mm = '0' + mm;
+    if (dd < 10) dd = '0' + dd;
+
+    return `${yyyy}-${mm}-${dd}`}
 
 export const imageClient = (image_file) => {
     return imgurClient.upload({

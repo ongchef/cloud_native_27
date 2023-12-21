@@ -12,7 +12,8 @@ import {
     postUsersAppointmentJoin,
     getUsersAppointmentHistory,
     getUsersAppointmentJoinDetail,
-    notifyUsersByTime
+    notifyUsersByTime,
+    notifyUsersByTimeById
 } from "../controllers/user.js";
 
 const router = express.Router();
@@ -55,5 +56,8 @@ router.post("/login", postUsersLogin)
 
 // GET /api/users/notification
 router.get("/notification", notifyUsersByTime)
+
+// GET /api/users/notification/id
+router.get("/notification/id", notifyUsersByTimeById)
 
 export default router
