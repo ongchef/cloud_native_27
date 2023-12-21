@@ -38,7 +38,7 @@ export default function AdminStadiumStatus() {
     let s = sport !== "ALL" ? sport : "";
     let l = location !== "ALL" ? location : "";
     let p = provider !== "ALL" ? provider : "";
-    console.log(s, l, p);
+    //console.log(s, l, p);
     return FetchData.getData("api/admin/court", page, {
       query_time: date + time.$d.toString().substring(15, 24),
       ...(s && s !== null && { ball: s }),
@@ -48,7 +48,7 @@ export default function AdminStadiumStatus() {
   }
   const handleSearch = async () => {
     try {
-      console.log("click");
+      //console.log("click");
       const result = await getStadium();
       // handle the result
       setStadiumList(result.courts);
@@ -193,7 +193,7 @@ export default function AdminStadiumStatus() {
           return (
             <StadiumCard
               id={court.court_id}
-              image={court.image_url.split(".jpg")[0]+".jpg"}
+              image={court.image_url.split(".jpg")[0] + ".jpg"}
               title={court.court_name + " - " + court.location}
               description={[
                 court.address,
