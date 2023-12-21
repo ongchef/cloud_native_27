@@ -75,7 +75,7 @@ async function postDateWithImg(url, data, img, redirect) {
     .catch((error) => {
       console.log(error);
       alert(error.response.data);
-      // window.location.href = redirect ? redirect : "/";
+      window.location.href = redirect ? redirect : "/";
       return [];
     });
 }
