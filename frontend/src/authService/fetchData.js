@@ -59,7 +59,7 @@ async function postDateWithImg(url, data, img, redirect) {
     type: "application/json;charset=utf-8",
   });
   bodyFormData.append("data", blob, "data");
-
+  bodyFormData.append("img", img, "img");
   return axios({
     method: "post",
     url: ip+url,
@@ -75,7 +75,7 @@ async function postDateWithImg(url, data, img, redirect) {
     .catch((error) => {
       console.log(error);
       alert(error.response.data);
-      window.location.href = redirect ? redirect : "/";
+      // window.location.href = redirect ? redirect : "/";
       return [];
     });
 }
