@@ -28,10 +28,9 @@ app.use("/api/admin", adminRoutes);
 
 //swagger
 import swaggerUi from 'swagger-ui-express';
-// import { createRequire } from 'node:module';
-// const require = createRequire(import.meta.url);
-// const swaggerFile = require("../swagger_output.json");
-import swaggerFile from '../swagger_output.json' assert { type: 'json' };
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const swaggerFile = require("../swagger_output.json");
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // Send Email

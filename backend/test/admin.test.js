@@ -1,6 +1,10 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
 import app from '../src/app.js';
+import adminModel from '../models/admin.js';
+import adminRoute from '../routes/admin.js';
+import adminController from '../controllers/admin.js';
+
 const { expect } = chai;
 
 chai.use(chaiHttp)
@@ -13,9 +17,8 @@ describe('get all providers API', () => {
             .get('/api/admin/getProviders')
             .set('Authorization', `Bearer 60b59b1f-b9c7-7bfe-43a6-9a42089ab18f`); 
             
-        // 进行断言，验证返回的数据是否符合预期
         expect(res).to.have.status(200);
-        expect(res.body).to.be.an('array').that.is.not.empty; // 验证响应的body是否为数组类型
+        expect(res.body).to.be.an('array').that.is.not.empty; 
         for (let i = 0; i < res.body.length; i++) {
             expect(res.body[i]).to.have.property('user_id').that.is.a('string');
             expect(res.body[i]).to.have.property('name').that.is.a('string');
@@ -24,8 +27,8 @@ describe('get all providers API', () => {
 
     it('should return unauthorized when user is not an admin', (done) => {
         chai.request(app)
-          .get('/api/admin/getProviders') // 更改为你的路由路径
-          .set('Authorization', 'Bearer 60b59b1f-b9c7-7bfe-43a6-9a42089ab18') // 设置一个无效的授权令牌
+          .get('/api/admin/getProviders')
+          .set('Authorization', 'Bearer 60b59b1f-b9c7-7bfe-43a6-9a42089ab18') 
           .end((err, res) => {
             expect(res).to.have.status(401);
             expect(res.text).to.equal('You are not the admin!');
@@ -382,7 +385,7 @@ describe('get user info API', () => {
 describe('put user API', () => {
   it('should return user detail when the user is admin', async () => {
       const query = {
-        user_id: '5c2c3e35-2d78-46b4-9356-ac165d3e66b3'
+        user_id: 'f24c014c-ec6a-4118-9007-a6359b9e1285'
       };
       const body = {
         "password": "password123",
@@ -405,7 +408,7 @@ describe('put user API', () => {
 
     it('should return 名稱和電子郵件重複！ when the email and phone are duplicated', async () => {
       const query = {
-        user_id: '5c2c3e35-2d78-46b4-9356-ac165d3e66b3'
+        user_id: 'f24c014c-ec6a-4118-9007-a6359b9e1285'
       };
       const body = {
         "password": "password123",
@@ -428,7 +431,7 @@ describe('put user API', () => {
     
     it('should return 名稱重複！ when the email and phone are duplicated', async () => {
       const query = {
-        user_id: '5c2c3e35-2d78-46b4-9356-ac165d3e66b3'
+        user_id: 'f24c014c-ec6a-4118-9007-a6359b9e1285'
       };
       const body = {
         "password": "password123",
@@ -451,7 +454,7 @@ describe('put user API', () => {
 
     it('should return 電子郵件重複！ when the email and phone are duplicated', async () => {
       const query = {
-        user_id: '5c2c3e35-2d78-46b4-9356-ac165d3e66b3'
+        user_id: 'f24c014c-ec6a-4118-9007-a6359b9e1285'
       };
       const body = {
         "password": "password123",
@@ -474,7 +477,7 @@ describe('put user API', () => {
 
   it('should return unauthorized when user is not an admin', (done) => {
     const query = {
-      user_id: '5c2c3e35-2d78-46b4-9356-ac165d3e66b3'
+      user_id: 'f24c014c-ec6a-4118-9007-a6359b9e1285'
     };
     const body = {
       "password": "password123",
@@ -500,7 +503,7 @@ describe('put user API', () => {
 describe('delete user info API', () => {
   it('should return unauthorized when user is not an admin', (done) => {
     const query = {
-      user_id: '5c2c3e35-2d78-46b4-9356-ac165d3e66b3'
+      user_id: 'f24c014c-ec6a-4118-9007-a6359b9e1285'
     };
       chai.request(app)
         .delete('/api/admin/user') // 更改为你的路由路径
@@ -515,7 +518,7 @@ describe('delete user info API', () => {
   
   it('should delete user when the user is admin', async () => {
       const query = {
-        user_id: '5c2c3e35-2d78-46b4-9356-ac165d3e66b3'
+        user_id: 'f24c014c-ec6a-4118-9007-a6359b9e1285'
       };
       const res = await chai
           .request(app)

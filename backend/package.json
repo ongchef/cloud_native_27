@@ -4,14 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha",
-    "dev": "nodemon src/app.js",
+    "test": "nyc --all mocha --exit --timeout 5000",
+    "dev": "nodemon ./src/app.js",
     "swagger-autogen": "node ./swagger.js"
+  },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-syntax-import-attributes"
+    ]
   },
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "chai": "^4.3.10",
@@ -37,6 +44,8 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-import-attributes": "^7.23.3",
+    "coveralls": "^3.1.1",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "should": "^13.2.3"

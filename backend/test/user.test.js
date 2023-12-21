@@ -1,6 +1,9 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
 import app from '../src/app.js';
+import userModel from '../models/user.js';
+import userRoute from '../routes/user.js';
+import userController from '../controllers/user.js';
 const { expect } = chai;
 
 chai.use(chaiHttp)

@@ -107,7 +107,7 @@ export const getCourtsAppointments = async(req,res) => {
                     let found = 0;
                     for (let j = 0; j < court.length; j++) {
                         court[j]['date'] = parseISODate(court[j]['date'])
-        
+
                         if (court[j]['date'].split(" ")[0] === req.query['query_time'].split(" ")[0]) {
                             found = 1
                             break;
@@ -134,7 +134,6 @@ export const getCourtsAppointments = async(req,res) => {
                     }
                 }
             }
-                
             //pagination and count the total page
             let limit = 10;
             let page = req.query['page'] !== undefined ? req.query['page'] : 1;
