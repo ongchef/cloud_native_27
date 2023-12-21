@@ -19,6 +19,7 @@ import fakeStadium from "../testData/fakeStadium";
 import Pagination from "@mui/material/Pagination"; // 引入Pagination元件
 import FetchData from "../authService/fetchData";
 import Typography from "@mui/material/Typography";
+import { LinearProgress } from "@mui/material";
 export default function OrderStadium() {
   const [sport, setSport] = useState();
   const [location, setLocation] = useState();
@@ -28,6 +29,7 @@ export default function OrderStadium() {
   const [ball, setBall] = useState();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fakeStadium();
   });
@@ -55,7 +57,7 @@ export default function OrderStadium() {
     } else {
       setWeekday(day);
     }
-
+    setLoading(true)
     return FetchData.getData(
       "api/users/appointment",
       page,
@@ -64,7 +66,9 @@ export default function OrderStadium() {
         ball: sport,
         address: location,
       }
-    );
+    ).then((data)=>{
+      setLoading(false)
+      return data})
   }
   const [stadiumList, setStadiumList] = useState([]);
   useEffect(() => {
@@ -78,6 +82,12 @@ export default function OrderStadium() {
   return (
     <div>
       <h2>Order Stadium</h2>
+      {loading ? (
+        <Box>
+          <LinearProgress sx={{ display: "flex", justifyContent: "center" }} />
+        </Box>
+      ) : (
+        <>
       <Box
         display="flex"
         flexDirection="row"
@@ -240,6 +250,8 @@ export default function OrderStadium() {
           color="primary"
         />{" "}
       </Box>
+      </>
+      )}
     </div>
   );
 }

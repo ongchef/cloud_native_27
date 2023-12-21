@@ -23,6 +23,7 @@ import FetchData from "../authService/fetchData";
 import Typography from "@mui/material/Typography";
 
 import { useSearchParams } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
 const balltype = ["羽球", "籃球", "桌球", "排球"];
 export default function JoinStadium() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,7 +36,7 @@ export default function JoinStadium() {
   const [minute, setMinute] = useState(0);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-
+  const [loading, setLoading] = useState(true);
   const [publicIndex, setPublicIndex] = useState(1);
   const [appointmentList, setAppointmentList] = useState([]);
 
@@ -62,6 +63,7 @@ export default function JoinStadium() {
     }
   };
   async function SearchAppointment() {
+    setLoading(true);
     try {
       console.log({
         query_time: date + time.$d.toString().substring(15, 24),
@@ -79,7 +81,10 @@ export default function JoinStadium() {
           address: location,
           public_index: publicIndex,
         }
-      );
+      ).then((data)=>{
+        setLoading(false)
+        return data
+      });
       return res;
     } catch (error) {
       console.log("Error:" + error);
@@ -109,6 +114,12 @@ export default function JoinStadium() {
   return (
     <div>
       <h2>Join Stadium</h2>
+      {loading ? (
+        <Box>
+          <LinearProgress sx={{ display: "flex", justifyContent: "center" }} />
+        </Box>
+      ) : (
+        <>
       <Box
         display="flex"
         flexDirection="row"
@@ -266,6 +277,8 @@ export default function JoinStadium() {
         />
         {/* 添加這一行 */}
       </Box>
+      </>
+      )}
     </div>
   );
 }
