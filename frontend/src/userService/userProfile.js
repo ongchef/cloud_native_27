@@ -17,27 +17,23 @@ export default function UserProfile() {
     console.log(userdata);
     let login = { name: userdata.name, password: userdata.password };
     console.log(login);
-    FetchData.postData("api/users/login", login).then(
-      (res) => {
-        console.log(res);
-        if (res === 200) {
-          delete userdata.password;
-          FetchData.putData("api/users", userdata).then(
-            (res) => {
-              console.log(res);
-              if (res === 200) {
-                console.log("個人資訊更新成功");
-                alert("個人資訊成功");
-                window.location.reload();
-              }
-            }
-          );
-        } else if (res === 401) {
-          alert("密碼錯誤");
-          window.location.reload();
-        }
+    FetchData.postData("api/users/login", login).then((res) => {
+      console.log(res);
+      if (res === 200) {
+        delete userdata.password;
+        FetchData.putData("api/users", userdata).then((res) => {
+          console.log(res);
+          if (res === 200) {
+            console.log("個人資訊更新成功");
+            alert("個人資訊成功");
+            window.location.reload();
+          }
+        });
+      } else if (res === 401) {
+        alert("密碼錯誤");
+        window.location.reload();
       }
-    );
+    });
   };
   useEffect(() => {
     getUserProfile().then((res) => {
@@ -125,24 +121,7 @@ export default function UserProfile() {
                     value={profile.email}
                   />
                 </Box>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  width="70%"
-                >
-                  <Typography variant="h5" style={{}}>
-                    Line ID :
-                  </Typography>
-                  <TextField
-                    id="line_ID"
-                    label="Line ID"
-                    onChange={handleChange}
-                    style={{ width: "70%" }}
-                    value={profile.line_id}
-                  />
-                </Box>
+
                 <Box
                   display="flex"
                   flexDirection="row"
