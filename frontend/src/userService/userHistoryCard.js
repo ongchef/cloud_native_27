@@ -17,7 +17,6 @@ export default function UserHistoryCard({
     <Box my={2}>
       <Card
         sx={{
-          height: "38vh",
           width: "100%",
           margin: "auto",
           "@media (max-width:800px)": {
@@ -47,7 +46,7 @@ export default function UserHistoryCard({
               />
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} alignItems="center" justifyContent="center">
             <CardContent>
               <Typography
                 variant="h5"
