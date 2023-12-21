@@ -1,23 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-	Table,
-	TableContainer,
-	TableHead,
-	TableBody,
-	TableRow,
-	TableCell,
-	Box,
-} from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import AdminUserRow from './adminUserRow';
 import FetchData from '../authService/fetchData';
+import Box from '@mui/material/Box';
+import Pagination from '@mui/material/Pagination';
+import TablePagination from '@mui/material/TablePagination';
 
 export default function AdminUserHistory() {
 	const [users, setUsers] = useState([]);
+	const [page, setPage] = useState(1);
+	const [totalPage, setTotalPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
+
 	const API_URL = 'api/admin/userHistories';
 
 	const fetchUsers = useCallback(async () => {
 		try {
 			const fetchedUsers = await FetchData.getData(API_URL);
+			console.log(fetchedUsers);
 			setUsers(fetchedUsers);
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -28,10 +33,26 @@ export default function AdminUserHistory() {
 		fetchUsers();
 	}, [fetchUsers]);
 
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
 	return (
 		<Box>
 			<h3>adminUserHistory</h3>
-			<TableContainer sx={{ overflowY: 'auto', height: '70vh' }}>
+			<TableContainer
+				sx={{
+					margin: 'auto',
+					overflowY: 'auto',
+					height: '70vh',
+					width: '70vw',
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}>
 				<Table>
 					<TableHead>
 						<TableRow
@@ -87,6 +108,16 @@ export default function AdminUserHistory() {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{/* <Box display="flex" justifyContent="center" marginTop="20px">
+				<TablePagination
+					component="div"
+					count={totalPage}
+					page={page}
+					onPageChange={handleChangePage}
+					rowsPerPage={rowsPerPage}
+					onRowsPerPageChange={handleChangeRowsPerPage}
+				/>
+			</Box> */}
 		</Box>
 	);
 }
