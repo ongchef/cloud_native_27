@@ -12,7 +12,10 @@ Join-U-Ball is a cutting-edge Stadium Matching System designed to address the co
 
 ### For Users (Players)
 - **Stadium Booking**: Register and log in to choose the sport you want to play, select your desired time, and either book a stadium or join an existing team room based on the sport, intensity, and rules.
+- ![image](https://github.com/ongchef/cloud_native_27/blob/d1b0ca3a4c8a609256f8a00d0f009c6edc7c3021/order.png)
 - **Join Team Rooms**: Find and join team rooms that match your desired sport and playing intensity.
+- ![image](https://github.com/ongchef/cloud_native_27/blob/d1b0ca3a4c8a609256f8a00d0f009c6edc7c3021/join.png)
+
 - **Notifications**: Receive email and in-app notifications at 8:00 AM on the day of your booking and 3 hours before your reservation time to remind you of your scheduled activities.
 - **Map Visualization**: Utilize our intuitive map interface to visually locate available stadiums, understand their geographical context, and make informed booking decisions.
 
